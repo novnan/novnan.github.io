@@ -1,0 +1,775 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>novnan&#39;s notes</title>
+  <icon>https://novnan.github.io/icon.png</icon>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://novnan.github.io/"/>
+  <updated>2020-08-06T07:41:19.849Z</updated>
+  <id>https://novnan.github.io/</id>
+  
+  <author>
+    <name>novnan</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>宝塔Linux面板小内存服务器编译安装 MySQL 8.0</title>
+    <link href="https://novnan.github.io/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/"/>
+    <id>https://novnan.github.io/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/</id>
+    <published>2019-07-14T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.849Z</updated>
+    
+    <summary type="html">
+    
+      &lt;div class=&quot;note primary&quot;&gt;
+            &lt;p&gt;如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;宝塔 6.9.8&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;宝塔面板在编译安装 MySQL 8.0 时，要求 4个核心的 CPU，8G 内存，实在是太高了，小站长的服务器一般都不会有如此高的配置。这时候，我们要使用 MySQL 8.0，可以选择极速安装，或者，如果一定要自己编译的话，可以使用命令行来跳过配置检测。不过，MySQL 编译过程中，需要 5G 以上的内存，以及 9G 以上的数据盘空间。如果我们的内存实在不够，可以创建 swap 虚拟内存。&lt;/p&gt;
+&lt;p&gt;在宝塔面板里的 &lt;strong&gt;Linux 工具箱&lt;/strong&gt;(如果没有可以去软件商店里面安装) 修改 Swap/虚拟内存，输入 0，然后手动设置 swap 到系统盘：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fallocate -l 4G /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chown root:root /swap &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;chmod 0600 /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkswap /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;swapon /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;/swap    swap    swap    defaults    0 0&amp;#x27;&lt;/span&gt; &amp;gt;&amp;gt; /etc/fstab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;查看一下 swap 是否开启成功：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;swapon -s&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filename                                Type            Size    Used    Priority&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/swap                                   file    4194300 9480    -2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;现在内存有 5933M，应该够了，我们还要检查一下，/www 所在的磁盘够不够，建议剩余空间不小于 10G。如果不够，把不需要的文件删一下，或者扩容磁盘，这里不赘述。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://novnan.github.io/categories/Linux/"/>
+    
+    
+      <category term="BT Panel" scheme="https://novnan.github.io/tags/BT-Panel/"/>
+    
+      <category term="mysql 8.0" scheme="https://novnan.github.io/tags/mysql-8-0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Composer 修改项目依赖为新的镜像地址</title>
+    <link href="https://novnan.github.io/Composer/modify-the-project-dependency-to-the-new-mirror-address/"/>
+    <id>https://novnan.github.io/Composer/modify-the-project-dependency-to-the-new-mirror-address/</id>
+    <published>2019-07-10T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.847Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前置说明&quot;&gt;&lt;a href=&quot;#前置说明&quot; class=&quot;headerlink&quot; title=&quot;前置说明&quot;&gt;&lt;/a&gt;前置说明&lt;/h2&gt;&lt;p&gt;本文以从 &lt;code&gt;https://pkg.phpcomposer.com&lt;/code&gt; 镜像切换到 &lt;code&gt;https://packagist.laravel-china.org&lt;/code&gt; 为例子来讲解。请自行修改命令行中对应的链接。&lt;/p&gt;
+&lt;h2 id=&quot;问题说明&quot;&gt;&lt;a href=&quot;#问题说明&quot; class=&quot;headerlink&quot; title=&quot;问题说明&quot;&gt;&lt;/a&gt;问题说明&lt;/h2&gt;&lt;p&gt;Composer 在安装时会在 &lt;code&gt;composer.lock&lt;/code&gt; 文件中写入扩展包下载地址，如：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/Composer/modify-the-project-dependency-to-the-new-mirror-address/l5HYA3LOTP.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;一些年代久远的项目中使用了 &lt;code&gt;https://pkg.phpcomposer.com/&lt;/code&gt; 的中文加速镜像，然后最近因为其镜像访问出了故障：&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>你生产环境的 Composer 是这样吗？</title>
+    <link href="https://novnan.github.io/Composer/introduction-to-composer/"/>
+    <id>https://novnan.github.io/Composer/introduction-to-composer/</id>
+    <published>2019-06-11T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.846Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;composer-配置项&quot;&gt;&lt;a href=&quot;#composer-配置项&quot; class=&quot;headerlink&quot; title=&quot;composer 配置项&quot;&gt;&lt;/a&gt;composer 配置项&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;具体的每个配置项细节请参考  &lt;a href=&quot;https://docs.phpcomposer.com/04-schema.html&quot;&gt;Composer 官网&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;配置列表&quot;&gt;&lt;a href=&quot;#配置列表&quot; class=&quot;headerlink&quot; title=&quot;配置列表&quot;&gt;&lt;/a&gt;配置列表&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;ID&lt;/th&gt;
+&lt;th&gt;配置项&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;name&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;包的名称，它包括供应商名称和项目名称，使用 / 分隔。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;包描述&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;version&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;版本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;type&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装类型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;keywords&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;关键字&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;homepage&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;项目主页&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;time&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;版本发布时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;license&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;许可协议&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;authors&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;作者&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;support&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;支持,获取项目支持的向相关信息对象。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;require&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自动加载的包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;require-dev&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;在DEV下自动加载的包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;conflict&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;此列表中的包与当前包的这个版本冲突。它们将不允许同时被安装&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;14&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;suggest&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;建议安装的包，它们增强或能够与当前包良好的工作。这些只是信息，并显示在依赖包安装完成之后，给你的用户一个建议，他们可以添加更多的包。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;autoload&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自动加载,分别有四种加载机制 &lt;code&gt;psr-4&lt;/code&gt; &lt;code&gt;psr-0&lt;/code&gt; &lt;code&gt;classmap&lt;/code&gt; &lt;code&gt;file&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;include-path&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;保留传统,不建议使用&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;target-dir&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;定义当前包安装的目标文件夹&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;18&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;minimum-stability&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装包的时候通过稳定性过滤包的默认行为, &lt;code&gt;dev&lt;/code&gt; &lt;code&gt;alpha&lt;/code&gt; &lt;code&gt;beta&lt;/code&gt; &lt;code&gt;RC&lt;/code&gt; &lt;code&gt;stable&lt;/code&gt; 可选&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;prefer-stable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装包的时候优先使用更稳定的包版本, &lt;code&gt;&amp;quot;prefer-stable&amp;quot;: true&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;repositories&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用自定义的包资源库。默认情况下 composer 只使用 packagist 作为包的资源库。通过指定资源库，你可以从其他地方获取资源包。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;config&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;配置参数，eg：&lt;code&gt;process-timeout&lt;/code&gt; &lt;code&gt;vendor-dir&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;22&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;scripts &lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Composer 允许你在安装过程中的各个阶段挂接脚本。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;23&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;extra&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;任意的，供 &lt;code&gt;scripts&lt;/code&gt; 使用的额外数据。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;24&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bin&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;该属性用于标注一组应被视为二进制脚本的文件，他们会被软链接到（config 对象中的）bin-dir 属性所标注的目录，以供其他依赖包调用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;archive&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;这些选项在创建包存档时使用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+    
+    </summary>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>六个鲜为人知的 Composer 命令</title>
+    <link href="https://novnan.github.io/Composer/six-lesser-known-composer-commands-you-should-know/"/>
+    <id>https://novnan.github.io/Composer/six-lesser-known-composer-commands-you-should-know/</id>
+    <published>2019-05-19T16:00:00.000Z</published>
+    <updated>2020-08-06T09:56:11.975Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Composer 是 PHP 的一个依赖管理工具。 如果你是一名 PHP 开发人员，那么你很可能每天都在使用它并且频繁的运行命令 &lt;code&gt;require&lt;/code&gt;， &lt;code&gt;install&lt;/code&gt; 和 &lt;code&gt;update&lt;/code&gt;。也许你并没有意识到， 我们可以使用一些其他的 Composer 命令，来更加轻松的使用它。&lt;/p&gt;
+&lt;p&gt;它有许多的命令可以使用，但今天我将分享我使用的并且每天都有帮助的 6 个命令。&lt;/p&gt;
+&lt;h2 id=&quot;show&quot;&gt;&lt;a href=&quot;#show&quot; class=&quot;headerlink&quot; title=&quot;show&quot;&gt;&lt;/a&gt;show&lt;/h2&gt;&lt;p&gt;先说下 &lt;code&gt;show&lt;/code&gt; 命令。它允许您查看项目的所有已安装包(包括依赖项)，以及查看相关包的说明。所有这些信息都可以在Composer锁文件(composer.lock)中找到, 但是使用 &lt;code&gt;show&lt;/code&gt; 命令相对来说是一种更简单、更方便的一种查看包信息的方法。&lt;/p&gt;
+&lt;p&gt;要列出所有已安装的包及其版本号和说明，只需使用 &lt;code&gt;show&lt;/code&gt;:&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;composer show&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;有时候把这些信息用依赖关系树的形式查看会更容易理解， 可以通过 &lt;code&gt;--tree&lt;/code&gt; or &lt;code&gt;-t&lt;/code&gt; 参数:&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;composer show -t&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+      <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git Submodule 用法笔记</title>
+    <link href="https://novnan.github.io/Git/git-submodule/"/>
+    <id>https://novnan.github.io/Git/git-submodule/</id>
+    <published>2019-04-02T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.848Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;git version 2.21.0&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;新增-submodule&quot;&gt;&lt;a href=&quot;#新增-submodule&quot; class=&quot;headerlink&quot; title=&quot;新增 submodule&quot;&gt;&lt;/a&gt;新增 submodule&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;git submodule add &amp;lt;url&amp;gt; &amp;lt;folder&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;div class=&quot;note danger&quot;&gt;
+            &lt;p&gt;如果出现 &lt;code&gt;xxx already exists in the index&lt;/code&gt; 的提示，则给根据&lt;a href=&quot;https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index&quot;&gt;Issue with adding common code as git submodule: “already exists in the index”&lt;/a&gt;里面的回答，执行 &lt;code&gt;git rm -f --cached &amp;lt;folder&amp;gt;&lt;/code&gt; 后，在执行 &lt;code&gt;git submodule add&lt;/code&gt;&lt;/p&gt;
+          &lt;/div&gt;
+
+
+&lt;p&gt;如果这个仓库先前没有用过 submodule，那么 Git 会在目录下建立一个叫做 &lt;code&gt;.gitmodules&lt;/code&gt; 的文件，这里记录了 remote repo 的 URL 和这个 submodule 在此目录的路径。执行此命令后 submodule 和 &lt;code&gt;.gitmodules&lt;/code&gt; 会自动 staged，这个时候可以 commit 和 push。&lt;/p&gt;
+&lt;h2 id=&quot;更新-submodule&quot;&gt;&lt;a href=&quot;#更新-submodule&quot; class=&quot;headerlink&quot; title=&quot;更新 submodule&quot;&gt;&lt;/a&gt;更新 submodule&lt;/h2&gt;&lt;p&gt;必须到个人的目录底下执行 &lt;code&gt;git pull&lt;/code&gt; 去拉取 upstream 的代码，可是这样会比较安全；若要一次全部更新所有的 submodule，可以用 &lt;code&gt;foreach&lt;/code&gt; 命令：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git submodule foreach --recursive git pull origin master&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;删除-submodule&quot;&gt;&lt;a href=&quot;#删除-submodule&quot; class=&quot;headerlink&quot; title=&quot;删除 submodule&quot;&gt;&lt;/a&gt;删除 submodule&lt;/h2&gt;&lt;p&gt;本以为会有像是 &lt;code&gt;git submodule rm&lt;/code&gt; 这样的命令，结果竟然没有，必须辛苦的一个一个手动移除，不知道不实现这个命令的考量是什么，希望未来的版本能把它加上去。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Git" scheme="https://novnan.github.io/categories/Git/"/>
+    
+    
+      <category term="Git" scheme="https://novnan.github.io/tags/Git/"/>
+    
+      <category term="Git Submodule" scheme="https://novnan.github.io/tags/Git-Submodule/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu 18.04 LTS中安装和美化ZSH Shell</title>
+    <link href="https://novnan.github.io/Linux/install-zsh-shell-ubuntu-18-04/"/>
+    <id>https://novnan.github.io/Linux/install-zsh-shell-ubuntu-18-04/</id>
+    <published>2019-03-28T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.850Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;Ubuntu 18.04.2 LTS&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;安装ZSH-Shell&quot;&gt;&lt;a href=&quot;#安装ZSH-Shell&quot; class=&quot;headerlink&quot; title=&quot;安装ZSH Shell&quot;&gt;&lt;/a&gt;安装ZSH Shell&lt;/h2&gt;&lt;p&gt;ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt install zsh&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/Linux/install-zsh-shell-ubuntu-18-04/bd9f206bly1g1jqcbjc1yj210y0xg79k.jpg&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Linux" scheme="https://novnan.github.io/categories/Linux/"/>
+    
+    
+      <category term="Ubuntu" scheme="https://novnan.github.io/tags/Ubuntu/"/>
+    
+      <category term="zsh" scheme="https://novnan.github.io/tags/zsh/"/>
+    
+      <category term="oh my zsh" scheme="https://novnan.github.io/tags/oh-my-zsh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>array_merge 和 array+ 的区别</title>
+    <link href="https://novnan.github.io/PHP/combining-arrays-using-plus-versus-array-merge/"/>
+    <id>https://novnan.github.io/PHP/combining-arrays-using-plus-versus-array-merge/</id>
+    <published>2019-03-28T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.851Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;PHP version 7.1.26&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;键名是string，两者区别&quot;&gt;&lt;a href=&quot;#键名是string，两者区别&quot; class=&quot;headerlink&quot; title=&quot;键名是string，两者区别&quot;&gt;&lt;/a&gt;键名是string，两者区别&lt;/h2&gt;&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr1 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PHP&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr2 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PYTHON&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r(array_merge($arr1, $arr2));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r($arr1 + $arr2);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//再比如&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr1 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr2 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;3&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;c&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r(array_merge($arr1,$arr2));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 3 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r($arr1 + $arr2);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 2 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>令人困惑的strtotime</title>
+    <link href="https://novnan.github.io/PHP/confusing-strtotime/"/>
+    <id>https://novnan.github.io/PHP/confusing-strtotime/</id>
+    <published>2018-07-30T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.851Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;今天是 &lt;code&gt;2018-07-31&lt;/code&gt; 执行代码&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;date(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;,strtotime(&lt;span class=&quot;string&quot;&gt;&amp;quot;-1 month&amp;quot;&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;按正常理解输出应该是 &lt;code&gt;2018-06-30&lt;/code&gt;，但实际输出是 &lt;code&gt;2018-07-01&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;虽然这个问题看起来很迷惑，但从内部逻辑上来说呢，其实是”对”的。&lt;br&gt;我们来模拟下date内部的对于这种事情的处理逻辑：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先做-1 month，那么当前是07-31，减去一以后就是06-31&lt;/li&gt;
+&lt;li&gt;再做日期规范化，因为6月没有31号，所以就好像2点60等于3点一样，6月31就等于了7月1&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;是不是逻辑很”清晰”呢? 我们也可以手动验证第二个步骤，比如:&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;var_dump(date(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;, strtotime(&lt;span class=&quot;string&quot;&gt;&amp;quot;2017-06-31&amp;quot;&lt;/span&gt;)));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//输出2017-07-01&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="strtotime" scheme="https://novnan.github.io/tags/strtotime/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP empty 函数判断结果为空，但实际值却为非空</title>
+    <link href="https://novnan.github.io/PHP/When-empty-is-not-empty/"/>
+    <id>https://novnan.github.io/PHP/When-empty-is-not-empty/</id>
+    <published>2018-05-27T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.850Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;PHP 7.1.16&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;最近我在一个项目中使用 &lt;code&gt;empty&lt;/code&gt; 时获取到了一些意料之外的结果。下面是我处理后的调试记录，在这里分享给你。&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;var_dump(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $person-&amp;gt;firstName,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;empty&lt;/span&gt;($person-&amp;gt;firstName)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;它的结果是：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;(&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;) &lt;span class=&quot;string&quot;&gt;&amp;quot;Freek&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;bool&lt;/span&gt;(&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="empty" scheme="https://novnan.github.io/tags/empty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ubuntu 16.04服务器上搭建Shadowsocks服务</title>
+    <link href="https://novnan.github.io/Shadowsocks/setup-Shadowsocks-on-ubuntu-1604/"/>
+    <id>https://novnan.github.io/Shadowsocks/setup-Shadowsocks-on-ubuntu-1604/</id>
+    <published>2018-05-09T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.853Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;Ubuntu 16.04&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;更新软件源&quot;&gt;&lt;a href=&quot;#更新软件源&quot; class=&quot;headerlink&quot; title=&quot;更新软件源&quot;&gt;&lt;/a&gt;更新软件源&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;安装pip&quot;&gt;&lt;a href=&quot;#安装pip&quot; class=&quot;headerlink&quot; title=&quot;安装pip&quot;&gt;&lt;/a&gt;安装pip&lt;/h2&gt;&lt;p&gt;使用 &lt;code&gt;Python 3&lt;/code&gt; 为载体，因 &lt;code&gt;Python 3&lt;/code&gt; 对应的包管理器 &lt;code&gt;pip3&lt;/code&gt; 并未预装，首先安装 &lt;code&gt;pip3&lt;/code&gt;：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt install python3-pip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;安装Shadowsocks&quot;&gt;&lt;a href=&quot;#安装Shadowsocks&quot; class=&quot;headerlink&quot; title=&quot;安装Shadowsocks&quot;&gt;&lt;/a&gt;安装Shadowsocks&lt;/h2&gt;&lt;p&gt;因 Shadowsocks 作者不再维护 &lt;code&gt;pip&lt;/code&gt; 中的Shadowsocks（定格在了2.8.2），我们使用下面的命令来安装最新版的Shadowsocks：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="Shadowsocks" scheme="https://novnan.github.io/categories/Shadowsocks/"/>
+    
+    
+      <category term="shadowsocks" scheme="https://novnan.github.io/tags/shadowsocks/"/>
+    
+      <category term="ss" scheme="https://novnan.github.io/tags/ss/"/>
+    
+      <category term="ubuntu" scheme="https://novnan.github.io/tags/ubuntu/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP 将 DateTime 对象转化为友好时间</title>
+    <link href="https://novnan.github.io/PHP/create-a-friendly-date-format/"/>
+    <id>https://novnan.github.io/PHP/create-a-friendly-date-format/</id>
+    <published>2018-02-07T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.851Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span
+        
+      
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>迭代器和生成器</title>
+    <link href="https://novnan.github.io/PHP/iterator-and-generator/"/>
+    <id>https://novnan.github.io/PHP/iterator-and-generator/</id>
+    <published>2018-01-27T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.852Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;一道面试题&quot;&gt;&lt;a href=&quot;#一道面试题&quot; class=&quot;headerlink&quot; title=&quot;一道面试题&quot;&gt;&lt;/a&gt;一道面试题&lt;/h2&gt;&lt;div class=&quot;note primary&quot;&gt;
+            &lt;p&gt;如果让你用 PHP 生成从 1 到100 万个数值，请问怎么做才能最省内存？&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;p&gt;没错，这是一道面试题，如果让你写出答案，你会有什么样的思路呢？请先独自思考几分钟。&lt;/p&gt;
+&lt;p&gt;可能你想到的会是这种方式：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// 我自己本地测试大概用了 34MB 内存&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;makeLargeArray&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;$length&lt;/span&gt;)&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $dataset = [];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;for&lt;/span&gt; ($i = &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;; $i &amp;lt; $length; $i++) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        $dataset[] = $i;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; $dataset;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$customRange = makeLargeArray(&lt;span class=&quot;number&quot;&gt;1000000&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;foreach&lt;/span&gt; ($customRange &lt;span class=&quot;keyword&quot;&gt;as&lt;/span&gt; $i) &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;echo&lt;/span&gt; $i, PHP_EOL;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// 记录使用的内存&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;formatBytes&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;$bytes, $precision = &lt;span class=&quot;number&quot;&gt;2&lt;/span&gt;&lt;/span&gt;) &lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $units = &lt;span class=&quot;keyword&quot;&gt;array&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;b&amp;quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;kb&amp;quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;mb&amp;quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;gb&amp;quot;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;quot;tb&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $bytes = max($bytes, &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $pow = floor(($bytes ? log($bytes) : &lt;span class=&quot;number&quot;&gt;0&lt;/span&gt;) / log(&lt;span class=&quot;number&quot;&gt;1024&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $pow = min($pow, count($units) - &lt;span class=&quot;number&quot;&gt;1&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $bytes /= (&lt;span class=&quot;number&quot;&gt;1&lt;/span&gt; &amp;lt;&amp;lt; (&lt;span class=&quot;number&quot;&gt;10&lt;/span&gt; * $pow));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;return&lt;/span&gt; round($bytes, $precision) . &lt;span class=&quot;string&quot;&gt;&amp;quot; &amp;quot;&lt;/span&gt; . $units[$pow];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;print&lt;/span&gt; formatBytes(memory_get_peak_usage());&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;你如果给出这种答案的话，肯定不会让面试官满意的。因为这道题的重点是节省内存，如果是如上的程序，虽然能够实现题目的前半部分要求，但实际运行起来却是一个非常吃内存的老虎。因为从 PHP 底层分析， &lt;code&gt;makeLargeArray()&lt;/code&gt; 会预先创建一个由一百万个整数组成的数组分配内存！&lt;/p&gt;
+&lt;p&gt;那么到底要怎么做才能既节省内存，又能实现这道题的目标呢？&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="Iterator" scheme="https://novnan.github.io/tags/Iterator/"/>
+    
+      <category term="Generator" scheme="https://novnan.github.io/tags/Generator/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>nginx基本配置与参数说明</title>
+    <link href="https://novnan.github.io/Nginx/example-nginx-configuration/"/>
+    <id>https://novnan.github.io/Nginx/example-nginx-configuration/</id>
+    <published>2018-01-22T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.850Z</updated>
+    
+    <summary type="html">
+    
+      &lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;31&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;32&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;33&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;34&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;35&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;36&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;37&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;38&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;39&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;40&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;41&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;42&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;43&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;44&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;45&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;46&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;47&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;48&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;49&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;50&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;51&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;52&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;53&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;54&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;55&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;56&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;57&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;58&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;59&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;60&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;61&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;62&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;63&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;64&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;65&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;66&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;67&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;68&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;69&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;70&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;71&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;72&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;73&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;74&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;75&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;76&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;77&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;78&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;79&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;80&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;81&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;82&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;83&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;84&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;85&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;86&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;87&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;88&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;89&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;90&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;91&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;92&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;93&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;94&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;95&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;96&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;97&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;98&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;99&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;100&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;101&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;102&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;103&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;104&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;105&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;106&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;107&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;108&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;109&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;110&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;111&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;112&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;113&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;114&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;115&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;116&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;117&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;118&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;119&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;120&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;121&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;122&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;#运行用户&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;user nobody;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#启动进程,通常设置成和cpu的数量相等&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;worker_processes  1;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#全局错误日志及PID文件&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#error_log  logs&amp;#x2F;error.log;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#error_log  logs&amp;#x2F;error.log  notice;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#error_log  logs&amp;#x2F;error.log  info;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#pid        logs&amp;#x2F;nginx.pid;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;#工作模式及连接数上限&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;events &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #epoll是多路复用IO(I&amp;#x2F;O Multiplexing)中的一种方式,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #仅用于linux2.6以上内核,可以大大提高nginx的性能&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    use   epoll; &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #单个后台worker process进程的最大并发链接数    &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    worker_connections  1024;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 并发总数是 worker_processes 和 worker_connections 的乘积&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 即 max_clients &amp;#x3D; worker_processes * worker_connections&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 在设置了反向代理的情况下，max_clients &amp;#x3D; worker_processes * worker_connections &amp;#x2F; 4  为什么&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 为什么上面反向代理要除以4，应该说是一个经验值&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 根据以上条件，正常情况下的Nginx Server可以应付的最大连接数为：4 * 8000 &amp;#x3D; 32000&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # worker_connections 值的设置跟物理内存大小有关&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 因为并发受IO约束，max_clients的值须小于系统可以打开的最大文件数&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 而系统可以打开的最大文件数和内存大小成正比，一般1GB内存的机器上可以打开的文件数大约是10万左右&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 我们来看看360M内存的VPS可以打开的文件句柄数是多少：&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # $ cat &amp;#x2F;proc&amp;#x2F;sys&amp;#x2F;fs&amp;#x2F;file-max&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 输出 34336&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 32000 &amp;lt; 34336，即并发连接总数小于系统可以打开的文件句柄总数，这样就在操作系统可以承受的范围之内&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 所以，worker_connections 的值需根据 worker_processes 进程数目和系统可以打开的最大文件总数进行适当地进行设置&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 使得并发总数小于操作系统可以打开的最大文件数目&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 其实质也就是根据主机的物理CPU和内存进行配置&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # 当然，理论上的并发总数可能会和实际有所偏差，因为主机还有其他的工作进程需要消耗系统资源。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    # ulimit -SHn 65535&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;http &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #设定mime类型,类型由mime.type文件定义&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    include    mime.types;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    default_type  application&amp;#x2F;octet-stream;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #设定日志格式&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    log_format  main  &amp;#39;$remote_addr - $remote_user [$time_local] &amp;quot;$request&amp;quot; &amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                      &amp;#39;$status $body_bytes_sent &amp;quot;$http_referer&amp;quot; &amp;#39;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;                      &amp;#39;&amp;quot;$http_user_agent&amp;quot; &amp;quot;$http_x_forwarded_for&amp;quot;&amp;#39;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    access_log  logs&amp;#x2F;access.log  main;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #sendfile 指令指定 nginx 是否调用 sendfile 函数（zero copy 方式）来输出文件，&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #对于普通应用，必须设为 on,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #如果用来进行下载等应用磁盘IO重负载应用，可设置为 off，&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #以平衡磁盘与网络I&amp;#x2F;O处理速度，降低系统的uptime.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    sendfile     on;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #tcp_nopush     on;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #连接超时时间&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #keepalive_timeout  0;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    keepalive_timeout  65;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    tcp_nodelay     on;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #开启gzip压缩&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    gzip  on;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    gzip_disable &amp;quot;MSIE [1-6].&amp;quot;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #设定请求缓冲&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    client_header_buffer_size    128k;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    large_client_header_buffers  4 128k;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    #设定虚拟主机配置&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    server &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #侦听80端口&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        listen    80;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #定义使用 www.nginx.cn访问&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        server_name  www.nginx.cn;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #定义服务器的默认网站根目录位置&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        root html;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #设定本虚拟主机的访问日志&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        access_log  logs&amp;#x2F;nginx.access.log  main;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #默认请求&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        location &amp;#x2F; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            #定义首页索引文件的名称&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            index index.php index.html index.htm;   &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        # 定义错误提示页面&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        error_page   500 502 503 504 &amp;#x2F;50x.html;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        location &amp;#x3D; &amp;#x2F;50x.html &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #静态文件，nginx自己处理&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        location ~ ^&amp;#x2F;(images|javascript|js|css|flash|media|static)&amp;#x2F; &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            #过期30天，静态文件不怎么更新，过期可以设大一点，&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            #如果频繁更新，则可以设置得小一点。&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            expires 30d;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #PHP 脚本请求全部转发到 FastCGI处理. 使用FastCGI默认配置.&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        location ~ .php$ &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            fastcgi_pass 127.0.0.1:9000;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            fastcgi_index index.php;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            include fastcgi_params;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        #禁止访问 .htxxx 文件&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            location ~ &amp;#x2F;.ht &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;            deny all;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;        &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="Nginx" scheme="https://novnan.github.io/categories/Nginx/"/>
+    
+    
+      <category term="Nginx" scheme="https://novnan.github.io/tags/Nginx/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PhpStorm + Xdebug 调试配置</title>
+    <link href="https://novnan.github.io/PhpStorm/PhpStorm-Xdebug-configuration/"/>
+    <id>https://novnan.github.io/PhpStorm/PhpStorm-Xdebug-configuration/</id>
+    <published>2018-01-22T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.853Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;PhpStorm 2017.3.3&lt;br&gt;Postman 5.5.0&lt;br&gt;php-7.1.12-Win32-VC14-x64 TS&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;安装-xdebug-模块&quot;&gt;&lt;a href=&quot;#安装-xdebug-模块&quot; class=&quot;headerlink&quot; title=&quot;安装 xdebug 模块&quot;&gt;&lt;/a&gt;安装 xdebug 模块&lt;/h2&gt;&lt;p&gt;前往 &lt;a href=&quot;https://xdebug.org/download.php&quot;&gt;xdebug 官方网站&lt;/a&gt; 下载与自己的 PHP 版本匹配的 xdebug模块文件，如果不知道要选择哪个版本的 &lt;code&gt;xdebug&lt;/code&gt;，可以在浏览器上查看 &lt;code&gt;phpinfo()&lt;/code&gt;，复制全部 &lt;code&gt;phpinfo()&lt;/code&gt; 到&lt;a href=&quot;https://xdebug.org/wizard.php&quot;&gt;这里&lt;/a&gt;自动解析。最后，将 &lt;code&gt;xdebug&lt;/code&gt; 模块文件放入PHP安装目录/ext文件夹中。&lt;/p&gt;
+&lt;h2 id=&quot;配置-php-ini&quot;&gt;&lt;a href=&quot;#配置-php-ini&quot; class=&quot;headerlink&quot; title=&quot;配置 php.ini&quot;&gt;&lt;/a&gt;配置 php.ini&lt;/h2&gt;&lt;p&gt;&lt;code&gt;php.ini&lt;/code&gt; 添加如下几行配置&lt;/p&gt;
+&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;23&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;[xdebug]&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;指定Xdebug扩展文件&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;zend_extension &amp;#x3D; php_xdebug.dll&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.default_enable &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;远程调试&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_enable &amp;#x3D; on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;自动打开远程调试&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.remote_autostart &amp;#x3D; 1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;代码自动跟踪&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.auto_trace &amp;#x3D; off&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;收集传递给函数的参数变量&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.collect_params&amp;#x3D;on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;收集函数调用的返回值&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.collect_return&amp;#x3D;on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;性能检测分析&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.profiler_enable_trigger &amp;#x3D; on&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;生成的分析文件&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.profiler_output_name &amp;#x3D; cachegrind.out.%t.%p&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;堆栈跟踪文件的存放目录&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.profiler_output_dir &amp;#x3D; &amp;quot;D:&amp;#x2F;laragon&amp;#x2F;tmp&amp;quot;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;extension&amp;#x3D;php_printer.dll&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;;指定传递给DBGp调试器处理程序的IDE Key 在Chrome以及FireFox中插件配置的时候要用到&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;xdebug.idekey&amp;#x3D;PHPSTORM&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+    
+    </summary>
+    
+    
+      <category term="PhpStorm" scheme="https://novnan.github.io/categories/PhpStorm/"/>
+    
+    
+      <category term="PhpStorm" scheme="https://novnan.github.io/tags/PhpStorm/"/>
+    
+      <category term="Xdebug" scheme="https://novnan.github.io/tags/Xdebug/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>解决在 Chrome network preview 标签中不能渲染 dd 方法</title>
+    <link href="https://novnan.github.io/PHP/resolve-cannot-render-dd-function-in-chrome-network-preview-tab/"/>
+    <id>https://novnan.github.io/PHP/resolve-cannot-render-dd-function-in-chrome-network-preview-tab/</id>
+    <published>2017-12-08T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.852Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;Chrome version 63.0.3239.84&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;code&gt;dd&lt;/code&gt; 方法指的是 &lt;a href=&quot;../php-global-uses-the-laravel-helper-function-dd&quot;&gt;PHP 全局使用 Laravel 辅助函数 dd&lt;/a&gt; 中设置的方法。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;在 Chrome 63 中，preview 并没有渲染 html 标签，如下图所示：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/PHP/resolve-cannot-render-dd-function-in-chrome-network-preview-tab/bd9f206bgy1fmafyt9sgsj213s09j3yv.png&quot;&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="dd" scheme="https://novnan.github.io/tags/dd/"/>
+    
+      <category term="Chrome" scheme="https://novnan.github.io/tags/Chrome/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>将空目录添加至 Git 版本库</title>
+    <link href="https://novnan.github.io/Git/add-an-empty-directory-to-a-git-repository/"/>
+    <id>https://novnan.github.io/Git/add-an-empty-directory-to-a-git-repository/</id>
+    <published>2017-12-06T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.847Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;git 没有跟踪空目录，所以需要跟踪那么就需要添加文件，就是在目录下新建一个 &lt;code&gt;.gitkeep&lt;/code&gt; 文件（文件名其实随意，不过常见的是 &lt;code&gt;.gitkeep&lt;/code&gt; 和
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Git" scheme="https://novnan.github.io/categories/Git/"/>
+    
+    
+      <category term="Git" scheme="https://novnan.github.io/tags/Git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>微信退款异步通知 aes-256-ecb 解密</title>
+    <link href="https://novnan.github.io/Weixin/wxpay-refund/"/>
+    <id>https://novnan.github.io/Weixin/wxpay-refund/</id>
+    <published>2017-12-05T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.854Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h2 id=&quot;实现代码&quot;&gt;&lt;a href=&quot;#实现代码&quot; class=&quot;headerlink&quot; title=&quot;实现代码&quot;&gt;&lt;/a&gt;实现代码&lt;/h2&gt;&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td
+        
+      
+    
+    </summary>
+    
+    
+      <category term="weixin" scheme="https://novnan.github.io/categories/weixin/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="wxpay" scheme="https://novnan.github.io/tags/wxpay/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP7中的异常与错误处理</title>
+    <link href="https://novnan.github.io/PHP/throwable-exceptions-and-errors-in-php7/"/>
+    <id>https://novnan.github.io/PHP/throwable-exceptions-and-errors-in-php7/</id>
+    <published>2017-12-04T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.852Z</updated>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;PHP-中的-Exception-Error-Throwable&quot;&gt;&lt;a href=&quot;#PHP-中的-Exception-Error-Throwable&quot; class=&quot;headerlink&quot; title=&quot;PHP 中的 Exception, Error, Throwable&quot;&gt;&lt;/a&gt;PHP 中的 Exception, Error, Throwable&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;PHP 中将代码自身异常(一般是环境或者语法非法所致)称作错误 &lt;code&gt;Error&lt;/code&gt;，将运行中出现的逻辑错误称为异常 &lt;code&gt;Exception&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;错误是没法通过代码处理的，而异常则可以通过 &lt;code&gt;try/catch&lt;/code&gt; 来处理&lt;/li&gt;
+&lt;li&gt;PHP7 中出现了 &lt;code&gt;Throwable&lt;/code&gt; 接口，该接口由 &lt;code&gt;Error&lt;/code&gt; 和 &lt;code&gt;Exception&lt;/code&gt; 实现，用户不能直接实现 &lt;code&gt;Throwable&lt;/code&gt; 接口，而只能通过继承 &lt;code&gt;Exception&lt;/code&gt; 来实现接口&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;PHP7-异常处理机制&quot;&gt;&lt;a href=&quot;#PHP7-异常处理机制&quot; class=&quot;headerlink&quot; title=&quot;PHP7 异常处理机制&quot;&gt;&lt;/a&gt;PHP7 异常处理机制&lt;/h2&gt;&lt;p&gt;过去的 PHP，处理致命错误几乎是不可能的。致命错误不会调用由 &lt;code&gt;set_error_handler()&lt;/code&gt; 设置的处理方式，而是简单的停止脚本的执行。&lt;/p&gt;
+&lt;p&gt;在 PHP7 中，当致命错误和可捕获的错误(&lt;code&gt;E_ERROR&lt;/code&gt; 和 &lt;code&gt;E_RECOVERABLE_ERROR&lt;/code&gt;)发生时会抛出异常，而不是直接停止脚本的运行。对于某些情况，比如内存溢出，致命错误则仍然像之前一样直接停止脚本执行。在 PHP7 中，&lt;strong&gt;一个未捕获的异常也会是一个致命错误&lt;/strong&gt;。这意味着在 PHP5.x 中致命错误抛出的异常未捕获，在 PHP7 中也是致命错误。&lt;/p&gt;
+&lt;div class=&quot;note danger&quot;&gt;
+            &lt;p&gt;注意：其他级别的错误如 &lt;code&gt;warning&lt;/code&gt; 和 &lt;code&gt;notice&lt;/code&gt;，和之前一样不会抛出异常，只有 &lt;code&gt;fatal&lt;/code&gt; 和 &lt;code&gt;recoverable&lt;/code&gt; 级别的错误会抛出异常。&lt;/p&gt;
+          &lt;/div&gt;
+    
+    </summary>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="PHP7" scheme="https://novnan.github.io/tags/PHP7/"/>
+    
+      <category term="Exception" scheme="https://novnan.github.io/tags/Exception/"/>
+    
+      <category term="Error" scheme="https://novnan.github.io/tags/Error/"/>
+    
+      <category term="Throwable" scheme="https://novnan.github.io/tags/Throwable/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Laravel 服务容器</title>
+    <link href="https://novnan.github.io/Laravel/learn-laravel-container/"/>
+    <id>https://novnan.github.io/Laravel/learn-laravel-container/</id>
+    <published>2017-11-07T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.849Z</updated>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;容器，字面上理解就是装东西的东西。常见的变量、对象属性等都可以算是容器。一个容器能够装什么，全部取决于你对该容器的定义。当然，有这样一种容器，它存放的不是文本、数值，而是对象、对象的描述（类、接口）或者是提供对象的回调，通过这种容器，我们得以实现许多高级的功能，其中最常提到的，就是 “解耦” 、“依赖注入（DI）”。本文就从这里开始。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;Laravel Framework version 5.1.41 (LTS)&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;IoC-容器，-laravel-的核心&quot;&gt;&lt;a href=&quot;#IoC-容器，-laravel-的核心&quot; class=&quot;headerlink&quot; title=&quot;IoC 容器， laravel 的核心&quot;&gt;&lt;/a&gt;IoC 容器， laravel 的核心&lt;/h2&gt;&lt;p&gt;Laravel 的核心就是一个 &lt;code&gt;IoC 容器&lt;/code&gt;，根据文档，称其为“&lt;code&gt;服务容器&lt;/code&gt;”，顾名思义，该容器提供了整个框架中需要的一系列服务。作为初学者，很多人会在这一个概念上犯难，因此，我打算从一些基础的内容开始讲解，通过理解面向对象开发中依赖的产生和解决方法，来逐渐揭开“依赖注入”的面纱，逐渐理解这一神奇的设计理念。&lt;/p&gt;
+&lt;p&gt;本文一大半内容都是通过举例来让读者去理解什么是 &lt;code&gt;IoC（控制反转）&lt;/code&gt; 和 &lt;code&gt;DI（依赖注入）&lt;/code&gt;，通过理解这些概念，来更加深入。更多关于 laravel 服务容器的用法建议阅读文档即可。&lt;/p&gt;
+&lt;h2 id=&quot;IoC-容器诞生的故事&quot;&gt;&lt;a href=&quot;#IoC-容器诞生的故事&quot; class=&quot;headerlink&quot; title=&quot;IoC 容器诞生的故事&quot;&gt;&lt;/a&gt;IoC 容器诞生的故事&lt;/h2&gt;&lt;p&gt;讲解 IoC 容器有很多的文章，我之前也写过。但现在我打算利用当下的灵感重新来过，那么开始吧。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Laravel" scheme="https://novnan.github.io/categories/Laravel/"/>
+    
+    
+      <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+      <category term="Laravel" scheme="https://novnan.github.io/tags/Laravel/"/>
+    
+      <category term="Container" scheme="https://novnan.github.io/tags/Container/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>让 Hexo NexT 支持 emoji 表情</title>
+    <link href="https://novnan.github.io/Hexo/emojis-for-hexo-next/"/>
+    <id>https://novnan.github.io/Hexo/emojis-for-hexo-next/</id>
+    <published>2017-09-15T16:00:00.000Z</published>
+    <updated>2020-08-06T07:41:19.848Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;将 markdown 转化为 html 的转化器叫做 markdown 渲染器。&lt;/p&gt;
+&lt;p&gt;在 Hexo 中默认的 markdown 渲染器是 &lt;code&gt;hexo-renderer-marked&lt;/code&gt; ，这个渲染器是不支持 emoji 表情的。&lt;/p&gt;
+&lt;p&gt;在 NexT 的 &lt;a href=&quot;https://github.com/iissnan/hexo-theme-next/issues/390&quot;&gt;issue&lt;/a&gt; 上有推荐使用 &lt;a href=&quot;https://github.com/sergiolepore/hexo-tag-emojis&quot;&gt;hexo-tag-emojis&lt;/a&gt; 这个插件来支持 emoji 表情，但可惜的是这个插件已经不再维护，已经不支持 &lt;code&gt;Hexo v3+&lt;/code&gt; 了。还好在 Hexo 的 &lt;a href=&quot;https://hexo.io/plugins/&quot;&gt;plugins&lt;/a&gt; 页，我们找到了另外一个 emoji 插件 &lt;a href=&quot;https://github.com/crimx/hexo-filter-github-emojis&quot;&gt;hexo-filter-github-emojis&lt;/a&gt;。&lt;/p&gt;
+&lt;p&gt;下面我们就来实现 Hexo NexT 对 emoji 的支持。&lt;/p&gt;
+&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
+            &lt;p&gt;Hexo 3.3.9&lt;br&gt;NexT 5.1.2&lt;/p&gt;
+          &lt;/div&gt;
+
+&lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ npm install hexo-filter-github-emojis --save&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;配置&quot;&gt;&lt;a href=&quot;#配置&quot; class=&quot;headerlink&quot; title=&quot;配置&quot;&gt;&lt;/a&gt;配置&lt;/h2&gt;&lt;p&gt;打开 &lt;code&gt;站点配置文件&lt;/code&gt;，添加以下内容：&lt;/p&gt;
+&lt;figure class=&quot;highlight yaml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attr&quot;&gt;githubEmojis:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;enable:&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;className:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;github-emoji&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;unicode:&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;styles:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;localEmojis:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;具体的每个配置项含义可以看插件的&lt;a href=&quot;https://github.com/crimx/hexo-filter-github-emojis&quot;&gt;文档&lt;/a&gt;。&lt;/p&gt;
+    
+    </summary>
+    
+    
+      <category term="Hexo" scheme="https://novnan.github.io/categories/Hexo/"/>
+    
+    
+      <category term="Hexo" scheme="https://novnan.github.io/tags/Hexo/"/>
+    
+      <category term="NexT" scheme="https://novnan.github.io/tags/NexT/"/>
+    
+      <category term="emoji" scheme="https://novnan.github.io/tags/emoji/"/>
+    
+  </entry>
+  
+</feed>
