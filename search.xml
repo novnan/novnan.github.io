@@ -1675,4 +1675,31 @@
         <tag>Container</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Hexo版本升级指南</title>
+    <url>/Hexo/update_hexo/</url>
+    <content><![CDATA[<p>1、全局升级hexo-cli，先 <code>hexo version</code> 查看当前版本，然后 <code>npm i hexo-cli -g</code>，再次 <code>hexo version</code> 查看是否升级成功。</p>
+<p>2、使用 <code>npm install -g npm-check</code> 和 <code>npm-check</code>，检查系统中的插件是否有升级的，可以看到自己前面都安装了那些插件</p>
+<p>3、使用<code> npm install -g npm-upgrade</code> 和 <code>npm-upgrade</code>，升级系统中的插件</p>
+<p>4、使用 <code>npm update -g和npm update --save</code></p>
+<p>PS：第四步遇到了错误，错误提示如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; fsevents@1.2.11 install /Users/lanvnal/Files/blog/node_modules/hexo/node_modules/fsevents</span><br><span class="line">&gt; node-gyp rebuild</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.CLTools_Executables&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLILeo&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLI&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line">gyp: No Xcode or CLT version detected!</span><br></pre></td></tr></table></figure>
+
+<p>其实已经安装过了xcode cli，但是这里还是报错了，估计和苹果新系统有关，重装就好了，操作如下：</p>
+<p>如果像以前一样执行 <code>xcode-select --install</code> 会有如下报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcode-select: error: command line tools are already installed, use &quot;Software Update&quot; to install updates</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+
+<div class="note default">
+            <p>原文链接：<a href="https://lanvnal.com/2020/02/16/hexo-ban-ben-sheng-ji/">Hexo版本升级指南</a></p>
+          </div>]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
 </search>

@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://novnan.github.io/"/>
-  <updated>2020-08-06T07:41:19.849Z</updated>
+  <updated>2020-08-07T01:22:26.235Z</updated>
   <id>https://novnan.github.io/</id>
   
   <author>
@@ -15,6 +15,34 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Hexo版本升级指南</title>
+    <link href="https://novnan.github.io/Hexo/update_hexo/"/>
+    <id>https://novnan.github.io/Hexo/update_hexo/</id>
+    <published>2020-08-06T16:00:00.000Z</published>
+    <updated>2020-08-07T01:22:26.235Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;p&gt;1、全局升级hexo-cli，先 &lt;code&gt;hexo version&lt;/code&gt; 查看当前版本，然后 &lt;code&gt;npm i hexo-cli -g&lt;/code&gt;，再次 &lt;code&gt;hexo version&lt;/code&gt; 查看是否升级成功。&lt;/p&gt;
+&lt;p&gt;2、使用
+        
+      
+    
+    </summary>
+    
+    
+      <category term="Hexo" scheme="https://novnan.github.io/categories/Hexo/"/>
+    
+    
+      <category term="Hexo" scheme="https://novnan.github.io/tags/Hexo/"/>
+    
+  </entry>
   
   <entry>
     <title>宝塔Linux面板小内存服务器编译安装 MySQL 8.0</title>
@@ -731,44 +759,6 @@
       <category term="Laravel" scheme="https://novnan.github.io/tags/Laravel/"/>
     
       <category term="Container" scheme="https://novnan.github.io/tags/Container/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>让 Hexo NexT 支持 emoji 表情</title>
-    <link href="https://novnan.github.io/Hexo/emojis-for-hexo-next/"/>
-    <id>https://novnan.github.io/Hexo/emojis-for-hexo-next/</id>
-    <published>2017-09-15T16:00:00.000Z</published>
-    <updated>2020-08-06T07:41:19.848Z</updated>
-    
-    <summary type="html">
-    
-      &lt;p&gt;将 markdown 转化为 html 的转化器叫做 markdown 渲染器。&lt;/p&gt;
-&lt;p&gt;在 Hexo 中默认的 markdown 渲染器是 &lt;code&gt;hexo-renderer-marked&lt;/code&gt; ，这个渲染器是不支持 emoji 表情的。&lt;/p&gt;
-&lt;p&gt;在 NexT 的 &lt;a href=&quot;https://github.com/iissnan/hexo-theme-next/issues/390&quot;&gt;issue&lt;/a&gt; 上有推荐使用 &lt;a href=&quot;https://github.com/sergiolepore/hexo-tag-emojis&quot;&gt;hexo-tag-emojis&lt;/a&gt; 这个插件来支持 emoji 表情，但可惜的是这个插件已经不再维护，已经不支持 &lt;code&gt;Hexo v3+&lt;/code&gt; 了。还好在 Hexo 的 &lt;a href=&quot;https://hexo.io/plugins/&quot;&gt;plugins&lt;/a&gt; 页，我们找到了另外一个 emoji 插件 &lt;a href=&quot;https://github.com/crimx/hexo-filter-github-emojis&quot;&gt;hexo-filter-github-emojis&lt;/a&gt;。&lt;/p&gt;
-&lt;p&gt;下面我们就来实现 Hexo NexT 对 emoji 的支持。&lt;/p&gt;
-&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;Hexo 3.3.9&lt;br&gt;NexT 5.1.2&lt;/p&gt;
-          &lt;/div&gt;
-
-&lt;h2 id=&quot;安装&quot;&gt;&lt;a href=&quot;#安装&quot; class=&quot;headerlink&quot; title=&quot;安装&quot;&gt;&lt;/a&gt;安装&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;$ npm install hexo-filter-github-emojis --save&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;h2 id=&quot;配置&quot;&gt;&lt;a href=&quot;#配置&quot; class=&quot;headerlink&quot; title=&quot;配置&quot;&gt;&lt;/a&gt;配置&lt;/h2&gt;&lt;p&gt;打开 &lt;code&gt;站点配置文件&lt;/code&gt;，添加以下内容：&lt;/p&gt;
-&lt;figure class=&quot;highlight yaml&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;attr&quot;&gt;githubEmojis:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;enable:&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;className:&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;github-emoji&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;unicode:&lt;/span&gt; &lt;span class=&quot;literal&quot;&gt;false&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;styles:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;  &lt;span class=&quot;attr&quot;&gt;localEmojis:&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;具体的每个配置项含义可以看插件的&lt;a href=&quot;https://github.com/crimx/hexo-filter-github-emojis&quot;&gt;文档&lt;/a&gt;。&lt;/p&gt;
-    
-    </summary>
-    
-    
-      <category term="Hexo" scheme="https://novnan.github.io/categories/Hexo/"/>
-    
-    
-      <category term="Hexo" scheme="https://novnan.github.io/tags/Hexo/"/>
-    
-      <category term="NexT" scheme="https://novnan.github.io/tags/NexT/"/>
-    
-      <category term="emoji" scheme="https://novnan.github.io/tags/emoji/"/>
     
   </entry>
   
