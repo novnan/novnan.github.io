@@ -1,5 +1,5 @@
 /* global NexT, CONFIG */
-if (window.jQuery) { var Velocity = $.Velocity; }
+
 NexT.motion = {};
 
 NexT.motion.integrator = {
