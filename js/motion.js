@@ -1,7 +1,7 @@
 /* global NexT, CONFIG */
 
 NexT.motion = {};
-let Velocity = $.Velocity;
+
 NexT.motion.integrator = {
   queue: [],
   init : function() {
