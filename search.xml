@@ -239,9 +239,8 @@
 <blockquote>
 <p><strong>因此生产请使用 <code>composer dump-autoload -o --no-dev --classmap-authoritative</code></strong></p>
 </blockquote>
-<div class="note default">
-            <p>原文链接：<a href="https://learnku.com/articles/26343">你生产环境的 Composer 是这样吗？</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://learnku.com/articles/26343">你生产环境的 Composer 是这样吗？</a></p>
+</div>]]></content>
       <categories>
         <category>Composer</category>
       </categories>
@@ -286,9 +285,8 @@
 <p><img src="/images/Composer/modify-the-project-dependency-to-the-new-mirror-address/f1bYWcxUp2.png"></p>
 <h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>问：</strong> 此操作是否会升级依赖版本？<br><strong>答：</strong> 不会，只会在 <code>composer.lock</code> 中将旧的依赖下载地址更新为新的，版本保持不变。</p>
 <p><strong>问：</strong> 线上环境里已经下载了依赖到 <code>vendor</code> 文件夹，是否需要删了再重新下载？<br><strong>答：</strong> 不需要，如上所讲，只是更新了下载链接，代码包连哈希都是一样，无需重新下载。</p>
-<div class="note default">
-            <p>原文链接：<a href="https://learnku.com/laravel/wikis/16722">Laravel 安装和开发环境：修改项目依赖为新的镜像地址</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://learnku.com/laravel/wikis/16722">Laravel 安装和开发环境：修改项目依赖为新的镜像地址</a></p>
+</div>]]></content>
       <categories>
         <category>Composer</category>
       </categories>
@@ -355,9 +353,8 @@
 <h2 id="许可"><a href="#许可" class="headerlink" title="许可"></a>许可</h2><p>最后，知道您安装的每个软件包的许可证是非常有用的。 Composer 有一个方便的 <code>licenses</code> 命令，用于查询许可的完整列表：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">composer licenses</span><br></pre></td></tr></table></figure>
 
-<div class="note default">
-            <p>原文链接：<a href="https://learnku.com/laravel/t/28678">推荐六个鲜为人知的 Composer 命令</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://learnku.com/laravel/t/28678">推荐六个鲜为人知的 Composer 命令</a></p>
+</div>]]></content>
       <categories>
         <category>Composer</category>
       </categories>
@@ -372,9 +369,8 @@
     <content><![CDATA[<blockquote>
 <p>当 PHP 引擎试图实例化未知类的操作时，就会调用 <code>__autoload()</code> ,并将类名当做字符串传递给它。但 <code>__autoload()</code> 有个缺点，就是 一个进程中只能定义一次。它是全局唯一的，如果框架占了这个名字，便会导致框架的用户用不了其它的 <code>__autoload()</code> 了，包括用户自定义的和其它类库带的。这时候就可以使用 <code>spl_autoload_register()</code> 函数。它可以把函数注册到 <code>__autoload</code> 队列中。 </p>
 </blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Composer version 1.5.1 </p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Composer version 1.5.1 </p>
+</div>
 
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>以 Laravel 项目为例，<code>composer.json</code> 文件：</p>
 <figure class="highlight json"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;autoload&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;classmap&quot;</span> : [</span><br><span class="line">            <span class="string">&quot;app/controllers&quot;</span>,</span><br><span class="line">            <span class="string">&quot;app/models&quot;</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -431,23 +427,10 @@
       </tags>
   </entry>
   <entry>
-    <title>将空目录添加至 Git 版本库</title>
-    <url>/Git/add-an-empty-directory-to-a-git-repository/</url>
-    <content><![CDATA[<p>git 没有跟踪空目录，所以需要跟踪那么就需要添加文件，就是在目录下新建一个 <code>.gitkeep</code> 文件（文件名其实随意，不过常见的是 <code>.gitkeep</code> 和 <code>.keep</code>）方法如下:</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find . -type d -empty -exec touch &#123;&#125;&#x2F;.gitkeep \;</span><br></pre></td></tr></table></figure>]]></content>
-      <categories>
-        <category>Git</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>禁止 Git 自动保存账号密码</title>
     <url>/Git/donot-make-git-remember-my-credentials/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>git version 2.14.1.windows.1</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>git version 2.14.1.windows.1</p>
+</div>
 
 <p>默认情况下 git 使用 https 在输入账号密码后会保存到 windows 凭据下。</p>
 <h2 id="查看配置信息"><a href="#查看配置信息" class="headerlink" title="查看配置信息"></a>查看配置信息</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global -l</span><br></pre></td></tr></table></figure>
@@ -467,17 +450,28 @@
       </tags>
   </entry>
   <entry>
+    <title>将空目录添加至 Git 版本库</title>
+    <url>/Git/add-an-empty-directory-to-a-git-repository/</url>
+    <content><![CDATA[<p>git 没有跟踪空目录，所以需要跟踪那么就需要添加文件，就是在目录下新建一个 <code>.gitkeep</code> 文件（文件名其实随意，不过常见的是 <code>.gitkeep</code> 和 <code>.keep</code>）方法如下:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">find . -type d -empty -exec touch &#123;&#125;&#x2F;.gitkeep \;</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>Git</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Git Submodule 用法笔记</title>
     <url>/Git/git-submodule/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>git version 2.21.0</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>git version 2.21.0</p>
+</div>
 
 <h2 id="新增-submodule"><a href="#新增-submodule" class="headerlink" title="新增 submodule"></a>新增 submodule</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next/</span></span><br><span class="line">git submodule add &lt;url&gt; &lt;folder&gt;</span><br></pre></td></tr></table></figure>
 
-<div class="note danger">
-            <p>如果出现 <code>xxx already exists in the index</code> 的提示，则给根据<a href="https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index">Issue with adding common code as git submodule: “already exists in the index”</a>里面的回答，执行 <code>git rm -f --cached &lt;folder&gt;</code> 后，在执行 <code>git submodule add</code></p>
-          </div>
+<div class="note danger"><p>如果出现 <code>xxx already exists in the index</code> 的提示，则给根据<a href="https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index">Issue with adding common code as git submodule: “already exists in the index”
+</a>里面的回答，执行 <code>git rm -f --cached &lt;folder&gt;</code> 后，在执行 <code>git submodule add</code></p>
+</div>
 
 
 <p>如果这个仓库先前没有用过 submodule，那么 Git 会在目录下建立一个叫做 <code>.gitmodules</code> 的文件，这里记录了 remote repo 的 URL 和这个 submodule 在此目录的路径。执行此命令后 submodule 和 <code>.gitmodules</code> 会自动 staged，这个时候可以 commit 和 push。</p>
@@ -491,7 +485,7 @@
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git rm --cached &lt;folder&gt;</span><br><span class="line">rm -rf &lt;folder&gt;</span><br></pre></td></tr></table></figure>
 
 <p>再来是修改 <code>.gitmodules</code> 文件，把不用的 submodule 删掉，例如：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- [submodule <span class="string">&quot;themes/next&quot;</span>]</span><br><span class="line">-    path = themes/next</span><br><span class="line">-    url = https://github.com/theme-next/hexo-theme-next.git</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">- [submodule <span class="string">&quot;themes/next&quot;</span>]</span><br><span class="line">-	path = themes/next</span><br><span class="line">-	url = https://github.com/theme-next/hexo-theme-next.git</span><br></pre></td></tr></table></figure>
 
 <p>还要修改 <code>.git/config</code> 的內容，跟 <code>.gitmodules</code> 一样，把需要移除的 submodule 删掉，最后再 commit。</p>
 <h2 id="clone-时把-submodule-一起-clone-下来"><a href="#clone-时把-submodule-一起-clone-下来" class="headerlink" title="clone 时把 submodule 一起 clone 下来"></a>clone 时把 submodule 一起 clone 下来</h2><p>执行 <code>git clone</code> 时 Git 不会自动把 submodule 一起 clone 下来，必须加上 <code>--recursive</code> 这个参数，这样可以连带 submodule 的 submodule 通通一起 clone 下来：</p>
@@ -509,9 +503,8 @@
 <li><p><code>git submodule sync</code>：如果 submodule 的 remote URL 有变动，可以在 <code>.gitmodules</code> 修正 URL，然后执行这个命令，便会将 submodule 的 remote URL 更正。</p>
 </li>
 </ul>
-<div class="note default">
-            <p>原文链接：<a href="https://blog.chh.tw/posts/git-submodule/">Git Submodule 用法筆記</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://blog.chh.tw/posts/git-submodule/">Git Submodule 用法筆記</a></p>
+</div>]]></content>
       <categories>
         <category>Git</category>
       </categories>
@@ -527,9 +520,8 @@
 <p>在 Hexo 中默认的 markdown 渲染器是 <code>hexo-renderer-marked</code> ，这个渲染器是不支持 emoji 表情的。</p>
 <p>在 NexT 的 <a href="https://github.com/iissnan/hexo-theme-next/issues/390">issue</a> 上有推荐使用 <a href="https://github.com/sergiolepore/hexo-tag-emojis">hexo-tag-emojis</a> 这个插件来支持 emoji 表情，但可惜的是这个插件已经不再维护，已经不支持 <code>Hexo v3+</code> 了。还好在 Hexo 的 <a href="https://hexo.io/plugins/">plugins</a> 页，我们找到了另外一个 emoji 插件 <a href="https://github.com/crimx/hexo-filter-github-emojis">hexo-filter-github-emojis</a>。</p>
 <p>下面我们就来实现 Hexo NexT 对 emoji 的支持。</p>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Hexo 3.3.9<br>NexT 5.1.2</p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Hexo 3.3.9<br>NexT 5.1.2</p>
+</div>
 
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ npm install hexo-filter-github-emojis --save</span><br></pre></td></tr></table></figure>
 
@@ -587,9 +579,8 @@
   <entry>
     <title>Hexo 文章保存为草稿</title>
     <url>/Hexo/hexo-draft/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Hexo 3.3.8</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Hexo 3.3.8</p>
+</div>
 
 <h2 id="传统建立文章方式"><a href="#传统建立文章方式" class="headerlink" title="传统建立文章方式"></a>传统建立文章方式</h2><p>一般我们都会使用 <code>hexo new &lt;title&gt;</code> 来建立文章，这种建立方法会将新文章建立在 <code>source/_posts</code> 目录下，当使用 <code>hexo generate</code> 编译 markdown 文件时，会将其 HTML 结果编译在 <code>public</code> 目录下，之后 <code>hexo deploy</code> 将会把 <code>public</code> 目录下所有文章部署到 GitHub，这是我们熟悉的 Hexo 流程。</p>
 <p>这种建立文章方式的缺点是：若我们同时编辑多篇文章，只要其中一篇文章尚未编辑完成，也会随着 <code>hexo deploy</code> 一起部署到 GitHub，也就是 GitHub 可能会看到我们尚未完成的文章。</p>
@@ -605,10 +596,35 @@
 
 <p>其中 <code>&lt;filename&gt;</code> 为不包含 <code>md</code> 后缀的文章名称。它的原理只是将文章从 <code>source/_drafts</code> 移动到 <code>source/_posts</code> 而已。</p>
 <p>之后的 <code>hexo generate</code> 与 <code>hexo deploy</code> 的用法就完全一样了。</p>
-<div class="note success">
-            <p>若日后想将正式文章转为为草稿，只需手动将文章从 <code>source/_posts</code> 目录移动到 <code>source/_drafts</code> 目录即可。</p>
-          </div>
+<div class="note success"><p>若日后想将正式文章转为为草稿，只需手动将文章从 <code>source/_posts</code> 目录移动到 <code>source/_drafts</code> 目录即可。</p>
+</div>
 ]]></content>
+      <categories>
+        <category>Hexo</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hexo版本升级指南</title>
+    <url>/Hexo/update_hexo/</url>
+    <content><![CDATA[<p>1、全局升级hexo-cli，先 <code>hexo version</code> 查看当前版本，然后 <code>npm i hexo-cli -g</code>，再次 <code>hexo version</code> 查看是否升级成功。</p>
+<p>2、使用 <code>npm install -g npm-check</code> 和 <code>npm-check</code>，检查系统中的插件是否有升级的，可以看到自己前面都安装了那些插件</p>
+<p>3、使用<code> npm install -g npm-upgrade</code> 和 <code>npm-upgrade</code>，升级系统中的插件</p>
+<p>4、使用 <code>npm update -g和npm update --save</code></p>
+<p>PS：第四步遇到了错误，错误提示如下：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; fsevents@1.2.11 install /Users/lanvnal/Files/blog/node_modules/hexo/node_modules/fsevents</span><br><span class="line">&gt; node-gyp rebuild</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.CLTools_Executables&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLILeo&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLI&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line">gyp: No Xcode or CLT version detected!</span><br></pre></td></tr></table></figure>
+
+<p>其实已经安装过了xcode cli，但是这里还是报错了，估计和苹果新系统有关，重装就好了，操作如下：</p>
+<p>如果像以前一样执行 <code>xcode-select --install</code> 会有如下报错：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcode-select: error: command line tools are already installed, use &quot;Software Update&quot; to install updates</span><br></pre></td></tr></table></figure>
+
+<p>解决办法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
+
+<div class="note default"><p>原文链接：<a href="https://lanvnal.com/2020/02/16/hexo-ban-ben-sheng-ji/">Hexo版本升级指南</a></p>
+</div>]]></content>
       <categories>
         <category>Hexo</category>
       </categories>
@@ -626,10 +642,10 @@
 <blockquote>
 <p>如果用户没有 sudo 权限，参考<a href="http://www.centoscn.com/CentosBug/osbug/2015/0114/4496.html">这里</a>进行设置。</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[centos@localhost ~]$ sudo systemctl <span class="built_in">set</span>-default multi-user.target</span><br><span class="line">rm <span class="string">&#x27;/etc/systemd/system/default.target&#x27;</span></span><br><span class="line">ln -s <span class="string">&#x27;/usr/lib/systemd/system/multi-user.target&#x27;</span> <span class="string">&#x27;/etc/systemd/system/default.target&#x27;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[centos@localhost ~]$ sudo systemctl set-default multi-user.target</span><br><span class="line">rm <span class="string">&#x27;/etc/systemd/system/default.target&#x27;</span></span><br><span class="line">ln -s <span class="string">&#x27;/usr/lib/systemd/system/multi-user.target&#x27;</span> <span class="string">&#x27;/etc/systemd/system/default.target&#x27;</span></span><br></pre></td></tr></table></figure>
 
 <p>设置成功之后 reboot 一下，即可顺利进入命令行界面了。<br>如果想要再次进入图形界面，在命令行中运行</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[centos@localhost ~]$ sudo systemctl <span class="built_in">set</span>-default graphical.target</span><br></pre></td></tr></table></figure>]]></content>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[centos@localhost ~]$ sudo systemctl set-default graphical.target</span><br></pre></td></tr></table></figure>]]></content>
       <categories>
         <category>Linux</category>
       </categories>
@@ -640,13 +656,11 @@
   <entry>
     <title>宝塔Linux面板小内存服务器编译安装 MySQL 8.0</title>
     <url>/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/</url>
-    <content><![CDATA[<div class="note primary">
-            <p>如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。</p>
-          </div>
+    <content><![CDATA[<div class="note primary"><p>如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。</p>
+</div>
 
-<div class="note info">
-            <p>宝塔 6.9.8</p>
-          </div>
+<div class="note info"><p>宝塔 6.9.8</p>
+</div>
 
 <p>宝塔面板在编译安装 MySQL 8.0 时，要求 4个核心的 CPU，8G 内存，实在是太高了，小站长的服务器一般都不会有如此高的配置。这时候，我们要使用 MySQL 8.0，可以选择极速安装，或者，如果一定要自己编译的话，可以使用命令行来跳过配置检测。不过，MySQL 编译过程中，需要 5G 以上的内存，以及 9G 以上的数据盘空间。如果我们的内存实在不够，可以创建 swap 虚拟内存。</p>
 <p>在宝塔面板里的 <strong>Linux 工具箱</strong>(如果没有可以去软件商店里面安装) 修改 Swap/虚拟内存，输入 0，然后手动设置 swap 到系统盘：</p>
@@ -700,31 +714,13 @@
       </tags>
   </entry>
   <entry>
-    <title>nginx基本配置与参数说明</title>
-    <url>/Nginx/example-nginx-configuration/</url>
-    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#运行用户</span><br><span class="line">user nobody;</span><br><span class="line">#启动进程,通常设置成和cpu的数量相等</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">#全局错误日志及PID文件</span><br><span class="line">#error_log  logs&#x2F;error.log;</span><br><span class="line">#error_log  logs&#x2F;error.log  notice;</span><br><span class="line">#error_log  logs&#x2F;error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs&#x2F;nginx.pid;</span><br><span class="line"></span><br><span class="line">#工作模式及连接数上限</span><br><span class="line">events &#123;</span><br><span class="line">    #epoll是多路复用IO(I&#x2F;O Multiplexing)中的一种方式,</span><br><span class="line">    #仅用于linux2.6以上内核,可以大大提高nginx的性能</span><br><span class="line">    use   epoll; </span><br><span class="line"></span><br><span class="line">    #单个后台worker process进程的最大并发链接数    </span><br><span class="line">    worker_connections  1024;</span><br><span class="line"></span><br><span class="line">    # 并发总数是 worker_processes 和 worker_connections 的乘积</span><br><span class="line">    # 即 max_clients &#x3D; worker_processes * worker_connections</span><br><span class="line">    # 在设置了反向代理的情况下，max_clients &#x3D; worker_processes * worker_connections &#x2F; 4  为什么</span><br><span class="line">    # 为什么上面反向代理要除以4，应该说是一个经验值</span><br><span class="line">    # 根据以上条件，正常情况下的Nginx Server可以应付的最大连接数为：4 * 8000 &#x3D; 32000</span><br><span class="line">    # worker_connections 值的设置跟物理内存大小有关</span><br><span class="line">    # 因为并发受IO约束，max_clients的值须小于系统可以打开的最大文件数</span><br><span class="line">    # 而系统可以打开的最大文件数和内存大小成正比，一般1GB内存的机器上可以打开的文件数大约是10万左右</span><br><span class="line">    # 我们来看看360M内存的VPS可以打开的文件句柄数是多少：</span><br><span class="line">    # $ cat &#x2F;proc&#x2F;sys&#x2F;fs&#x2F;file-max</span><br><span class="line">    # 输出 34336</span><br><span class="line">    # 32000 &lt; 34336，即并发连接总数小于系统可以打开的文件句柄总数，这样就在操作系统可以承受的范围之内</span><br><span class="line">    # 所以，worker_connections 的值需根据 worker_processes 进程数目和系统可以打开的最大文件总数进行适当地进行设置</span><br><span class="line">    # 使得并发总数小于操作系统可以打开的最大文件数目</span><br><span class="line">    # 其实质也就是根据主机的物理CPU和内存进行配置</span><br><span class="line">    # 当然，理论上的并发总数可能会和实际有所偏差，因为主机还有其他的工作进程需要消耗系统资源。</span><br><span class="line">    # ulimit -SHn 65535</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    #设定mime类型,类型由mime.type文件定义</span><br><span class="line">    include    mime.types;</span><br><span class="line">    default_type  application&#x2F;octet-stream;</span><br><span class="line">    #设定日志格式</span><br><span class="line">    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span><br><span class="line">                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span><br><span class="line">                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;</span><br><span class="line"></span><br><span class="line">    access_log  logs&#x2F;access.log  main;</span><br><span class="line"></span><br><span class="line">    #sendfile 指令指定 nginx 是否调用 sendfile 函数（zero copy 方式）来输出文件，</span><br><span class="line">    #对于普通应用，必须设为 on,</span><br><span class="line">    #如果用来进行下载等应用磁盘IO重负载应用，可设置为 off，</span><br><span class="line">    #以平衡磁盘与网络I&#x2F;O处理速度，降低系统的uptime.</span><br><span class="line">    sendfile     on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #连接超时时间</span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line">    tcp_nodelay     on;</span><br><span class="line"></span><br><span class="line">    #开启gzip压缩</span><br><span class="line">    gzip  on;</span><br><span class="line">    gzip_disable &quot;MSIE [1-6].&quot;;</span><br><span class="line"></span><br><span class="line">    #设定请求缓冲</span><br><span class="line">    client_header_buffer_size    128k;</span><br><span class="line">    large_client_header_buffers  4 128k;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    #设定虚拟主机配置</span><br><span class="line">    server &#123;</span><br><span class="line">        #侦听80端口</span><br><span class="line">        listen    80;</span><br><span class="line">        #定义使用 www.nginx.cn访问</span><br><span class="line">        server_name  www.nginx.cn;</span><br><span class="line"></span><br><span class="line">        #定义服务器的默认网站根目录位置</span><br><span class="line">        root html;</span><br><span class="line"></span><br><span class="line">        #设定本虚拟主机的访问日志</span><br><span class="line">        access_log  logs&#x2F;nginx.access.log  main;</span><br><span class="line"></span><br><span class="line">        #默认请求</span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">            </span><br><span class="line">            #定义首页索引文件的名称</span><br><span class="line">            index index.php index.html index.htm;   </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 定义错误提示页面</span><br><span class="line">        error_page   500 502 503 504 &#x2F;50x.html;</span><br><span class="line">        location &#x3D; &#x2F;50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #静态文件，nginx自己处理</span><br><span class="line">        location ~ ^&#x2F;(images|javascript|js|css|flash|media|static)&#x2F; &#123;</span><br><span class="line">            </span><br><span class="line">            #过期30天，静态文件不怎么更新，过期可以设大一点，</span><br><span class="line">            #如果频繁更新，则可以设置得小一点。</span><br><span class="line">            expires 30d;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #PHP 脚本请求全部转发到 FastCGI处理. 使用FastCGI默认配置.</span><br><span class="line">        location ~ .php$ &#123;</span><br><span class="line">            fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">            fastcgi_index index.php;</span><br><span class="line">            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;</span><br><span class="line">            include fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #禁止访问 .htxxx 文件</span><br><span class="line">            location ~ &#x2F;.ht &#123;</span><br><span class="line">            deny all;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
-
-<div class="note default">
-            <p>原文链接：<a href="http://www.nginx.cn/76.html">nginx基本配置与参数说明</a></p>
-          </div>]]></content>
-      <categories>
-        <category>Nginx</category>
-      </categories>
-      <tags>
-        <tag>Nginx</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Ubuntu 18.04 LTS中安装和美化ZSH Shell</title>
     <url>/Linux/install-zsh-shell-ubuntu-18-04/</url>
     <content><![CDATA[<blockquote>
 <p>ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。</p>
 </blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Ubuntu 18.04.2 LTS</p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Ubuntu 18.04.2 LTS</p>
+</div>
 
 <h2 id="安装ZSH-Shell"><a href="#安装ZSH-Shell" class="headerlink" title="安装ZSH Shell"></a>安装ZSH Shell</h2><p>ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install zsh</span><br></pre></td></tr></table></figure>
@@ -749,9 +745,8 @@
 <p><img src="/images/Linux/install-zsh-shell-ubuntu-18-04/bd9f206bly1g1jqroex99j210y0xgdqx.jpg"></p>
 <p>按键盘数字键 <code>2</code>，ZSH 会使用推荐的设置创建一个新的 <code>~/.zshrc</code> 配置文件。如下图所示，此后就可以正常使用 ZSH Shell 了</p>
 <p><img src="/images/Linux/install-zsh-shell-ubuntu-18-04/bd9f206bly1g1jqy945y6j210y0xggr3.jpg"></p>
-<h2 id="ZSH和Git与「Oh-My-ZSH」集成"><a href="#ZSH和Git与「Oh-My-ZSH」集成" class="headerlink" title="ZSH和Git与「Oh My ZSH」集成"></a>ZSH和Git与「Oh My ZSH」集成</h2><div class="note success">
-            <p>ZSH 有一个致力于与 Git 版本控制系统一起工作的完整框架——「Oh My ZSH」，要了解「Oh My ZSH」的更多信息，请查看官方 <a href="https://github.com/robbyrussell/oh-my-zsh">Github</a> 页面。</p>
-          </div>
+<h2 id="ZSH和Git与「Oh-My-ZSH」集成"><a href="#ZSH和Git与「Oh-My-ZSH」集成" class="headerlink" title="ZSH和Git与「Oh My ZSH」集成"></a>ZSH和Git与「Oh My ZSH」集成</h2><div class="note success"><p>ZSH 有一个致力于与 Git 版本控制系统一起工作的完整框架——「Oh My ZSH」，要了解「Oh My ZSH」的更多信息，请查看官方 <a href="https://github.com/robbyrussell/oh-my-zsh">Github</a> 页面。</p>
+</div>
 
 <p>运行以下命令在 Ubuntu 18.04 LTS 上安装 Git</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt install git</span><br></pre></td></tr></table></figure>
@@ -791,11 +786,82 @@
       </tags>
   </entry>
   <entry>
+    <title>nginx基本配置与参数说明</title>
+    <url>/Nginx/example-nginx-configuration/</url>
+    <content><![CDATA[<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#运行用户</span><br><span class="line">user nobody;</span><br><span class="line">#启动进程,通常设置成和cpu的数量相等</span><br><span class="line">worker_processes  1;</span><br><span class="line"></span><br><span class="line">#全局错误日志及PID文件</span><br><span class="line">#error_log  logs&#x2F;error.log;</span><br><span class="line">#error_log  logs&#x2F;error.log  notice;</span><br><span class="line">#error_log  logs&#x2F;error.log  info;</span><br><span class="line"></span><br><span class="line">#pid        logs&#x2F;nginx.pid;</span><br><span class="line"></span><br><span class="line">#工作模式及连接数上限</span><br><span class="line">events &#123;</span><br><span class="line">    #epoll是多路复用IO(I&#x2F;O Multiplexing)中的一种方式,</span><br><span class="line">    #仅用于linux2.6以上内核,可以大大提高nginx的性能</span><br><span class="line">    use   epoll; </span><br><span class="line"></span><br><span class="line">    #单个后台worker process进程的最大并发链接数    </span><br><span class="line">    worker_connections  1024;</span><br><span class="line"></span><br><span class="line">    # 并发总数是 worker_processes 和 worker_connections 的乘积</span><br><span class="line">    # 即 max_clients &#x3D; worker_processes * worker_connections</span><br><span class="line">    # 在设置了反向代理的情况下，max_clients &#x3D; worker_processes * worker_connections &#x2F; 4  为什么</span><br><span class="line">    # 为什么上面反向代理要除以4，应该说是一个经验值</span><br><span class="line">    # 根据以上条件，正常情况下的Nginx Server可以应付的最大连接数为：4 * 8000 &#x3D; 32000</span><br><span class="line">    # worker_connections 值的设置跟物理内存大小有关</span><br><span class="line">    # 因为并发受IO约束，max_clients的值须小于系统可以打开的最大文件数</span><br><span class="line">    # 而系统可以打开的最大文件数和内存大小成正比，一般1GB内存的机器上可以打开的文件数大约是10万左右</span><br><span class="line">    # 我们来看看360M内存的VPS可以打开的文件句柄数是多少：</span><br><span class="line">    # $ cat &#x2F;proc&#x2F;sys&#x2F;fs&#x2F;file-max</span><br><span class="line">    # 输出 34336</span><br><span class="line">    # 32000 &lt; 34336，即并发连接总数小于系统可以打开的文件句柄总数，这样就在操作系统可以承受的范围之内</span><br><span class="line">    # 所以，worker_connections 的值需根据 worker_processes 进程数目和系统可以打开的最大文件总数进行适当地进行设置</span><br><span class="line">    # 使得并发总数小于操作系统可以打开的最大文件数目</span><br><span class="line">    # 其实质也就是根据主机的物理CPU和内存进行配置</span><br><span class="line">    # 当然，理论上的并发总数可能会和实际有所偏差，因为主机还有其他的工作进程需要消耗系统资源。</span><br><span class="line">    # ulimit -SHn 65535</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http &#123;</span><br><span class="line">    #设定mime类型,类型由mime.type文件定义</span><br><span class="line">    include    mime.types;</span><br><span class="line">    default_type  application&#x2F;octet-stream;</span><br><span class="line">    #设定日志格式</span><br><span class="line">    log_format  main  &#39;$remote_addr - $remote_user [$time_local] &quot;$request&quot; &#39;</span><br><span class="line">                      &#39;$status $body_bytes_sent &quot;$http_referer&quot; &#39;</span><br><span class="line">                      &#39;&quot;$http_user_agent&quot; &quot;$http_x_forwarded_for&quot;&#39;;</span><br><span class="line"></span><br><span class="line">    access_log  logs&#x2F;access.log  main;</span><br><span class="line"></span><br><span class="line">    #sendfile 指令指定 nginx 是否调用 sendfile 函数（zero copy 方式）来输出文件，</span><br><span class="line">    #对于普通应用，必须设为 on,</span><br><span class="line">    #如果用来进行下载等应用磁盘IO重负载应用，可设置为 off，</span><br><span class="line">    #以平衡磁盘与网络I&#x2F;O处理速度，降低系统的uptime.</span><br><span class="line">    sendfile     on;</span><br><span class="line">    #tcp_nopush     on;</span><br><span class="line"></span><br><span class="line">    #连接超时时间</span><br><span class="line">    #keepalive_timeout  0;</span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line">    tcp_nodelay     on;</span><br><span class="line"></span><br><span class="line">    #开启gzip压缩</span><br><span class="line">    gzip  on;</span><br><span class="line">    gzip_disable &quot;MSIE [1-6].&quot;;</span><br><span class="line"></span><br><span class="line">    #设定请求缓冲</span><br><span class="line">    client_header_buffer_size    128k;</span><br><span class="line">    large_client_header_buffers  4 128k;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    #设定虚拟主机配置</span><br><span class="line">    server &#123;</span><br><span class="line">        #侦听80端口</span><br><span class="line">        listen    80;</span><br><span class="line">        #定义使用 www.nginx.cn访问</span><br><span class="line">        server_name  www.nginx.cn;</span><br><span class="line"></span><br><span class="line">        #定义服务器的默认网站根目录位置</span><br><span class="line">        root html;</span><br><span class="line"></span><br><span class="line">        #设定本虚拟主机的访问日志</span><br><span class="line">        access_log  logs&#x2F;nginx.access.log  main;</span><br><span class="line"></span><br><span class="line">        #默认请求</span><br><span class="line">        location &#x2F; &#123;</span><br><span class="line">            </span><br><span class="line">            #定义首页索引文件的名称</span><br><span class="line">            index index.php index.html index.htm;   </span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        # 定义错误提示页面</span><br><span class="line">        error_page   500 502 503 504 &#x2F;50x.html;</span><br><span class="line">        location &#x3D; &#x2F;50x.html &#123;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #静态文件，nginx自己处理</span><br><span class="line">        location ~ ^&#x2F;(images|javascript|js|css|flash|media|static)&#x2F; &#123;</span><br><span class="line">            </span><br><span class="line">            #过期30天，静态文件不怎么更新，过期可以设大一点，</span><br><span class="line">            #如果频繁更新，则可以设置得小一点。</span><br><span class="line">            expires 30d;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #PHP 脚本请求全部转发到 FastCGI处理. 使用FastCGI默认配置.</span><br><span class="line">        location ~ .php$ &#123;</span><br><span class="line">            fastcgi_pass 127.0.0.1:9000;</span><br><span class="line">            fastcgi_index index.php;</span><br><span class="line">            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;</span><br><span class="line">            include fastcgi_params;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        #禁止访问 .htxxx 文件</span><br><span class="line">            location ~ &#x2F;.ht &#123;</span><br><span class="line">            deny all;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<div class="note default"><p>原文链接：<a href="http://www.nginx.cn/76.html">nginx基本配置与参数说明</a></p>
+</div>]]></content>
+      <categories>
+        <category>Nginx</category>
+      </categories>
+      <tags>
+        <tag>Nginx</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>PHP empty 函数判断结果为空，但实际值却为非空</title>
+    <url>/PHP/When-empty-is-not-empty/</url>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PHP 7.1.16</p>
+</div>
+
+<p>最近我在一个项目中使用 <code>empty</code> 时获取到了一些意料之外的结果。下面是我处理后的调试记录，在这里分享给你。</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">    $person-&gt;firstName,</span><br><span class="line">    <span class="keyword">empty</span>($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>它的结果是：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>结果出人意料。为什么变量的值为字符串，但同时会是空值呢？让我们在 <code>$person-&gt;firstName</code> 变量上尝试使用其它一些函数来进行判断吧：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">    $person-&gt;firstName,</span><br><span class="line">    <span class="keyword">empty</span>($person-&gt;firstName),</span><br><span class="line">    <span class="keyword">isset</span>($person-&gt;firstName),</span><br><span class="line">    is_null($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>以上结果为：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>) <span class="comment">// empty</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>) <span class="comment">// isset</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">false</span>) <span class="comment">// is_null</span></span><br></pre></td></tr></table></figure>
+
+<div class="note info"><p>注：这边我测试结果 isset 的结果同样为 false，可以到 <a href="http://www.dooccn.com/php7/#id/3f2d2339a9c74415c472e8637cda74a9">这里</a> 去运行下查看结果。</p>
+</div>
+
+<p><code>isset</code> 和 <code>is_null</code> 函数执行结果符合预期判断，唯独 <code>empty</code> 函数返回了错误结果。</p>
+<p>这里让我们来看看 <code>Person</code> 类的实现代码吧：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $attributes = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $attributes</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;attributes = $attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[$name] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上述代码我们可以看到 <code>Person</code> 对象的成员变量是通过 <code>__get</code> 魔术方法从 <code>$attributes</code> 数组中检索出来的。</p>
+<p>当将变量传入一个普通函数时，<code>$person-&gt;firstName</code> 会先进行取值处理，然后再将获取到的结果作为参数传入函数内。</p>
+<p>但是 <code>empty</code> 不是一个函数，而是一种数据结构。所以当将 <code>$person-&gt;firstName</code> 传入 <code>empty</code> 时，并不会先进行取值处理。而是会先判断 <code>$person</code> 对象成员属性 <code>firstName</code> 的内容，由于这个属性并未真实存在，所以返回 <code>false</code>。</p>
+<p>在这种应用场景下，<a href="http://php.net/manual/zh/language.oop5.overloading.php">官方文档</a>有给出解释:</p>
+<div class="note warning"><p>在除 isset() 外的其它语言结构中无法使用重载的属性，这意味着当对一个重载的属性使用 empty() 时，重载魔术方法将不会被调用。</p>
+<p>为避开此限制，必须将重载属性赋值到本地变量再使用 empty()</p>
+</div>
+
+<p>所以如果你希望 <code>empty</code> 函数能够正常处理类属性，可以将类属性赋值到本地变量再使用 <code>empty()</code>，或者我们在类中实现 <code>__isset</code> 魔术方法：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $attributes = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $attributes</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;attributes = $attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[$name] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__isset</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $attribute = <span class="keyword">$this</span>-&gt;$name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> !<span class="keyword">empty</span>($attribute);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这是当 <code>empty</code> 进行控制判断时，会使用这个魔术方法来判断最终的结果。</p>
+<p>我们再来看看输出结果：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">   $person-&gt;firstName,</span><br><span class="line">   <span class="keyword">empty</span>($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p>新的检测结果：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
+
+<p>完美！</p>
+<div class="note default"><p>原文链接：<a href="https://murze.be/when-empty-is-not-empty">When empty is not empty</a></p>
+</div>]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>PHP</tag>
+        <tag>empty</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>array_merge 和 array+ 的区别</title>
     <url>/PHP/combining-arrays-using-plus-versus-array-merge/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>PHP version 7.1.26</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PHP version 7.1.26</p>
+</div>
 
 <h2 id="键名是string，两者区别"><a href="#键名是string，两者区别" class="headerlink" title="键名是string，两者区别"></a>键名是string，两者区别</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PHP&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PYTHON&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1, $arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//再比如</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;c&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1,$arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 3 [c] =&gt; 2 )</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 2 [c] =&gt; 2 )</span></span><br></pre></td></tr></table></figure>
 
@@ -837,74 +903,14 @@
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;last day of -1 month&quot;</span>, strtotime(<span class="string">&quot;2017-03-31&quot;</span>))));</span><br><span class="line"><span class="comment">//输出2017-02-28</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;first day of +1 month&quot;</span>, strtotime(<span class="string">&quot;2017-08-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-09-01</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;first day of next month&quot;</span>, strtotime(<span class="string">&quot;2017-01-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-02-01</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;last day of last month&quot;</span>, strtotime(<span class="string">&quot;2017-03-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-02-28</span></span><br></pre></td></tr></table></figure>
 
 <p>那如果是5.3之前的版本(还有人用么?)，你可以使用mktime之类的，把所有的日子忽略掉，比如都限定为每月1号就可以了，只不过就不如直接用first day来的更加优雅。</p>
-<div class="note default">
-            <p>原文链接：<a href="http://www.laruence.com/2018/07/31/3188.html">令人困惑的strtotime</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="http://www.laruence.com/2018/07/31/3188.html">令人困惑的strtotime</a></p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
       <tags>
         <tag>PHP</tag>
         <tag>strtotime</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PHP empty 函数判断结果为空，但实际值却为非空</title>
-    <url>/PHP/When-empty-is-not-empty/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>PHP 7.1.16</p>
-          </div>
-
-<p>最近我在一个项目中使用 <code>empty</code> 时获取到了一些意料之外的结果。下面是我处理后的调试记录，在这里分享给你。</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">    $person-&gt;firstName,</span><br><span class="line">    <span class="keyword">empty</span>($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>它的结果是：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
-
-<p>结果出人意料。为什么变量的值为字符串，但同时会是空值呢？让我们在 <code>$person-&gt;firstName</code> 变量上尝试使用其它一些函数来进行判断吧：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">    $person-&gt;firstName,</span><br><span class="line">    <span class="keyword">empty</span>($person-&gt;firstName),</span><br><span class="line">    <span class="keyword">isset</span>($person-&gt;firstName),</span><br><span class="line">    is_null($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>以上结果为：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>) <span class="comment">// empty</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">true</span>) <span class="comment">// isset</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">false</span>) <span class="comment">// is_null</span></span><br></pre></td></tr></table></figure>
-
-<div class="note info">
-            <p>注：这边我测试结果 isset 的结果同样为 false，可以到 <a href="http://www.dooccn.com/php7/#id/3f2d2339a9c74415c472e8637cda74a9">这里</a> 去运行下查看结果。</p>
-          </div>
-
-<p><code>isset</code> 和 <code>is_null</code> 函数执行结果符合预期判断，唯独 <code>empty</code> 函数返回了错误结果。</p>
-<p>这里让我们来看看 <code>Person</code> 类的实现代码吧：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $attributes = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $attributes</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;attributes = $attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[$name] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>从上述代码我们可以看到 <code>Person</code> 对象的成员变量是通过 <code>__get</code> 魔术方法从 <code>$attributes</code> 数组中检索出来的。</p>
-<p>当将变量传入一个普通函数时，<code>$person-&gt;firstName</code> 会先进行取值处理，然后再将获取到的结果作为参数传入函数内。</p>
-<p>但是 <code>empty</code> 不是一个函数，而是一种数据结构。所以当将 <code>$person-&gt;firstName</code> 传入 <code>empty</code> 时，并不会先进行取值处理。而是会先判断 <code>$person</code> 对象成员属性 <code>firstName</code> 的内容，由于这个属性并未真实存在，所以返回 <code>false</code>。</p>
-<p>在这种应用场景下，<a href="http://php.net/manual/zh/language.oop5.overloading.php">官方文档</a>有给出解释:</p>
-<div class="note warning">
-            <p>在除 isset() 外的其它语言结构中无法使用重载的属性，这意味着当对一个重载的属性使用 empty() 时，重载魔术方法将不会被调用。</p><p>为避开此限制，必须将重载属性赋值到本地变量再使用 empty()</p>
-          </div>
-
-<p>所以如果你希望 <code>empty</code> 函数能够正常处理类属性，可以将类属性赋值到本地变量再使用 <code>empty()</code>，或者我们在类中实现 <code>__isset</code> 魔术方法：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $attributes = [];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">array</span> $attributes</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;attributes = $attributes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__get</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;attributes[$name] ?? <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__isset</span>(<span class="params">$name</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $attribute = <span class="keyword">$this</span>-&gt;$name;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> !<span class="keyword">empty</span>($attribute);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>这是当 <code>empty</code> 进行控制判断时，会使用这个魔术方法来判断最终的结果。</p>
-<p>我们再来看看输出结果：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">var_dump(</span><br><span class="line">   $person-&gt;firstName,</span><br><span class="line">   <span class="keyword">empty</span>($person-&gt;firstName)</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
-
-<p>新的检测结果：</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">string</span>(<span class="number">5</span>) <span class="string">&quot;Freek&quot;</span></span><br><span class="line"><span class="keyword">bool</span>(<span class="literal">false</span>)</span><br></pre></td></tr></table></figure>
-
-<p>完美！</p>
-<div class="note default">
-            <p>原文链接：<a href="https://murze.be/when-empty-is-not-empty">When empty is not empty</a></p>
-          </div>]]></content>
-      <categories>
-        <category>PHP</category>
-      </categories>
-      <tags>
-        <tag>PHP</tag>
-        <tag>empty</tag>
       </tags>
   </entry>
   <entry>
@@ -940,9 +946,12 @@
 <p>2.6 + 3.5 = 6.1</p>
 <p>这样的问题非常常见，也导致了在大量样本中，四舍五入后计算结果的总和会明显大于直接计算总和的结果，对于金融单位计算利息而言，这样很显然是一个亏本的行为。如果不亏本的算，依旧是简单处理可能结果相反，那么客户就不开心了。</p>
 <h2 id="银行家舍入（Banker’s-Round）"><a href="#银行家舍入（Banker’s-Round）" class="headerlink" title="银行家舍入（Banker’s Round）"></a>银行家舍入（Banker’s Round）</h2><p>亦叫做 “四舍六入五成双” ，四舍六入，使得两头（即进和舍）概率相等，但是，在 4 和 6 之间的 5 就需要特别对待。具体规则如下：</p>
-<div class="note info">
-            <ul><li>舍去位的数值小于5时，直接舍去；</li><li>舍去位的数值大于等于6时，进位后舍去；</li><li>当舍去位的数值等于5时，分两种情况：5后面还有其他数字（非0），则进位后舍去；若5后面是0（即5是最后一位），则根据5前一位数的奇偶性来判断是否需要进位，奇数进位，偶数舍去。</li></ul>
-          </div>
+<div class="note info"><ul>
+<li>舍去位的数值小于5时，直接舍去；</li>
+<li>舍去位的数值大于等于6时，进位后舍去；</li>
+<li>当舍去位的数值等于5时，分两种情况：5后面还有其他数字（非0），则进位后舍去；若5后面是0（即5是最后一位），则根据5前一位数的奇偶性来判断是否需要进位，奇数进位，偶数舍去。</li>
+</ul>
+</div>
 
 <p>舍去位，当小于 5，即 0 ~ 4.999999…… 则舍去，大于 6，即 6 ~ 10 则进位，则中间区间那个数字，5 ~ 5.999999…… ，只要使该区间内存在的数字平均分布，即可保证取舍概率相等。于是得到上述算法。</p>
 <p>按上述规则，之前的 2.55 + 3.45 = 6 得出的结果如下：</p>
@@ -954,9 +963,8 @@
 <h2 id="关于浮点数运算"><a href="#关于浮点数运算" class="headerlink" title="关于浮点数运算"></a>关于浮点数运算</h2><p>请牢记，*<em>不要使用 PHP 内置的 +-</em>/ 操作符**，请使用 <a href="http://php.net/manual/en/ref.bc.php">BC Math Functions</a>，执行下面这段代码就知道原因了：</p>
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">// output 0.099999999999998</span></span><br><span class="line"><span class="keyword">echo</span> <span class="number">19.45</span><span class="number">-19.35</span>;</span><br></pre></td></tr></table></figure>
 
-<div class="note default">
-            <p>原文链接：<a href="https://www.insp.top/article/how-to-ensure-accurate-for-digital-transformation">四舍五入不可取！结算金额，如何保证精确？</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://www.insp.top/article/how-to-ensure-accurate-for-digital-transformation">四舍五入不可取！结算金额，如何保证精确？</a></p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
@@ -967,9 +975,8 @@
   <entry>
     <title>迭代器和生成器</title>
     <url>/PHP/iterator-and-generator/</url>
-    <content><![CDATA[<h2 id="一道面试题"><a href="#一道面试题" class="headerlink" title="一道面试题"></a>一道面试题</h2><div class="note primary">
-            <p>如果让你用 PHP 生成从 1 到100 万个数值，请问怎么做才能最省内存？</p>
-          </div>
+    <content><![CDATA[<h2 id="一道面试题"><a href="#一道面试题" class="headerlink" title="一道面试题"></a>一道面试题</h2><div class="note primary"><p>如果让你用 PHP 生成从 1 到100 万个数值，请问怎么做才能最省内存？</p>
+</div>
 
 <p>没错，这是一道面试题，如果让你写出答案，你会有什么样的思路呢？请先独自思考几分钟。</p>
 <p>可能你想到的会是这种方式：</p>
@@ -994,7 +1001,7 @@
 <h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>生成器提供了一种更容易的方法来实现简单的对象迭代，相比较定义类实现 <code>Iterator</code> 接口的方式，性能开销和复杂性大大降低。</p>
 <h3 id="生成器的用法"><a href="#生成器的用法" class="headerlink" title="生成器的用法"></a>生成器的用法</h3><p>我觉得除了我给的第一个例子，官方给的用例是也能很好的解释生成器的益处。比如 PHP 的一个函数：range ，它可以建立一个包含指定范围单元的数组，标准的 <code>range()</code> 函数需要在内存中生成一个数组包含每一个在它范围内的值，然后返回该数组, 结果就是会产生多个很大的数组。 比如，调用 <code>range(0, 1000000)</code> 将导致内存占用超过 <strong>100 MB</strong>。</p>
 <p>做为一种替代方法, 我们可以实现一个 <code>xrange()</code> 生成器, 只需要足够的内存来创建 <code>Iterator</code> 对象并在内部跟踪生成器的当前状态，这样只需要不到 <strong>1K</strong> 字节的内存。</p>
-<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xrange</span>(<span class="params">$start, $limit, $step = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ($start &lt; $limit) &#123;</span><br><span class="line">        <span class="keyword">if</span> ($step &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">LogicException</span>(<span class="string">&#x27;Step must be +ve&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ($i = $start; $i &lt;= $limit; $i += $step) &#123;</span><br><span class="line">            <span class="keyword">yield</span> $i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ($step &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">LogicException</span>(<span class="string">&#x27;Step must be -ve&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ($i = $start; $i &gt;= $limit; $i += $step) &#123;</span><br><span class="line">            <span class="keyword">yield</span> $i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 注意下面range()和xrange()输出的结果是一样的。 */</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;Single digit odd numbers from range():  &#x27;</span>;</span><br><span class="line"><span class="keyword">foreach</span> (range(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>) <span class="keyword">as</span> $number) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;$number &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;Single digit odd numbers from xrange(): &#x27;</span>;</span><br><span class="line"><span class="keyword">foreach</span> (xrange(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>) <span class="keyword">as</span> $number) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;$number &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以上例程会输出：</span></span><br><span class="line">Single digit odd numbers <span class="keyword">from</span> range():  <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span></span><br><span class="line">Single digit odd numbers <span class="keyword">from</span> xrange(): <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">xrange</span>(<span class="params">$start, $limit, $step = <span class="number">1</span></span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> ($start &lt; $limit) &#123;</span><br><span class="line">        <span class="keyword">if</span> ($step &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">LogicException</span>(<span class="string">&#x27;Step must be +ve&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ($i = $start; $i &lt;= $limit; $i += $step) &#123;</span><br><span class="line">            <span class="keyword">yield</span> $i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> ($step &gt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">LogicException</span>(<span class="string">&#x27;Step must be -ve&#x27;</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> ($i = $start; $i &gt;= $limit; $i += $step) &#123;</span><br><span class="line">            <span class="keyword">yield</span> $i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/* 注意下面range()和xrange()输出的结果是一样的。 */</span></span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;Single digit odd numbers from range():  &#x27;</span>;</span><br><span class="line"><span class="keyword">foreach</span> (range(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>) <span class="keyword">as</span> $number) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$number</span> &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&quot;\n&quot;</span>;</span><br><span class="line"><span class="keyword">echo</span> <span class="string">&#x27;Single digit odd numbers from xrange(): &#x27;</span>;</span><br><span class="line"><span class="keyword">foreach</span> (xrange(<span class="number">1</span>, <span class="number">9</span>, <span class="number">2</span>) <span class="keyword">as</span> $number) &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">&quot;<span class="subst">$number</span> &quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 以上例程会输出：</span></span><br><span class="line">Single digit odd numbers <span class="keyword">from</span> range():  <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span></span><br><span class="line">Single digit odd numbers <span class="keyword">from</span> xrange(): <span class="number">1</span> <span class="number">3</span> <span class="number">5</span> <span class="number">7</span> <span class="number">9</span></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
 
 <h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><p>我们需要注意的关键是 <code>yield</code>，这是生成器的关键。我们通过上面例子，可以看得出，<code>yield</code> 会将当前一个值传递给 <code>foreach</code>，换句话说， <code>foreach</code> 每一次迭代过程都会从 <code>yield</code> 处取一个值，直到整个遍历过程不再存在 <code>yield</code> 为止的时候，遍历结束。</p>
 <p>我们也可以发现， <code>yield</code> 和 <code>return</code> 都会返回值，但区别在于一个 <code>return</code> 是返回既定结果，一次返回完毕就不再返回新的结果，而 <code>yield</code> 是 不断产出 直到无法产出为止。</p>
@@ -1004,9 +1011,8 @@
 
 <p>导入导出这种需求在现实场景中是不是很常见，大家可以在项目里尝试使用生成器来取代传统的数组声明，可以帮公司省掉一大笔内存购买费用~</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>生成器是功能多样性和简洁性之间的折中方案。生成器是只能向前进的迭代器，这意味着不能使用生成器在数据集中执行后退、快进或査找操作，只能让生成器计算并产生下一个值。迭代大型数据集或数列时最适合使用生成器，因为这样占用的系统内存量极小。生成器也能完成迭代器能完成的简单任务，而且使用的代码较少。</p>
-<div class="note default">
-            <p>原文链接：<a href="https://wowphp.com/square/KW7p046mxOMedpeq1ogAQ3N82n">述迭代器和生成器</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://wowphp.com/square/KW7p046mxOMedpeq1ogAQ3N82n">述迭代器和生成器</a></p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
@@ -1021,9 +1027,11 @@
     <url>/PHP/php-global-uses-the-laravel-helper-function-dd/</url>
     <content><![CDATA[<h2 id="全局安装"><a href="#全局安装" class="headerlink" title="全局安装"></a>全局安装</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ composer global require symfony/var-dumper 2.7.*</span><br></pre></td></tr></table></figure>
 
-<div class="note warning">
-            <p>加上固定版本号是因为如果本地低版本的 Laravel 项目(比如 Laravel 5.1)，它里面依赖的版本是 <code>2.7.*</code> ，如果不指定版本会安装最新的 <code>3.3.*</code>，由于在 Laravel 项目中：</p><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (! function_exists(&#39;dd&#39;)) &#123;</span><br><span class="line">     function dd()&#123;</span><br><span class="line">        ...</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>的缘故，导致使用全局定义的 dd function 。会出现不兼容报错的情况。</p>
-          </div>
+<div class="note warning"><p>加上固定版本号是因为如果本地低版本的 Laravel 项目(比如 Laravel 5.1)，它里面依赖的版本是 <code>2.7.*</code> ，如果不指定版本会安装最新的 <code>3.3.*</code>，由于在 Laravel 项目中：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">if (! function_exists(&#39;dd&#39;)) &#123;</span><br><span class="line">     function dd()&#123;</span><br><span class="line">        ...</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>的缘故，导致使用全局定义的 dd function 。会出现不兼容报错的情况。</p>
+</div>
 
 <h2 id="配置-php-ini"><a href="#配置-php-ini" class="headerlink" title="配置 php.ini"></a>配置 php.ini</h2><p>在 php.ini 中找到 <code>auto_prepend_file</code>，然后写上你相对应的路径，比如我的路径：</p>
 <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">auto_prepend_file &#x3D; &quot;C:&#x2F;Users&#x2F;Administrator.N27NDU1NHONBOGF&#x2F;AppData&#x2F;Roaming&#x2F;Composer&#x2F;vendor&#x2F;autoload.php&quot;</span><br></pre></td></tr></table></figure>
@@ -1043,9 +1051,8 @@
 <p>最后更新一下，就可以 dd 用起来了！</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ composer global dump-autoload</span><br></pre></td></tr></table></figure>
 
-<div class="note default">
-            <p>原文链接：<a href="https://laravel-china.org/articles/5075/php-global-uses-the-laravel-helper-function-dd">PHP 全局使用 Laravel 辅助函数 dd</a> </p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://laravel-china.org/articles/5075/php-global-uses-the-laravel-helper-function-dd">PHP 全局使用 Laravel 辅助函数 dd</a> </p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
@@ -1075,9 +1082,13 @@
 <p>如果说这种单一入口目录结构的优势，那么我们不得不提及应用核心代码与静态资源的分离，使用这种方式，我们可以非常完美的将服务端核心代码与静态资源完全分离开来，这就意味着如果你想要访问 <code>public</code> 目录外的资源都必须要经过守卫的审查。这就为统一的安全性提供了便利。</p>
 <p>我曾经见到过这么一个有趣的情况，某人在 ECSHOP 程序的配置文件目录下拷贝了一份配置并重命名为 <code>config.php.bak</code>，原意可能是为了防止自己忘记数据库的密码，但是这就意味着任何用户都可以通过浏览器访问到这个文件了，因为对于 Nginx 或者 Apache 来说这些 HTTP 请求只要路径正确，如果不是 PHP 程序的话，他们就会以静态资源的方式进行输出，当然，这只是个个例，但却足以让你明白动静分离的好处了。</p>
 <p>那么我们现在穿透到黑盒的内部看一下，如果说黑盒是一个工厂，守卫把一个请求交由工厂来处理，那么它一定需要通过一定的流程来产出一个响应。那么它的流程一般是这样的：</p>
-<div class="note success">
-            <ul><li>初始化应用所需的模块资源</li><li>根据不同的请求类型将其导向相应的业务</li><li>业务处理</li><li>返回响应</li></ul>
-          </div>
+<div class="note success"><ul>
+<li>初始化应用所需的模块资源</li>
+<li>根据不同的请求类型将其导向相应的业务</li>
+<li>业务处理</li>
+<li>返回响应</li>
+</ul>
+</div>
 
 <p>那么我们应该可以看出，其实单一入口最大的优势就是规范了开发流程。</p>
 <p>我们可能很难想象规范化的流程能带来多大的开发效率上的提升，但是它确实能最大化的提升效率。</p>
@@ -1085,9 +1096,8 @@
 <p>而在单入口应用中，如果抽象度非常高的话，那么我们完全可以把 session 实现抽象为其中的一个中间件，这样，我们也完全可以在请求被守卫进行分发时由程序自动的判断是否需要启用 session 功能，这完全可以是自动化的。</p>
 <p>再比如说，如果我们想对应用的请求启用日志功能，那么基于传统的多入口应用，我们需要在每一个入口中都加入日志功能，才能达到记录所有日志的效果，而在单入口应用中我们只需要添加一个日志中间件就可以让它来记录所有的日志了。</p>
 <p>对于多入口的应用每当我增加一个入口页面时，我一定不能忘记引入基层的组件库。</p>
-<div class="note default">
-            <p>原文链接：<a href="http://www.jianshu.com/p/d93d79b2699f">Laravel 源码分析系列 —— 单一入口</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="http://www.jianshu.com/p/d93d79b2699f">Laravel 源码分析系列 —— 单一入口</a></p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
@@ -1098,9 +1108,8 @@
   <entry>
     <title>解决在 Chrome network preview 标签中不能渲染 dd 方法</title>
     <url>/PHP/resolve-cannot-render-dd-function-in-chrome-network-preview-tab/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Chrome version 63.0.3239.84</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Chrome version 63.0.3239.84</p>
+</div>
 
 <h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><blockquote>
 <p><code>dd</code> 方法指的是 <a href="../php-global-uses-the-laravel-helper-function-dd">PHP 全局使用 Laravel 辅助函数 dd</a> 中设置的方法。</p>
@@ -1131,6 +1140,42 @@
       </tags>
   </entry>
   <entry>
+    <title>PhpStorm + Xdebug 调试配置</title>
+    <url>/PhpStorm/PhpStorm-Xdebug-configuration/</url>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PhpStorm 2017.3.3<br>Postman 5.5.0<br>php-7.1.12-Win32-VC14-x64 TS</p>
+</div>
+
+<h2 id="安装-xdebug-模块"><a href="#安装-xdebug-模块" class="headerlink" title="安装 xdebug 模块"></a>安装 xdebug 模块</h2><p>前往 <a href="https://xdebug.org/download.php">xdebug 官方网站</a> 下载与自己的 PHP 版本匹配的 xdebug模块文件，如果不知道要选择哪个版本的 <code>xdebug</code>，可以在浏览器上查看 <code>phpinfo()</code>，复制全部 <code>phpinfo()</code> 到<a href="https://xdebug.org/wizard.php">这里</a>自动解析。最后，将 <code>xdebug</code> 模块文件放入PHP安装目录/ext文件夹中。</p>
+<h2 id="配置-php-ini"><a href="#配置-php-ini" class="headerlink" title="配置 php.ini"></a>配置 php.ini</h2><p><code>php.ini</code> 添加如下几行配置</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[xdebug]</span><br><span class="line">;指定Xdebug扩展文件</span><br><span class="line">zend_extension &#x3D; php_xdebug.dll</span><br><span class="line">xdebug.default_enable &#x3D; 1</span><br><span class="line">;远程调试</span><br><span class="line">xdebug.remote_enable &#x3D; on</span><br><span class="line">;自动打开远程调试</span><br><span class="line">xdebug.remote_autostart &#x3D; 1</span><br><span class="line">;代码自动跟踪</span><br><span class="line">xdebug.auto_trace &#x3D; off</span><br><span class="line">;收集传递给函数的参数变量</span><br><span class="line">xdebug.collect_params&#x3D;on</span><br><span class="line">;收集函数调用的返回值</span><br><span class="line">xdebug.collect_return&#x3D;on</span><br><span class="line">;性能检测分析</span><br><span class="line">xdebug.profiler_enable_trigger &#x3D; on</span><br><span class="line">;生成的分析文件</span><br><span class="line">xdebug.profiler_output_name &#x3D; cachegrind.out.%t.%p</span><br><span class="line">;堆栈跟踪文件的存放目录</span><br><span class="line">xdebug.profiler_output_dir &#x3D; &quot;D:&#x2F;laragon&#x2F;tmp&quot;</span><br><span class="line">extension&#x3D;php_printer.dll</span><br><span class="line">;指定传递给DBGp调试器处理程序的IDE Key 在Chrome以及FireFox中插件配置的时候要用到</span><br><span class="line">xdebug.idekey&#x3D;PHPSTORM</span><br></pre></td></tr></table></figure>
+
+<a id="more"></a>
+
+<p>重启服务器，查看 <code>phpinfo()</code>，即可看到 <code>xdebug</code>模块的相关信息</p>
+<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqo4lrkfaj20s303vt8m.jpg"></p>
+<h2 id="配置-PhpStorm"><a href="#配置-PhpStorm" class="headerlink" title="配置 PhpStorm"></a>配置 PhpStorm</h2><ul>
+<li>设置xdebug端口号</li>
+</ul>
+<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqo81tanhj20t60lojt7.jpg"></p>
+<ul>
+<li>设置 servers</li>
+</ul>
+<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqoc4r7s6j20t40lnmya.jpg"></p>
+<ul>
+<li>开启监听</li>
+</ul>
+<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqoj40trwj20o601nt8s.jpg"></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在需要打断点的地方打断点，访问相应的 web 页面或接口即可启动断点，还可以看到执行到该断点前的所有变量。</p>
+]]></content>
+      <categories>
+        <category>PhpStorm</category>
+      </categories>
+      <tags>
+        <tag>PhpStorm</tag>
+        <tag>Xdebug</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>PHP7中的异常与错误处理</title>
     <url>/PHP/throwable-exceptions-and-errors-in-php7/</url>
     <content><![CDATA[<h2 id="PHP-中的-Exception-Error-Throwable"><a href="#PHP-中的-Exception-Error-Throwable" class="headerlink" title="PHP 中的 Exception, Error, Throwable"></a>PHP 中的 Exception, Error, Throwable</h2><ul>
@@ -1140,9 +1185,8 @@
 </ul>
 <h2 id="PHP7-异常处理机制"><a href="#PHP7-异常处理机制" class="headerlink" title="PHP7 异常处理机制"></a>PHP7 异常处理机制</h2><p>过去的 PHP，处理致命错误几乎是不可能的。致命错误不会调用由 <code>set_error_handler()</code> 设置的处理方式，而是简单的停止脚本的执行。</p>
 <p>在 PHP7 中，当致命错误和可捕获的错误(<code>E_ERROR</code> 和 <code>E_RECOVERABLE_ERROR</code>)发生时会抛出异常，而不是直接停止脚本的运行。对于某些情况，比如内存溢出，致命错误则仍然像之前一样直接停止脚本执行。在 PHP7 中，<strong>一个未捕获的异常也会是一个致命错误</strong>。这意味着在 PHP5.x 中致命错误抛出的异常未捕获，在 PHP7 中也是致命错误。</p>
-<div class="note danger">
-            <p>注意：其他级别的错误如 <code>warning</code> 和 <code>notice</code>，和之前一样不会抛出异常，只有 <code>fatal</code> 和 <code>recoverable</code> 级别的错误会抛出异常。</p>
-          </div>
+<div class="note danger"><p>注意：其他级别的错误如 <code>warning</code> 和 <code>notice</code>，和之前一样不会抛出异常，只有 <code>fatal</code> 和 <code>recoverable</code> 级别的错误会抛出异常。</p>
+</div>
 
 <a id="more"></a>
 
@@ -1187,9 +1231,8 @@
 <figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line"><span class="comment">// Code that may throw an Exception or Error.</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Throwable</span> $t) &#123;</span><br><span class="line"><span class="comment">// Executed only in PHP 7, will not match in PHP 5.x</span></span><br><span class="line">&#125; <span class="keyword">catch</span> (<span class="built_in">Exception</span> $e) &#123;</span><br><span class="line"><span class="comment">// Executed only in PHP 5.x, will not be reached in PHP 7</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <p>不幸的是，处理异常的函数中的类型声明不容易确定。当 <code>Exception</code> 用于函数参数类型声明时，如果函数调用时候能用 <code>Error</code> 的实例，这个类型声明就要去掉。当 PHP5.x 不需要被支持时，类型声明则可以还原为 <code>Throwable</code>。</p>
-<div class="note default">
-            <p>原文链接：<a href="https://trowski.com/2015/06/24/throwable-exceptions-and-errors-in-php7/">Throwable Exceptions and Errors in PHP 7</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://trowski.com/2015/06/24/throwable-exceptions-and-errors-in-php7/">Throwable Exceptions and Errors in PHP 7</a></p>
+</div>]]></content>
       <categories>
         <category>PHP</category>
       </categories>
@@ -1202,193 +1245,10 @@
       </tags>
   </entry>
   <entry>
-    <title>PhpStorm + Xdebug 调试配置</title>
-    <url>/PhpStorm/PhpStorm-Xdebug-configuration/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>PhpStorm 2017.3.3<br>Postman 5.5.0<br>php-7.1.12-Win32-VC14-x64 TS</p>
-          </div>
-
-<h2 id="安装-xdebug-模块"><a href="#安装-xdebug-模块" class="headerlink" title="安装 xdebug 模块"></a>安装 xdebug 模块</h2><p>前往 <a href="https://xdebug.org/download.php">xdebug 官方网站</a> 下载与自己的 PHP 版本匹配的 xdebug模块文件，如果不知道要选择哪个版本的 <code>xdebug</code>，可以在浏览器上查看 <code>phpinfo()</code>，复制全部 <code>phpinfo()</code> 到<a href="https://xdebug.org/wizard.php">这里</a>自动解析。最后，将 <code>xdebug</code> 模块文件放入PHP安装目录/ext文件夹中。</p>
-<h2 id="配置-php-ini"><a href="#配置-php-ini" class="headerlink" title="配置 php.ini"></a>配置 php.ini</h2><p><code>php.ini</code> 添加如下几行配置</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[xdebug]</span><br><span class="line">;指定Xdebug扩展文件</span><br><span class="line">zend_extension &#x3D; php_xdebug.dll</span><br><span class="line">xdebug.default_enable &#x3D; 1</span><br><span class="line">;远程调试</span><br><span class="line">xdebug.remote_enable &#x3D; on</span><br><span class="line">;自动打开远程调试</span><br><span class="line">xdebug.remote_autostart &#x3D; 1</span><br><span class="line">;代码自动跟踪</span><br><span class="line">xdebug.auto_trace &#x3D; off</span><br><span class="line">;收集传递给函数的参数变量</span><br><span class="line">xdebug.collect_params&#x3D;on</span><br><span class="line">;收集函数调用的返回值</span><br><span class="line">xdebug.collect_return&#x3D;on</span><br><span class="line">;性能检测分析</span><br><span class="line">xdebug.profiler_enable_trigger &#x3D; on</span><br><span class="line">;生成的分析文件</span><br><span class="line">xdebug.profiler_output_name &#x3D; cachegrind.out.%t.%p</span><br><span class="line">;堆栈跟踪文件的存放目录</span><br><span class="line">xdebug.profiler_output_dir &#x3D; &quot;D:&#x2F;laragon&#x2F;tmp&quot;</span><br><span class="line">extension&#x3D;php_printer.dll</span><br><span class="line">;指定传递给DBGp调试器处理程序的IDE Key 在Chrome以及FireFox中插件配置的时候要用到</span><br><span class="line">xdebug.idekey&#x3D;PHPSTORM</span><br></pre></td></tr></table></figure>
-
-<a id="more"></a>
-
-<p>重启服务器，查看 <code>phpinfo()</code>，即可看到 <code>xdebug</code>模块的相关信息</p>
-<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqo4lrkfaj20s303vt8m.jpg"></p>
-<h2 id="配置-PhpStorm"><a href="#配置-PhpStorm" class="headerlink" title="配置 PhpStorm"></a>配置 PhpStorm</h2><ul>
-<li>设置xdebug端口号</li>
-</ul>
-<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqo81tanhj20t60lojt7.jpg"></p>
-<ul>
-<li>设置 servers</li>
-</ul>
-<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqoc4r7s6j20t40lnmya.jpg"></p>
-<ul>
-<li>开启监听</li>
-</ul>
-<p><img src="/images/PhpStorm/PhpStorm-Xdebug-configuration/bd9f206bgy1fnqoj40trwj20o601nt8s.jpg"></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p>在需要打断点的地方打断点，访问相应的 web 页面或接口即可启动断点，还可以看到执行到该断点前的所有变量。</p>
-]]></content>
-      <categories>
-        <category>PhpStorm</category>
-      </categories>
-      <tags>
-        <tag>PhpStorm</tag>
-        <tag>Xdebug</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>PHPStorm 实用的快捷键</title>
-    <url>/PhpStorm/phpstorm-useful-shortcuts/</url>
-    <content><![CDATA[<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><h3 id="控制光标位置"><a href="#控制光标位置" class="headerlink" title="控制光标位置"></a>控制光标位置</h3><ul>
-<li><code>ctrl + m</code> 将光标定位到文件中心</li>
-<li><code>alt + j</code> 多列模式进行选中,只会选择相同的单词</li>
-<li><code>alt + shift + j</code> 取消多列模式</li>
-<li><code>home, end</code> 移动到行首或行末</li>
-<li><code>ctrl + shift + m</code> 匹配括号的位置，会将光标移动到对应正括号和反括号位置</li>
-<li><code>ctrl + [ 或 ]</code> 具有相似功能</li>
-<li><code>ctrl + shift + [ 或 ]</code> 可已选中对应的括号区域</li>
-<li><code>ctrl + pageup</code> 将光标移动到页面顶头</li>
-<li><code>ctrl + pagedown</code> 将光标移动到页面底部</li>
-<li><code>ctrl + g</code> 输入:行号:列号快速定位文件位置</li>
-</ul>
-<h3 id="编辑文档"><a href="#编辑文档" class="headerlink" title="编辑文档"></a>编辑文档</h3><h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><ul>
-<li><code>ctrl + y</code> 删除一行</li>
-<li><code>ctrl + delete</code> 删除光标后内容</li>
-<li><code>ctrl + backspace</code> 删除光标前一个字的内容</li>
-<li><code>ctrl + enter</code> 在行首会在该行前创建新行，行末会在改行后创建新行</li>
-</ul>
-<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><ul>
-<li><code>ctrl + d</code> 复制选中块，若没有则只是复制当前行</li>
-<li><code>ctrl + shift + v</code> 粘贴文档时可以选择行数，多选时按住 shift，也可以显示剪切板历史</li>
-</ul>
-<a id="more"></a>
-
-<h4 id="选择移动"><a href="#选择移动" class="headerlink" title="选择移动"></a>选择移动</h4><ul>
-<li><code>ctrl + w</code> 进行选择扩展，加 shift 反向操作扩展</li>
-<li><code>shift + ↑ 或 ↓</code> 向上或向下移动一行</li>
-<li><code>shift + home 或 end</code> 选择光标到行首或行末的内容</li>
-<li><code>pageup, pagedown</code> 向上或向下移动一页</li>
-<li><code>shift pageup, pagedown</code> 向上或向下选择一页</li>
-<li><code>ctrl + shift + [ 或 ]</code> 选择匹配括号的内容，注意使用时光标要放在括号前后才起作用</li>
-<li><code>shift + alt + ↑ 或 ↓</code> 将光标对应行向上或向下移动，也可以选中多行进行移动</li>
-<li><code>shift + ctrl + ↑ 或 ↓</code> 对于函数等内容，它是向上或向下移动整个函数</li>
-<li><code>ctrl + shift + l</code> 格式化代码，再加上 alt 可以格式化全局</li>
-<li><code>alt + shift + insert</code> 实现按照矩形格式来选择文本的功能</li>
-</ul>
-<h4 id="文件控制"><a href="#文件控制" class="headerlink" title="文件控制"></a>文件控制</h4><ul>
-<li><code>ctrl + b</code> 跳转到函数 ，或者按住 ctrl 点击函数也可实现该效果。</li>
-<li><code>ctrl + f12</code> 显示函数之间的结构关系</li>
-<li><code>alt + ↑ 或 ↓</code> 函数跳转的上下切换</li>
-<li><code>ctrl + alt + ← 或 →</code> 实现前进和返回，但是在 windows 中这两个快捷键被用来转换屏幕,所以建议自定义快捷键</li>
-<li><code>ctrl + alt + backspace</code> 也可实现返回的功能</li>
-<li><code>F2</code> 当出现规则检查错误时进行导航，加 shift 为反向导航，利用 ctrl+f1 查看错误原因，alt+enter 查看解决办法</li>
-<li><code>F6 和 F5</code> 移动和复制文件，在弹出框中写入路径即可</li>
-<li><code>ctrl + alt + shift + t</code> 在项目文件树中使用，会出现对文件移动、复制等操作</li>
-<li><code>shift + f6</code> 项目窗口中使用可以重命名文件，在编辑模式下没有作用</li>
-<li><code>alt + insert</code> 新建文件</li>
-<li><code>ctrl + shift + f</code> 在工程中查找内容</li>
-<li><code>ctrl + shift + U</code> 或者 edit | toggle case 修改字母大小写</li>
-</ul>
-<h4 id="设置与查找"><a href="#设置与查找" class="headerlink" title="设置与查找"></a>设置与查找</h4><ul>
-<li><code>ctrl + n</code> 全局查找类</li>
-<li><code>ctrl + f</code> 文件中查找,支持正则</li>
-<li><code>ctrl + shift + f</code> 支持在整个项目中查找,甚至是整个磁盘中</li>
-<li><code>ctrl + r</code> 文件替换,支持正则</li>
-<li><code>ctrl + shift + r</code> 支持在项目中进行批量替换</li>
-<li><code>shift + f6</code> 可以利用该功能实现项目中变量或文件的重命名</li>
-<li><code>ctrl + shift + n</code> 全局查找文件，你可以在查找时追加:行号:列号快速定位文件位置</li>
-<li><code>ctrl + shift + n</code> 使用该方法也可以查找目录，只需要在搜索关键字后加上/的路径索引符即可</li>
-<li><code>ctrl + shift + a</code> 查找 PhpStorm 命令的名称，及快捷键，可以迅速执行</li>
-<li><code>ctrl + q</code> 快速查找文档帮助在阅读函数时非常有用</li>
-<li><code>ctrl + alt + t</code> 利用此实现环绕</li>
-</ul>
-<h4 id="设置标签"><a href="#设置标签" class="headerlink" title="设置标签"></a>设置标签</h4><p><code>shift + f11, f11</code> 设置和清除标签,利用标签来进行文件的修改</p>
-<h4 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h4><ul>
-<li><code>ctrl + /</code> 添加单行注释</li>
-<li><code>ctrl + shift +\</code> 添加多行注释</li>
-</ul>
-<div class="note success">
-            <p>注释模式会随着使用语言自动变化</p>
-          </div>
-
-<h4 id="高级编辑功能"><a href="#高级编辑功能" class="headerlink" title="高级编辑功能"></a>高级编辑功能</h4><ul>
-<li><code>alt + enter</code> 在编辑 php 时，若字符串为 HTML 片段，可以利用该功能实现片段代码编写</li>
-<li><code>alt + enter</code> 该命令在不同环境有多种操作非常重要</li>
-<li><code>ctrl + alt + m</code> 在编码时，可以将选择的块新建成函数</li>
-<li><code>shift + F6</code> 在修改函数或文件名的同时，引用该函数或文件的地方也会同时修改</li>
-<li><code>ctrl + alt + n</code> 当光标在函数变量附近时，使用该快捷键会将变量内容变成内联模式</li>
-</ul>
-<h3 id="工作窗口切换"><a href="#工作窗口切换" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h3><h4 id="项目树和文件之间的切换"><a href="#项目树和文件之间的切换" class="headerlink" title="项目树和文件之间的切换"></a>项目树和文件之间的切换</h4><ul>
-<li><code>alt + f1 + 1</code> 在全局查找到文件以后，利用该快捷键迅速定位在项目树中的的位置</li>
-<li><code>f4</code> 实现在查找到的文件和项目树之间进行切换</li>
-<li><code>alt + 左右方向键</code> 进行文件切换</li>
-</ul>
-<h4 id="工作窗口切换-1"><a href="#工作窗口切换-1" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h4><ul>
-<li><code>ctrl + tab + 左右方向键</code> 切换所有工作选项</li>
-<li><code>alt + number</code> 例如 alt + 1 打开关闭工程</li>
-<li><code>alt + 1</code> 打开关闭工程文件夹，可以直接在项目树中输入字符进行查找，也可利用上下左右键进行展开</li>
-<li><code>alt + 6</code> 查看 todo 信息</li>
-<li><code>alt + 7</code> 打开函数结构显示</li>
-<li><code>ctrl + tab</code> 切换显示工具栏</li>
-<li><code>alt + f12</code> 快速打开控制台</li>
-<li><code>F12</code> 打开最近关闭的窗口</li>
-<li><code>shift + esc</code> 退出，esc 也有退出功能。</li>
-<li><code>ctrl + f4</code> 在非编辑窗口下会退出，在编辑窗口下会关闭当前窗口</li>
-<li><code>f4 和 shift + f4</code> 打开工程文件夹中所在位置的文件，在新窗口中打开</li>
-<li><code>ctrl + shift + e</code> 打开最近编辑的文件列表，ctrl + e 相似</li>
-<li><code>alt + home</code> 迅速回到顶层导航栏位置，利用上下左右箭头切换文件，这是可以利用上下左右键进行切换和展开</li>
-<li><code>f2</code> 导航到下一个错误</li>
-<li><code>shift + f2</code> 上一个错误</li>
-<li><code>alt + f12</code> 打开终端</li>
-<li><code>ctrl + shift + t</code> 在打开终端下创建新终端</li>
-<li><code>ctrl + shift + w</code> 在打开终端下关闭终端</li>
-</ul>
-<div class="note success">
-            <p>拖动工作路径和文件到终端下会创建一个指向该路径的新终端</p>
-          </div>
-
-<h4 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h4><ul>
-<li><code>ctrl + j</code> 查询当前文件支持的自定义模板</li>
-</ul>
-<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>PhpStorm 极其占用缓存，当电脑变慢时，利用 <code>file -&gt; invalidate caches/restart</code> 重启应用</p>
-<h3 id="工具栏消失"><a href="#工具栏消失" class="headerlink" title="工具栏消失"></a>工具栏消失</h3><p>进入 view 菜单选择 <code>tool bar</code> 和 <code>tool button</code> 即可</p>
-<h3 id="清除无用的-css-样式"><a href="#清除无用的-css-样式" class="headerlink" title="清除无用的 css 样式"></a>清除无用的 css 样式</h3><ol>
-<li><code>code -&gt; run inspection by name</code> 或者利用快捷键 <code>alt + ctrl + shift + i</code></li>
-<li>输入 <code>unused css</code></li>
-<li>选择删除无效的 css 样式</li>
-</ol>
-<h3 id="文件恢复"><a href="#文件恢复" class="headerlink" title="文件恢复"></a>文件恢复</h3><ol>
-<li>右键点击工程文件夹</li>
-<li>选择 <code>local history</code></li>
-<li>选择 <code>show history</code></li>
-<li>选中想要还原的状态，点击返回箭头即可</li>
-</ol>
-<h3 id="文本对齐"><a href="#文本对齐" class="headerlink" title="文本对齐"></a>文本对齐</h3><ol>
-<li>键值对对齐</li>
-</ol>
-<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivscil9ydj20sg0ljmz8.png"></p>
-<ol start="2">
-<li>变量申明对齐</li>
-</ol>
-<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivsdsl1tqj20sg0lhmzp.png"></p>
-<div class="note default">
-            <p>原文链接：<a href="https://segmentfault.com/a/1190000010630844">phpstorm 使用指南</a></p>
-          </div>]]></content>
-      <categories>
-        <category>PhpStorm</category>
-      </categories>
-      <tags>
-        <tag>PhpStorm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>ubuntu 16.04服务器上搭建Shadowsocks服务</title>
     <url>/Shadowsocks/setup-Shadowsocks-on-ubuntu-1604/</url>
-    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Ubuntu 16.04</p>
-          </div>
+    <content><![CDATA[<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Ubuntu 16.04</p>
+</div>
 
 <h2 id="更新软件源"><a href="#更新软件源" class="headerlink" title="更新软件源"></a>更新软件源</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt update</span><br></pre></td></tr></table></figure>
 
@@ -1480,6 +1340,148 @@
       </tags>
   </entry>
   <entry>
+    <title>PHPStorm 实用的快捷键</title>
+    <url>/PhpStorm/phpstorm-useful-shortcuts/</url>
+    <content><![CDATA[<h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><h3 id="控制光标位置"><a href="#控制光标位置" class="headerlink" title="控制光标位置"></a>控制光标位置</h3><ul>
+<li><code>ctrl + m</code> 将光标定位到文件中心</li>
+<li><code>alt + j</code> 多列模式进行选中,只会选择相同的单词</li>
+<li><code>alt + shift + j</code> 取消多列模式</li>
+<li><code>home, end</code> 移动到行首或行末</li>
+<li><code>ctrl + shift + m</code> 匹配括号的位置，会将光标移动到对应正括号和反括号位置</li>
+<li><code>ctrl + [ 或 ]</code> 具有相似功能</li>
+<li><code>ctrl + shift + [ 或 ]</code> 可已选中对应的括号区域</li>
+<li><code>ctrl + pageup</code> 将光标移动到页面顶头</li>
+<li><code>ctrl + pagedown</code> 将光标移动到页面底部</li>
+<li><code>ctrl + g</code> 输入:行号:列号快速定位文件位置</li>
+</ul>
+<h3 id="编辑文档"><a href="#编辑文档" class="headerlink" title="编辑文档"></a>编辑文档</h3><h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><ul>
+<li><code>ctrl + y</code> 删除一行</li>
+<li><code>ctrl + delete</code> 删除光标后内容</li>
+<li><code>ctrl + backspace</code> 删除光标前一个字的内容</li>
+<li><code>ctrl + enter</code> 在行首会在该行前创建新行，行末会在改行后创建新行</li>
+</ul>
+<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><ul>
+<li><code>ctrl + d</code> 复制选中块，若没有则只是复制当前行</li>
+<li><code>ctrl + shift + v</code> 粘贴文档时可以选择行数，多选时按住 shift，也可以显示剪切板历史</li>
+</ul>
+<a id="more"></a>
+
+<h4 id="选择移动"><a href="#选择移动" class="headerlink" title="选择移动"></a>选择移动</h4><ul>
+<li><code>ctrl + w</code> 进行选择扩展，加 shift 反向操作扩展</li>
+<li><code>shift + ↑ 或 ↓</code> 向上或向下移动一行</li>
+<li><code>shift + home 或 end</code> 选择光标到行首或行末的内容</li>
+<li><code>pageup, pagedown</code> 向上或向下移动一页</li>
+<li><code>shift pageup, pagedown</code> 向上或向下选择一页</li>
+<li><code>ctrl + shift + [ 或 ]</code> 选择匹配括号的内容，注意使用时光标要放在括号前后才起作用</li>
+<li><code>shift + alt + ↑ 或 ↓</code> 将光标对应行向上或向下移动，也可以选中多行进行移动</li>
+<li><code>shift + ctrl + ↑ 或 ↓</code> 对于函数等内容，它是向上或向下移动整个函数</li>
+<li><code>ctrl + shift + l</code> 格式化代码，再加上 alt 可以格式化全局</li>
+<li><code>alt + shift + insert</code> 实现按照矩形格式来选择文本的功能</li>
+</ul>
+<h4 id="文件控制"><a href="#文件控制" class="headerlink" title="文件控制"></a>文件控制</h4><ul>
+<li><code>ctrl + b</code> 跳转到函数 ，或者按住 ctrl 点击函数也可实现该效果。</li>
+<li><code>ctrl + f12</code> 显示函数之间的结构关系</li>
+<li><code>alt + ↑ 或 ↓</code> 函数跳转的上下切换</li>
+<li><code>ctrl + alt + ← 或 →</code> 实现前进和返回，但是在 windows 中这两个快捷键被用来转换屏幕,所以建议自定义快捷键</li>
+<li><code>ctrl + alt + backspace</code> 也可实现返回的功能</li>
+<li><code>F2</code> 当出现规则检查错误时进行导航，加 shift 为反向导航，利用 ctrl+f1 查看错误原因，alt+enter 查看解决办法</li>
+<li><code>F6 和 F5</code> 移动和复制文件，在弹出框中写入路径即可</li>
+<li><code>ctrl + alt + shift + t</code> 在项目文件树中使用，会出现对文件移动、复制等操作</li>
+<li><code>shift + f6</code> 项目窗口中使用可以重命名文件，在编辑模式下没有作用</li>
+<li><code>alt + insert</code> 新建文件</li>
+<li><code>ctrl + shift + f</code> 在工程中查找内容</li>
+<li><code>ctrl + shift + U</code> 或者 edit | toggle case 修改字母大小写</li>
+</ul>
+<h4 id="设置与查找"><a href="#设置与查找" class="headerlink" title="设置与查找"></a>设置与查找</h4><ul>
+<li><code>ctrl + n</code> 全局查找类</li>
+<li><code>ctrl + f</code> 文件中查找,支持正则</li>
+<li><code>ctrl + shift + f</code> 支持在整个项目中查找,甚至是整个磁盘中</li>
+<li><code>ctrl + r</code> 文件替换,支持正则</li>
+<li><code>ctrl + shift + r</code> 支持在项目中进行批量替换</li>
+<li><code>shift + f6</code> 可以利用该功能实现项目中变量或文件的重命名</li>
+<li><code>ctrl + shift + n</code> 全局查找文件，你可以在查找时追加:行号:列号快速定位文件位置</li>
+<li><code>ctrl + shift + n</code> 使用该方法也可以查找目录，只需要在搜索关键字后加上/的路径索引符即可</li>
+<li><code>ctrl + shift + a</code> 查找 PhpStorm 命令的名称，及快捷键，可以迅速执行</li>
+<li><code>ctrl + q</code> 快速查找文档帮助在阅读函数时非常有用</li>
+<li><code>ctrl + alt + t</code> 利用此实现环绕</li>
+</ul>
+<h4 id="设置标签"><a href="#设置标签" class="headerlink" title="设置标签"></a>设置标签</h4><p><code>shift + f11, f11</code> 设置和清除标签,利用标签来进行文件的修改</p>
+<h4 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h4><ul>
+<li><code>ctrl + /</code> 添加单行注释</li>
+<li><code>ctrl + shift +\</code> 添加多行注释</li>
+</ul>
+<div class="note success"><p>注释模式会随着使用语言自动变化</p>
+</div>
+
+<h4 id="高级编辑功能"><a href="#高级编辑功能" class="headerlink" title="高级编辑功能"></a>高级编辑功能</h4><ul>
+<li><code>alt + enter</code> 在编辑 php 时，若字符串为 HTML 片段，可以利用该功能实现片段代码编写</li>
+<li><code>alt + enter</code> 该命令在不同环境有多种操作非常重要</li>
+<li><code>ctrl + alt + m</code> 在编码时，可以将选择的块新建成函数</li>
+<li><code>shift + F6</code> 在修改函数或文件名的同时，引用该函数或文件的地方也会同时修改</li>
+<li><code>ctrl + alt + n</code> 当光标在函数变量附近时，使用该快捷键会将变量内容变成内联模式</li>
+</ul>
+<h3 id="工作窗口切换"><a href="#工作窗口切换" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h3><h4 id="项目树和文件之间的切换"><a href="#项目树和文件之间的切换" class="headerlink" title="项目树和文件之间的切换"></a>项目树和文件之间的切换</h4><ul>
+<li><code>alt + f1 + 1</code> 在全局查找到文件以后，利用该快捷键迅速定位在项目树中的的位置</li>
+<li><code>f4</code> 实现在查找到的文件和项目树之间进行切换</li>
+<li><code>alt + 左右方向键</code> 进行文件切换</li>
+</ul>
+<h4 id="工作窗口切换-1"><a href="#工作窗口切换-1" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h4><ul>
+<li><code>ctrl + tab + 左右方向键</code> 切换所有工作选项</li>
+<li><code>alt + number</code> 例如 alt + 1 打开关闭工程</li>
+<li><code>alt + 1</code> 打开关闭工程文件夹，可以直接在项目树中输入字符进行查找，也可利用上下左右键进行展开</li>
+<li><code>alt + 6</code> 查看 todo 信息</li>
+<li><code>alt + 7</code> 打开函数结构显示</li>
+<li><code>ctrl + tab</code> 切换显示工具栏</li>
+<li><code>alt + f12</code> 快速打开控制台</li>
+<li><code>F12</code> 打开最近关闭的窗口</li>
+<li><code>shift + esc</code> 退出，esc 也有退出功能。</li>
+<li><code>ctrl + f4</code> 在非编辑窗口下会退出，在编辑窗口下会关闭当前窗口</li>
+<li><code>f4 和 shift + f4</code> 打开工程文件夹中所在位置的文件，在新窗口中打开</li>
+<li><code>ctrl + shift + e</code> 打开最近编辑的文件列表，ctrl + e 相似</li>
+<li><code>alt + home</code> 迅速回到顶层导航栏位置，利用上下左右箭头切换文件，这是可以利用上下左右键进行切换和展开</li>
+<li><code>f2</code> 导航到下一个错误</li>
+<li><code>shift + f2</code> 上一个错误</li>
+<li><code>alt + f12</code> 打开终端</li>
+<li><code>ctrl + shift + t</code> 在打开终端下创建新终端</li>
+<li><code>ctrl + shift + w</code> 在打开终端下关闭终端</li>
+</ul>
+<div class="note success"><p>拖动工作路径和文件到终端下会创建一个指向该路径的新终端</p>
+</div>
+
+<h4 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h4><ul>
+<li><code>ctrl + j</code> 查询当前文件支持的自定义模板</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>PhpStorm 极其占用缓存，当电脑变慢时，利用 <code>file -&gt; invalidate caches/restart</code> 重启应用</p>
+<h3 id="工具栏消失"><a href="#工具栏消失" class="headerlink" title="工具栏消失"></a>工具栏消失</h3><p>进入 view 菜单选择 <code>tool bar</code> 和 <code>tool button</code> 即可</p>
+<h3 id="清除无用的-css-样式"><a href="#清除无用的-css-样式" class="headerlink" title="清除无用的 css 样式"></a>清除无用的 css 样式</h3><ol>
+<li><code>code -&gt; run inspection by name</code> 或者利用快捷键 <code>alt + ctrl + shift + i</code></li>
+<li>输入 <code>unused css</code></li>
+<li>选择删除无效的 css 样式</li>
+</ol>
+<h3 id="文件恢复"><a href="#文件恢复" class="headerlink" title="文件恢复"></a>文件恢复</h3><ol>
+<li>右键点击工程文件夹</li>
+<li>选择 <code>local history</code></li>
+<li>选择 <code>show history</code></li>
+<li>选中想要还原的状态，点击返回箭头即可</li>
+</ol>
+<h3 id="文本对齐"><a href="#文本对齐" class="headerlink" title="文本对齐"></a>文本对齐</h3><ol>
+<li>键值对对齐</li>
+</ol>
+<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivscil9ydj20sg0ljmz8.png"></p>
+<ol start="2">
+<li>变量申明对齐</li>
+</ol>
+<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivsdsl1tqj20sg0lhmzp.png"></p>
+<div class="note default"><p>原文链接：<a href="https://segmentfault.com/a/1190000010630844">phpstorm 使用指南</a></p>
+</div>]]></content>
+      <categories>
+        <category>PhpStorm</category>
+      </categories>
+      <tags>
+        <tag>PhpStorm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>微信退款异步通知 aes-256-ecb 解密</title>
     <url>/Weixin/wxpay-refund/</url>
     <content><![CDATA[<h2 id="实现代码"><a href="#实现代码" class="headerlink" title="实现代码"></a>实现代码</h2><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 对微信退款回调的加密数据进行解密</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $encryptData 原始加密数据</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> string $key 商户 key</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> string 解密后的 xml 数据</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">decryptData</span>(<span class="params"> $encryptData, $key = <span class="string">&#x27;&#x27;</span> </span>)</span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">//1. base64_decode</span></span><br><span class="line">    $encryptData = base64_decode($encryptData);</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//2. md5 original key</span></span><br><span class="line">    $md5LowerKey = strtolower(md5($key));</span><br><span class="line"> </span><br><span class="line">    <span class="comment">//3. decrypt AES ECB</span></span><br><span class="line">    $decrypted = openssl_decrypt($encryptData, <span class="string">&#x27;AES-256-ECB&#x27;</span>, $md5LowerKey, OPENSSL_RAW_DATA);</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> $decrypted;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -1502,9 +1504,8 @@
     <content><![CDATA[<blockquote>
 <p>容器，字面上理解就是装东西的东西。常见的变量、对象属性等都可以算是容器。一个容器能够装什么，全部取决于你对该容器的定义。当然，有这样一种容器，它存放的不是文本、数值，而是对象、对象的描述（类、接口）或者是提供对象的回调，通过这种容器，我们得以实现许多高级的功能，其中最常提到的，就是 “解耦” 、“依赖注入（DI）”。本文就从这里开始。</p>
 </blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Laravel Framework version 5.1.41 (LTS)</p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Laravel Framework version 5.1.41 (LTS)</p>
+</div>
 
 <h2 id="IoC-容器，-laravel-的核心"><a href="#IoC-容器，-laravel-的核心" class="headerlink" title="IoC 容器， laravel 的核心"></a>IoC 容器， laravel 的核心</h2><p>Laravel 的核心就是一个 <code>IoC 容器</code>，根据文档，称其为“<code>服务容器</code>”，顾名思义，该容器提供了整个框架中需要的一系列服务。作为初学者，很多人会在这一个概念上犯难，因此，我打算从一些基础的内容开始讲解，通过理解面向对象开发中依赖的产生和解决方法，来逐渐揭开“依赖注入”的面纱，逐渐理解这一神奇的设计理念。</p>
 <p>本文一大半内容都是通过举例来让读者去理解什么是 <code>IoC（控制反转）</code> 和 <code>DI（依赖注入）</code>，通过理解这些概念，来更加深入。更多关于 laravel 服务容器的用法建议阅读文档即可。</p>
@@ -1663,9 +1664,8 @@
 <h2 id="和平！我们该总结总结了！"><a href="#和平！我们该总结总结了！" class="headerlink" title="和平！我们该总结总结了！"></a>和平！我们该总结总结了！</h2><p>无论如何，世界和平了。</p>
 <p>这里要总结的内容就是，其实很多事情并不复杂，怕的是复杂的理论内容。我觉得很多东西一旦想通也就那么回事儿。很多人觉得 laravel 这不好那不好、这里难哪里难，我只能说，laravel 的确不是一流和优秀的框架，说 laravel 是一流、优秀的框架的人，不是 laravel 的粉丝那么就是跟风炒作。Laravel 最大的特点和优秀之处就是使用了很多 php 比较新（实际上并不新）的概念和技术（也就一堆语法糖）而已。因此 laravel 的确符合一个适宜学习的框架。Laravel 的构思的确和其他框架有很大不同，这也要求学习他的人必须熟练 php，并 基础扎实！如果你觉得学 laravel 框架十分困难，那么原因只有一个：你 php 基础不好。</p>
 <p>另外，善于利用命名空间和面向对象的诸多特性，去追寻一些东西，你会发现，原来这一切这么容易。</p>
-<div class="note default">
-            <p>原文链接：<a href="https://www.insp.top/article/learn-laravel-container">laravel 学习笔记 —— 神奇的服务容器</a></p>
-          </div>]]></content>
+<div class="note default"><p>原文链接：<a href="https://www.insp.top/article/learn-laravel-container">laravel 学习笔记 —— 神奇的服务容器</a></p>
+</div>]]></content>
       <categories>
         <category>Laravel</category>
       </categories>
@@ -1673,33 +1673,6 @@
         <tag>PHP</tag>
         <tag>Laravel</tag>
         <tag>Container</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo版本升级指南</title>
-    <url>/Hexo/update_hexo/</url>
-    <content><![CDATA[<p>1、全局升级hexo-cli，先 <code>hexo version</code> 查看当前版本，然后 <code>npm i hexo-cli -g</code>，再次 <code>hexo version</code> 查看是否升级成功。</p>
-<p>2、使用 <code>npm install -g npm-check</code> 和 <code>npm-check</code>，检查系统中的插件是否有升级的，可以看到自己前面都安装了那些插件</p>
-<p>3、使用<code> npm install -g npm-upgrade</code> 和 <code>npm-upgrade</code>，升级系统中的插件</p>
-<p>4、使用 <code>npm update -g和npm update --save</code></p>
-<p>PS：第四步遇到了错误，错误提示如下：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; fsevents@1.2.11 install /Users/lanvnal/Files/blog/node_modules/hexo/node_modules/fsevents</span><br><span class="line">&gt; node-gyp rebuild</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">xcode-select: error: tool <span class="string">&#x27;xcodebuild&#x27;</span> requires Xcode, but active developer directory <span class="string">&#x27;/Library/Developer/CommandLineTools&#x27;</span> is a <span class="built_in">command</span> line tools instance</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.CLTools_Executables&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLILeo&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line"></span><br><span class="line">No receipt <span class="keyword">for</span> <span class="string">&#x27;com.apple.pkg.DeveloperToolsCLI&#x27;</span> found at <span class="string">&#x27;/&#x27;</span>.</span><br><span class="line">gyp: No Xcode or CLT version detected!</span><br></pre></td></tr></table></figure>
-
-<p>其实已经安装过了xcode cli，但是这里还是报错了，估计和苹果新系统有关，重装就好了，操作如下：</p>
-<p>如果像以前一样执行 <code>xcode-select --install</code> 会有如下报错：</p>
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">xcode-select: error: command line tools are already installed, use &quot;Software Update&quot; to install updates</span><br></pre></td></tr></table></figure>
-
-<p>解决办法：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
-
-<div class="note default">
-            <p>原文链接：<a href="https://lanvnal.com/2020/02/16/hexo-ban-ben-sheng-ji/">Hexo版本升级指南</a></p>
-          </div>]]></content>
-      <categories>
-        <category>Hexo</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>

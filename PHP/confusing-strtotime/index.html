@@ -621,9 +621,8 @@ if(canvas.getContext){
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;last day of -1 month&quot;</span>, strtotime(<span class="string">&quot;2017-03-31&quot;</span>))));</span><br><span class="line"><span class="comment">//输出2017-02-28</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;first day of +1 month&quot;</span>, strtotime(<span class="string">&quot;2017-08-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-09-01</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;first day of next month&quot;</span>, strtotime(<span class="string">&quot;2017-01-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-02-01</span></span><br><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;last day of last month&quot;</span>, strtotime(<span class="string">&quot;2017-03-31&quot;</span>))));</span><br><span class="line"><span class="comment">////输出2017-02-28</span></span><br></pre></td></tr></table></figure>
 
 <p>那如果是5.3之前的版本(还有人用么?)，你可以使用mktime之类的，把所有的日子忽略掉，比如都限定为每月1号就可以了，只不过就不如直接用first day来的更加优雅。</p>
-<div class="note default">
-            <p>原文链接：<a target="_blank" rel="noopener" href="http://www.laruence.com/2018/07/31/3188.html">令人困惑的strtotime</a></p>
-          </div>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="http://www.laruence.com/2018/07/31/3188.html">令人困惑的strtotime</a></p>
+</div>
     </div>
 
     
@@ -900,6 +899,7 @@ translateInitilization();
       });
       });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
 
 

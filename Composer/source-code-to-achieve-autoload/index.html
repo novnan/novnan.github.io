@@ -603,9 +603,8 @@ if(canvas.getContext){
         <blockquote>
 <p>当 PHP 引擎试图实例化未知类的操作时，就会调用 <code>__autoload()</code> ,并将类名当做字符串传递给它。但 <code>__autoload()</code> 有个缺点，就是 一个进程中只能定义一次。它是全局唯一的，如果框架占了这个名字，便会导致框架的用户用不了其它的 <code>__autoload()</code> 了，包括用户自定义的和其它类库带的。这时候就可以使用 <code>spl_autoload_register()</code> 函数。它可以把函数注册到 <code>__autoload</code> 队列中。 </p>
 </blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Composer version 1.5.1 </p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Composer version 1.5.1 </p>
+</div>
 
 <h2 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h2><p>以 Laravel 项目为例，<code>composer.json</code> 文件：</p>
 <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">&quot;autoload&quot;</span>: &#123;</span><br><span class="line">        <span class="attr">&quot;classmap&quot;</span> : [</span><br><span class="line">            <span class="string">&quot;app/controllers&quot;</span>,</span><br><span class="line">            <span class="string">&quot;app/models&quot;</span></span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -929,6 +928,7 @@ translateInitilization();
       });
       });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
 
 

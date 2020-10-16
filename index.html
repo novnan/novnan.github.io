@@ -704,9 +704,8 @@ if(canvas.getContext){
 <p>解决办法：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo rm -rf /Library/Developer/CommandLineTools</span><br><span class="line">xcode-select --install</span><br></pre></td></tr></table></figure>
 
-<div class="note default">
-            <p>原文链接：<a target="_blank" rel="noopener" href="https://lanvnal.com/2020/02/16/hexo-ban-ben-sheng-ji/">Hexo版本升级指南</a></p>
-          </div>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://lanvnal.com/2020/02/16/hexo-ban-ben-sheng-ji/">Hexo版本升级指南</a></p>
+</div>
       
     </div>
 
@@ -786,13 +785,11 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody">
-          <div class="note primary">
-            <p>如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。</p>
-          </div>
+          <div class="note primary"><p>如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。</p>
+</div>
 
-<div class="note info">
-            <p>宝塔 6.9.8</p>
-          </div>
+<div class="note info"><p>宝塔 6.9.8</p>
+</div>
 
 <p>宝塔面板在编译安装 MySQL 8.0 时，要求 4个核心的 CPU，8G 内存，实在是太高了，小站长的服务器一般都不会有如此高的配置。这时候，我们要使用 MySQL 8.0，可以选择极速安装，或者，如果一定要自己编译的话，可以使用命令行来跳过配置检测。不过，MySQL 编译过程中，需要 5G 以上的内存，以及 9G 以上的数据盘空间。如果我们的内存实在不够，可以创建 swap 虚拟内存。</p>
 <p>在宝塔面板里的 <strong>Linux 工具箱</strong>(如果没有可以去软件商店里面安装) 修改 Swap/虚拟内存，输入 0，然后手动设置 swap 到系统盘：</p>
@@ -1299,15 +1296,14 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>git version 2.21.0</p>
-          </div>
+          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>git version 2.21.0</p>
+</div>
 
 <h2 id="新增-submodule"><a href="#新增-submodule" class="headerlink" title="新增 submodule"></a>新增 submodule</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next/</span></span><br><span class="line">git submodule add &lt;url&gt; &lt;folder&gt;</span><br></pre></td></tr></table></figure>
 
-<div class="note danger">
-            <p>如果出现 <code>xxx already exists in the index</code> 的提示，则给根据<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index">Issue with adding common code as git submodule: “already exists in the index”</a>里面的回答，执行 <code>git rm -f --cached &lt;folder&gt;</code> 后，在执行 <code>git submodule add</code></p>
-          </div>
+<div class="note danger"><p>如果出现 <code>xxx already exists in the index</code> 的提示，则给根据<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index">Issue with adding common code as git submodule: “already exists in the index”
+</a>里面的回答，执行 <code>git rm -f --cached &lt;folder&gt;</code> 后，在执行 <code>git submodule add</code></p>
+</div>
 
 
 <p>如果这个仓库先前没有用过 submodule，那么 Git 会在目录下建立一个叫做 <code>.gitmodules</code> 的文件，这里记录了 remote repo 的 URL 和这个 submodule 在此目录的路径。执行此命令后 submodule 和 <code>.gitmodules</code> 会自动 staged，这个时候可以 commit 和 push。</p>
@@ -1405,9 +1401,8 @@ if(canvas.getContext){
           <blockquote>
 <p>ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。</p>
 </blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Ubuntu 18.04.2 LTS</p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Ubuntu 18.04.2 LTS</p>
+</div>
 
 <h2 id="安装ZSH-Shell"><a href="#安装ZSH-Shell" class="headerlink" title="安装ZSH Shell"></a>安装ZSH Shell</h2><p>ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install zsh</span><br></pre></td></tr></table></figure>
@@ -1500,9 +1495,8 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>PHP version 7.1.26</p>
-          </div>
+          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PHP version 7.1.26</p>
+</div>
 
 <h2 id="键名是string，两者区别"><a href="#键名是string，两者区别" class="headerlink" title="键名是string，两者区别"></a>键名是string，两者区别</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PHP&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PYTHON&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1, $arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//再比如</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;c&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1,$arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 3 [c] =&gt; 2 )</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 2 [c] =&gt; 2 )</span></span><br></pre></td></tr></table></figure>
           <!--noindex-->
@@ -1858,6 +1852,7 @@ translateInitilization();
       });
       });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
 
 

@@ -608,9 +608,8 @@ if(canvas.getContext){
 <p>在 Hexo 中默认的 markdown 渲染器是 <code>hexo-renderer-marked</code> ，这个渲染器是不支持 emoji 表情的。</p>
 <p>在 NexT 的 <a target="_blank" rel="noopener" href="https://github.com/iissnan/hexo-theme-next/issues/390">issue</a> 上有推荐使用 <a target="_blank" rel="noopener" href="https://github.com/sergiolepore/hexo-tag-emojis">hexo-tag-emojis</a> 这个插件来支持 emoji 表情，但可惜的是这个插件已经不再维护，已经不支持 <code>Hexo v3+</code> 了。还好在 Hexo 的 <a target="_blank" rel="noopener" href="https://hexo.io/plugins/">plugins</a> 页，我们找到了另外一个 emoji 插件 <a target="_blank" rel="noopener" href="https://github.com/crimx/hexo-filter-github-emojis">hexo-filter-github-emojis</a>。</p>
 <p>下面我们就来实现 Hexo NexT 对 emoji 的支持。</p>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info">
-            <p>Hexo 3.3.9<br>NexT 5.1.2</p>
-          </div>
+<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Hexo 3.3.9<br>NexT 5.1.2</p>
+</div>
 
 <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-filter-github-emojis --save</span><br></pre></td></tr></table></figure>
 
@@ -933,6 +932,7 @@ translateInitilization();
       });
       });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
 
 

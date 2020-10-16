@@ -618,9 +618,12 @@ if(canvas.getContext){
 <p>2.6 + 3.5 = 6.1</p>
 <p>这样的问题非常常见，也导致了在大量样本中，四舍五入后计算结果的总和会明显大于直接计算总和的结果，对于金融单位计算利息而言，这样很显然是一个亏本的行为。如果不亏本的算，依旧是简单处理可能结果相反，那么客户就不开心了。</p>
 <h2 id="银行家舍入（Banker’s-Round）"><a href="#银行家舍入（Banker’s-Round）" class="headerlink" title="银行家舍入（Banker’s Round）"></a>银行家舍入（Banker’s Round）</h2><p>亦叫做 “四舍六入五成双” ，四舍六入，使得两头（即进和舍）概率相等，但是，在 4 和 6 之间的 5 就需要特别对待。具体规则如下：</p>
-<div class="note info">
-            <ul><li>舍去位的数值小于5时，直接舍去；</li><li>舍去位的数值大于等于6时，进位后舍去；</li><li>当舍去位的数值等于5时，分两种情况：5后面还有其他数字（非0），则进位后舍去；若5后面是0（即5是最后一位），则根据5前一位数的奇偶性来判断是否需要进位，奇数进位，偶数舍去。</li></ul>
-          </div>
+<div class="note info"><ul>
+<li>舍去位的数值小于5时，直接舍去；</li>
+<li>舍去位的数值大于等于6时，进位后舍去；</li>
+<li>当舍去位的数值等于5时，分两种情况：5后面还有其他数字（非0），则进位后舍去；若5后面是0（即5是最后一位），则根据5前一位数的奇偶性来判断是否需要进位，奇数进位，偶数舍去。</li>
+</ul>
+</div>
 
 <p>舍去位，当小于 5，即 0 ~ 4.999999…… 则舍去，大于 6，即 6 ~ 10 则进位，则中间区间那个数字，5 ~ 5.999999…… ，只要使该区间内存在的数字平均分布，即可保证取舍概率相等。于是得到上述算法。</p>
 <p>按上述规则，之前的 2.55 + 3.45 = 6 得出的结果如下：</p>
@@ -632,9 +635,8 @@ if(canvas.getContext){
 <h2 id="关于浮点数运算"><a href="#关于浮点数运算" class="headerlink" title="关于浮点数运算"></a>关于浮点数运算</h2><p>请牢记，*<em>不要使用 PHP 内置的 +-</em>/ 操作符**，请使用 <a target="_blank" rel="noopener" href="http://php.net/manual/en/ref.bc.php">BC Math Functions</a>，执行下面这段代码就知道原因了：</p>
 <figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// output 0.099999999999998</span></span><br><span class="line"><span class="keyword">echo</span> <span class="number">19.45</span><span class="number">-19.35</span>;</span><br></pre></td></tr></table></figure>
 
-<div class="note default">
-            <p>原文链接：<a target="_blank" rel="noopener" href="https://www.insp.top/article/how-to-ensure-accurate-for-digital-transformation">四舍五入不可取！结算金额，如何保证精确？</a></p>
-          </div>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://www.insp.top/article/how-to-ensure-accurate-for-digital-transformation">四舍五入不可取！结算金额，如何保证精确？</a></p>
+</div>
     </div>
 
     
@@ -910,6 +912,7 @@ translateInitilization();
       });
       });
   </script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
 
 
 

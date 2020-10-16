@@ -78,13 +78,11 @@
     <updated>2020-08-06T07:41:19.849Z</updated>
     
     
-    <summary type="html">&lt;div class=&quot;note primary&quot;&gt;
-            &lt;p&gt;如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;div class=&quot;note primary&quot;&gt;&lt;p&gt;如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。&lt;/p&gt;
+&lt;/div&gt;
 
-&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;宝塔 6.9.8&lt;/p&gt;
-          &lt;/div&gt;
+&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;宝塔 6.9.8&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;p&gt;宝塔面板在编译安装 MySQL 8.0 时，要求 4个核心的 CPU，8G 内存，实在是太高了，小站长的服务器一般都不会有如此高的配置。这时候，我们要使用 MySQL 8.0，可以选择极速安装，或者，如果一定要自己编译的话，可以使用命令行来跳过配置检测。不过，MySQL 编译过程中，需要 5G 以上的内存，以及 9G 以上的数据盘空间。如果我们的内存实在不够，可以创建 swap 虚拟内存。&lt;/p&gt;
 &lt;p&gt;在宝塔面板里的 &lt;strong&gt;Linux 工具箱&lt;/strong&gt;(如果没有可以去软件商店里面安装) 修改 Swap/虚拟内存，输入 0，然后手动设置 swap 到系统盘：&lt;/p&gt;
@@ -319,15 +317,14 @@
     <updated>2020-08-06T07:41:19.848Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;git version 2.21.0&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;git version 2.21.0&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;新增-submodule&quot;&gt;&lt;a href=&quot;#新增-submodule&quot; class=&quot;headerlink&quot; title=&quot;新增 submodule&quot;&gt;&lt;/a&gt;新增 submodule&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;git submodule add &amp;lt;url&amp;gt; &amp;lt;folder&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 
-&lt;div class=&quot;note danger&quot;&gt;
-            &lt;p&gt;如果出现 &lt;code&gt;xxx already exists in the index&lt;/code&gt; 的提示，则给根据&lt;a href=&quot;https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index&quot;&gt;Issue with adding common code as git submodule: “already exists in the index”&lt;/a&gt;里面的回答，执行 &lt;code&gt;git rm -f --cached &amp;lt;folder&amp;gt;&lt;/code&gt; 后，在执行 &lt;code&gt;git submodule add&lt;/code&gt;&lt;/p&gt;
-          &lt;/div&gt;
+&lt;div class=&quot;note danger&quot;&gt;&lt;p&gt;如果出现 &lt;code&gt;xxx already exists in the index&lt;/code&gt; 的提示，则给根据&lt;a href=&quot;https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index&quot;&gt;Issue with adding common code as git submodule: “already exists in the index”
+&lt;/a&gt;里面的回答，执行 &lt;code&gt;git rm -f --cached &amp;lt;folder&amp;gt;&lt;/code&gt; 后，在执行 &lt;code&gt;git submodule add&lt;/code&gt;&lt;/p&gt;
+&lt;/div&gt;
 
 
 &lt;p&gt;如果这个仓库先前没有用过 submodule，那么 Git 会在目录下建立一个叫做 &lt;code&gt;.gitmodules&lt;/code&gt; 的文件，这里记录了 remote repo 的 URL 和这个 submodule 在此目录的路径。执行此命令后 submodule 和 &lt;code&gt;.gitmodules&lt;/code&gt; 会自动 staged，这个时候可以 commit 和 push。&lt;/p&gt;
@@ -358,9 +355,8 @@
     <summary type="html">&lt;blockquote&gt;
 &lt;p&gt;ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;Ubuntu 18.04.2 LTS&lt;/p&gt;
-          &lt;/div&gt;
+&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Ubuntu 18.04.2 LTS&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;安装ZSH-Shell&quot;&gt;&lt;a href=&quot;#安装ZSH-Shell&quot; class=&quot;headerlink&quot; title=&quot;安装ZSH Shell&quot;&gt;&lt;/a&gt;安装ZSH Shell&lt;/h2&gt;&lt;p&gt;ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装&lt;/p&gt;
 &lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt install zsh&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -388,9 +384,8 @@
     <updated>2020-08-06T07:41:19.851Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;PHP version 7.1.26&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PHP version 7.1.26&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;键名是string，两者区别&quot;&gt;&lt;a href=&quot;#键名是string，两者区别&quot; class=&quot;headerlink&quot; title=&quot;键名是string，两者区别&quot;&gt;&lt;/a&gt;键名是string，两者区别&lt;/h2&gt;&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr1 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PHP&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr2 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PYTHON&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r(array_merge($arr1, $arr2));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r($arr1 + $arr2);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//再比如&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr1 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;$arr2 = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;3&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;c&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r(array_merge($arr1,$arr2));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 3 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;print_r($arr1 + $arr2);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 2 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
     
@@ -442,9 +437,8 @@
     <updated>2020-08-06T07:41:19.850Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;PHP 7.1.16&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PHP 7.1.16&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;p&gt;最近我在一个项目中使用 &lt;code&gt;empty&lt;/code&gt; 时获取到了一些意料之外的结果。下面是我处理后的调试记录，在这里分享给你。&lt;/p&gt;
 &lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;var_dump(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    $person-&amp;gt;firstName,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;empty&lt;/span&gt;($person-&amp;gt;firstName)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
@@ -471,9 +465,8 @@
     <updated>2020-08-06T07:41:19.853Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;Ubuntu 16.04&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Ubuntu 16.04&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;更新软件源&quot;&gt;&lt;a href=&quot;#更新软件源&quot; class=&quot;headerlink&quot; title=&quot;更新软件源&quot;&gt;&lt;/a&gt;更新软件源&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
 
@@ -529,9 +522,8 @@
     <updated>2020-08-06T07:41:19.852Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;一道面试题&quot;&gt;&lt;a href=&quot;#一道面试题&quot; class=&quot;headerlink&quot; title=&quot;一道面试题&quot;&gt;&lt;/a&gt;一道面试题&lt;/h2&gt;&lt;div class=&quot;note primary&quot;&gt;
-            &lt;p&gt;如果让你用 PHP 生成从 1 到100 万个数值，请问怎么做才能最省内存？&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;一道面试题&quot;&gt;&lt;a href=&quot;#一道面试题&quot; class=&quot;headerlink&quot; title=&quot;一道面试题&quot;&gt;&lt;/a&gt;一道面试题&lt;/h2&gt;&lt;div class=&quot;note primary&quot;&gt;&lt;p&gt;如果让你用 PHP 生成从 1 到100 万个数值，请问怎么做才能最省内存？&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;p&gt;没错，这是一道面试题，如果让你写出答案，你会有什么样的思路呢？请先独自思考几分钟。&lt;/p&gt;
 &lt;p&gt;可能你想到的会是这种方式：&lt;/p&gt;
@@ -580,9 +572,8 @@
     <updated>2020-08-06T07:41:19.853Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;PhpStorm 2017.3.3&lt;br&gt;Postman 5.5.0&lt;br&gt;php-7.1.12-Win32-VC14-x64 TS&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PhpStorm 2017.3.3&lt;br&gt;Postman 5.5.0&lt;br&gt;php-7.1.12-Win32-VC14-x64 TS&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;安装-xdebug-模块&quot;&gt;&lt;a href=&quot;#安装-xdebug-模块&quot; class=&quot;headerlink&quot; title=&quot;安装 xdebug 模块&quot;&gt;&lt;/a&gt;安装 xdebug 模块&lt;/h2&gt;&lt;p&gt;前往 &lt;a href=&quot;https://xdebug.org/download.php&quot;&gt;xdebug 官方网站&lt;/a&gt; 下载与自己的 PHP 版本匹配的 xdebug模块文件，如果不知道要选择哪个版本的 &lt;code&gt;xdebug&lt;/code&gt;，可以在浏览器上查看 &lt;code&gt;phpinfo()&lt;/code&gt;，复制全部 &lt;code&gt;phpinfo()&lt;/code&gt; 到&lt;a href=&quot;https://xdebug.org/wizard.php&quot;&gt;这里&lt;/a&gt;自动解析。最后，将 &lt;code&gt;xdebug&lt;/code&gt; 模块文件放入PHP安装目录/ext文件夹中。&lt;/p&gt;
 &lt;h2 id=&quot;配置-php-ini&quot;&gt;&lt;a href=&quot;#配置-php-ini&quot; class=&quot;headerlink&quot; title=&quot;配置 php.ini&quot;&gt;&lt;/a&gt;配置 php.ini&lt;/h2&gt;&lt;p&gt;&lt;code&gt;php.ini&lt;/code&gt; 添加如下几行配置&lt;/p&gt;
@@ -607,9 +598,8 @@
     <updated>2020-08-06T07:41:19.852Z</updated>
     
     
-    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;
-            &lt;p&gt;Chrome version 63.0.3239.84&lt;/p&gt;
-          &lt;/div&gt;
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Chrome version 63.0.3239.84&lt;/p&gt;
+&lt;/div&gt;
 
 &lt;h2 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h2&gt;&lt;blockquote&gt;
 &lt;p&gt;&lt;code&gt;dd&lt;/code&gt; 方法指的是 &lt;a href=&quot;../php-global-uses-the-laravel-helper-function-dd&quot;&gt;PHP 全局使用 Laravel 辅助函数 dd&lt;/a&gt; 中设置的方法。&lt;/p&gt;
@@ -697,9 +687,8 @@
 &lt;/ul&gt;
 &lt;h2 id=&quot;PHP7-异常处理机制&quot;&gt;&lt;a href=&quot;#PHP7-异常处理机制&quot; class=&quot;headerlink&quot; title=&quot;PHP7 异常处理机制&quot;&gt;&lt;/a&gt;PHP7 异常处理机制&lt;/h2&gt;&lt;p&gt;过去的 PHP，处理致命错误几乎是不可能的。致命错误不会调用由 &lt;code&gt;set_error_handler()&lt;/code&gt; 设置的处理方式，而是简单的停止脚本的执行。&lt;/p&gt;
 &lt;p&gt;在 PHP7 中，当致命错误和可捕获的错误(&lt;code&gt;E_ERROR&lt;/code&gt; 和 &lt;code&gt;E_RECOVERABLE_ERROR&lt;/code&gt;)发生时会抛出异常，而不是直接停止脚本的运行。对于某些情况，比如内存溢出，致命错误则仍然像之前一样直接停止脚本执行。在 PHP7 中，&lt;strong&gt;一个未捕获的异常也会是一个致命错误&lt;/strong&gt;。这意味着在 PHP5.x 中致命错误抛出的异常未捕获，在 PHP7 中也是致命错误。&lt;/p&gt;
-&lt;div class=&quot;note danger&quot;&gt;
-            &lt;p&gt;注意：其他级别的错误如 &lt;code&gt;warning&lt;/code&gt; 和 &lt;code&gt;notice&lt;/code&gt;，和之前一样不会抛出异常，只有 &lt;code&gt;fatal&lt;/code&gt; 和 &lt;code&gt;recoverable&lt;/code&gt; 级别的错误会抛出异常。&lt;/p&gt;
-          &lt;/div&gt;</summary>
+&lt;div class=&quot;note danger&quot;&gt;&lt;p&gt;注意：其他级别的错误如 &lt;code&gt;warning&lt;/code&gt; 和 &lt;code&gt;notice&lt;/code&gt;，和之前一样不会抛出异常，只有 &lt;code&gt;fatal&lt;/code&gt; 和 &lt;code&gt;recoverable&lt;/code&gt; 级别的错误会抛出异常。&lt;/p&gt;
+&lt;/div&gt;</summary>
     
     
     
