@@ -1787,4 +1787,221 @@
         <tag>NexT</tag>
       </tags>
   </entry>
+  <entry>
+    <title>接口限流常用算法实践</title>
+    <url>/PHP/api-rate-limiting-algorithm-practices/</url>
+    <content><![CDATA[<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。</p>
+<ul>
+<li>如何限制每分钟访问 <code>/api/books</code> 接口不能超过 120 次 ？</li>
+</ul>
+<p>我们先定义一个接口：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">RateLimiter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="固定时间窗口算法"><a href="#固定时间窗口算法" class="headerlink" title="固定时间窗口算法"></a>固定时间窗口算法</h2><p>固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。</p>
+<p>固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png"></p>
+<p>举个例子，如果 A 用户访问接口的时间分布如下：</p>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>访问次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00:00 ~ 00:30</td>
+<td>20</td>
+</tr>
+<tr>
+<td>00:30 ~ 01:00</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:00 ~ 01:30</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:30 ~ 02:00</td>
+<td>20</td>
+</tr>
+</tbody></table>
+<p>显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 <code>00:30 ~ 01:30</code> 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。</p>
+<a id="more"></a>
+
+<h3 id="PHP实现"><a href="#PHP实现" class="headerlink" title="PHP实现"></a>PHP实现</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FixedWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $prefix = <span class="string">&quot;ratelimiter:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> $key    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $window = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $limit  = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> $key, <span class="keyword">int</span> $window, <span class="keyword">int</span> $limit</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;key    = <span class="keyword">$this</span>-&gt;prefix . $key;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;window = $window;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;limit  = $limit;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $count = Redis::get(<span class="keyword">$this</span>-&gt;key);</span><br><span class="line">        <span class="comment">//首次访问</span></span><br><span class="line">        <span class="keyword">if</span> (!$count) &#123;</span><br><span class="line">            Redis::pipeline(<span class="function"><span class="keyword">function</span> (<span class="params">$pipe</span>) </span>&#123;</span><br><span class="line">                $pipe-&gt;incr(<span class="keyword">$this</span>-&gt;key);</span><br><span class="line">                $pipe-&gt;expire(<span class="keyword">$this</span>-&gt;key, <span class="keyword">$this</span>-&gt;window);</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断计数</span></span><br><span class="line">        <span class="keyword">if</span> ($count &gt;= <span class="keyword">$this</span>-&gt;limit) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        Redis::incr(<span class="keyword">$this</span>-&gt;key);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$rateLimiter = <span class="keyword">new</span> FixedWindowRateLimiter(<span class="string">&quot;api:books&quot;</span>, <span class="number">60</span>, <span class="number">120</span>);</span><br><span class="line"><span class="keyword">if</span> (!$rateLimiter-&gt;access()) &#123;</span><br><span class="line">    abort(<span class="number">404</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现"><a href="#Lua实现" class="headerlink" title="Lua实现"></a>Lua实现</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="comment">--- 资源唯一标识</span></span><br><span class="line"><span class="keyword">local</span> key = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="comment">--- 时间窗最大并发数</span></span><br><span class="line"><span class="keyword">local</span> max_window_concurrency = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])  </span><br><span class="line"><span class="comment">--- 时间窗</span></span><br><span class="line"><span class="keyword">local</span> window = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])   </span><br><span class="line"><span class="comment">--- 时间窗内当前并发数</span></span><br><span class="line"><span class="keyword">local</span> curr_window_concurrency = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;get&#x27;</span>, key) <span class="keyword">or</span> <span class="number">0</span>)  </span><br><span class="line"><span class="keyword">if</span> current + <span class="number">1</span> &gt; limit <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    redis.call(<span class="string">&quot;INCRBY&quot;</span>, key,<span class="number">1</span>)    </span><br><span class="line">    <span class="keyword">if</span> window &gt; <span class="number">-1</span> <span class="keyword">then</span></span><br><span class="line">        redis.call(<span class="string">&quot;expire&quot;</span>, key,window)    </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="滑动时间窗口算法"><a href="#滑动时间窗口算法" class="headerlink" title="滑动时间窗口算法"></a>滑动时间窗口算法</h2><p>固定时间窗口算法的问题是统计区间太大，限流不够精确，而且在第二个统计区间 <code>01:00 ~ 02:00</code> 时没有考虑与前一个统计区间的关系与影响（第一个区间后半段 + 第二个区间前半段也是一分钟）。</p>
+<p>为了解决上面我们提到的临界问题，我们试图把每个统计区间分为更小的统计区间，更精确的统计计数。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/sliding_window1.png"></p>
+<p>如上图所示，我们把每分钟分为三份，每个小格是20秒，对每个小格都会分别计数：</p>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>访问次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00:00 ~ 00:20</td>
+<td>2</td>
+</tr>
+<tr>
+<td>00:20 ~ 00:40</td>
+<td>2</td>
+</tr>
+<tr>
+<td>00:40 ~ 01:00</td>
+<td>116</td>
+</tr>
+<tr>
+<td>01:00 ~ 01:20</td>
+<td>116</td>
+</tr>
+</tbody></table>
+<p>第一次统计，我们先看 <code>01:00 ~ 02:00</code>，计数 120 次，没有超过流量限制，然而在下一个 20 秒中，流量请求集中，在 <code>00:20 ~ 01:20</code> 这一分钟的统计范围内，流量超过了限制，则可以限制访问。</p>
+<p>计数器算法其实就是滑动窗口算法。只是它没有对时间窗口做进一步地划分，所以只有1格；由此可见，当滑动窗口的格子划分的越多，那么滑动窗口的滚动就越平滑，限流的统计就会越精确。</p>
+<h3 id="PHP实现v1"><a href="#PHP实现v1" class="headerlink" title="PHP实现v1"></a>PHP实现v1</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SlidingWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span>    $remaining = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $prefix    = <span class="string">&quot;ratelimiter:sliding:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> $key       = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $window    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $limit     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $blocks    = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $blocks   窗口分块数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> $key, <span class="keyword">int</span> $window, <span class="keyword">int</span> $limit, <span class="keyword">int</span> $blocks</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;key    = <span class="keyword">$this</span>-&gt;prefix . $key;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;window = $window;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;limit  = $limit;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;blocks = $blocks;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $time           = time();</span><br><span class="line">        $lastBlockTime  = $time - $time % (ceil(<span class="keyword">$this</span>-&gt;window / <span class="keyword">$this</span>-&gt;blocks));</span><br><span class="line">        $firstBlockTime = $lastBlockTime - <span class="keyword">$this</span>-&gt;window;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//移除已经过期的 blocks</span></span><br><span class="line">        Redis::zremrangebylex(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;[0&#x27;</span>, <span class="string">&#x27;(&#x27;</span>.$firstBlockTime);</span><br><span class="line">        $blocks    = Redis::zrange(<span class="keyword">$this</span>-&gt;key, <span class="number">0</span>, <span class="number">-1</span>, <span class="string">&#x27;WITHSCORES&#x27;</span>);</span><br><span class="line">        $scores    = array_sum($blocks);</span><br><span class="line">        $remaining = <span class="keyword">$this</span>-&gt;limit - $scores;</span><br><span class="line">        <span class="keyword">if</span> ($remaining &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Redis::zincrby(<span class="keyword">$this</span>-&gt;key, <span class="number">1</span>, $lastBlockTime);</span><br><span class="line">        <span class="keyword">$this</span>-&gt;remaining = $remaining - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>滑动窗口真的可以解决临界问题么？</strong></p>
+<p>我们再来看一个例子，在下面的例子中，流量主要集中于滑动窗口的 last block 和 窗口滑动后的 next block。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/sliding_window2.png"></p>
+<p>同样的请求情况，我们先把一个滑动窗口分为三格，窗口滑动前后都是符合限流要求的；然后我们把原来的每一格都分为两格，如图2，那么此时，窗口滑动前后的状况就不同了。</p>
+<p>由此可见，滑动窗口算法很难完全符合限流需求，除非我们把统计区间变得更小，更甚至细化到每个请求，随之带来的问题是我们需要消耗更多存储空间。</p>
+<h3 id="PHP实现v2"><a href="#PHP实现v2" class="headerlink" title="PHP实现v2"></a>PHP实现v2</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SlidingWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span>    $remaining = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $prefix    = <span class="string">&quot;ratelimiter:sliding:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> $key       = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $window    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $limit     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $blocks    = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $blocks   窗口分块数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> $key, <span class="keyword">int</span> $window, <span class="keyword">int</span> $limit, <span class="keyword">int</span> $blocks</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;key    = <span class="keyword">$this</span>-&gt;prefix . $key;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;window = $window;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;limit  = $limit;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;blocks = $blocks;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        $now = microtime(<span class="literal">true</span>);</span><br><span class="line">        $result = Redis::pipeline(<span class="function"><span class="keyword">function</span> (<span class="params">$pipe</span>) <span class="title">use</span> (<span class="params">$now</span>) </span>&#123;</span><br><span class="line">            $pipe-&gt;zrangebyscore(<span class="keyword">$this</span>-&gt;key, <span class="number">0</span>, $now - <span class="keyword">$this</span>-&gt;window);</span><br><span class="line">            $pipe-&gt;zrange(<span class="keyword">$this</span>-&gt;key, <span class="number">0</span>, <span class="number">-1</span>);</span><br><span class="line">            $pipe-&gt;zadd(<span class="keyword">$this</span>-&gt;key, $now, $now);</span><br><span class="line">            $pipe-&gt;expire(<span class="keyword">$this</span>-&gt;key, <span class="keyword">$this</span>-&gt;window);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The second command inside the transaction was ZRANGE,</span></span><br><span class="line">        <span class="comment">// which returns a list of timestamps within the last hour.</span></span><br><span class="line">        $timestamps = $result[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="keyword">$this</span>-&gt;remaining = max(<span class="number">0</span>, <span class="keyword">$this</span>-&gt;limit - count($timestamps));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;remaining &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现v2"><a href="#Lua实现v2" class="headerlink" title="Lua实现v2"></a>Lua实现v2</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">local</span> window = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> limit = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> clearBefore = now - window</span><br><span class="line">redis.call(<span class="string">&#x27;ZREMRANGEBYSCORE&#x27;</span>, token, <span class="number">0</span>, clearBefore)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> amount = redis.call(<span class="string">&#x27;ZCARD&#x27;</span>, token)</span><br><span class="line"><span class="keyword">if</span> amount &lt; limit <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;ZADD&#x27;</span>, token, now, now)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">redis.call(<span class="string">&#x27;EXPIRE&#x27;</span>, token, window)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> limit - amount</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h2><p>漏桶算法（Leaky Bucket）是什么呢？大家都用过水龙头，打开龙头开关水就会流下滴到水桶里，而漏桶指的是水桶下面有个漏洞可以出水。如果水龙头开的特别大那么水流速就会过大，这样就可能导致水桶的水满了然后溢出。</p>
+<p>而我们讨论的漏桶算法的思路也很简单，水龙头打开后流下的水（请求）以一定的速率流到漏桶里（限流容器），漏桶以一定的速度出水（接口响应速率），如果水流速度过大（请求过多）就可能会导致漏桶的水溢出（访问频率超过接口响应速率），这时候我们需要关掉水龙头（拒绝请求），下面是经典的漏桶算法图示：</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/leaky_bucket.png"></p>
+<h3 id="PHP实现v3"><a href="#PHP实现v3" class="headerlink" title="PHP实现v3"></a>PHP实现v3</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LeakyBucketRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $prefix   = <span class="string">&quot;ratelimiter:leaky:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> $key      = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $rate     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $capacity = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $rate     请求处理速率（个/秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int     $capacity 漏桶容量（最大队列长度）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> $key, <span class="keyword">int</span> $rate, <span class="keyword">int</span> $capacity</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;capacity = $capacity;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;key      = <span class="keyword">$this</span>-&gt;prefix . $key;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;rate     = $rate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//当前时间</span></span><br><span class="line">        $time = time();</span><br><span class="line">        [$lastTime, $tokensPend] = Redis::hmget(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="string">&#x27;tokens_pend&#x27;</span>);</span><br><span class="line">        <span class="comment">//推算已经处理过的数量</span></span><br><span class="line">        $tokensHandled = ($time - $lastTime) * $rate;</span><br><span class="line">        <span class="comment">//当前剩余 tokens 数量（队列待处理）</span></span><br><span class="line">        $tokensPend = max(<span class="number">0</span>, $tokensPend - $tokensHandled);</span><br><span class="line">        <span class="comment">//更新上次请求的时间</span></span><br><span class="line">        Redis::set(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, $time);</span><br><span class="line">        <span class="comment">//判断漏桶是否满了</span></span><br><span class="line">        <span class="keyword">if</span> ($tokensPend &lt; <span class="keyword">$this</span>-&gt;capacity) &#123;</span><br><span class="line">            <span class="comment">//可以加入队列等待处理</span></span><br><span class="line">            Redis::set(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;tokens_pend&#x27;</span>, $tokensPend + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//队列已经满了</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>备注：</strong></p>
+<ul>
+<li>代码中对 redis 的操作存在并发问题，代码仅供参考程序逻辑，使用 redis+lua 脚本才是更靠谱的方案。</li>
+<li>代码仅处理了漏桶满时溢出、漏桶不满时允许进入队列，但是实际请求的处理，还需要后续使用队列或延时处理保证漏桶流出的速率。</li>
+</ul>
+<p>调用：</p>
+<figure class="highlight php"><table><tr><td class="code"><pre><span class="line">$mobile      = <span class="string">&quot;13888888888&quot;</span>;</span><br><span class="line">$rateLimiter = <span class="keyword">new</span> LeakyBucketRateLimiter(sprintf(<span class="string">&quot;api:sms:send:%s&quot;</span>, $mobile), <span class="number">2</span>, <span class="number">5</span>);</span><br><span class="line"><span class="keyword">if</span> (!$rateLimiter-&gt;access()) &#123;</span><br><span class="line">    abort(<span class="number">404</span>);</span><br><span class="line">&#125;</span><br><span class="line">Queue::smsSend($mobile, $sms);</span><br></pre></td></tr></table></figure>
+
+<p>漏桶算法中必须保证请求处理速率是恒定的，不然限流就只能做到『漏桶满时溢出』的程度了。<br>因此，在我看来，这种限流处理后置的算法，可能更适合异步任务或者离线处理。</p>
+<h3 id="Lua实现v3"><a href="#Lua实现v3" class="headerlink" title="Lua实现v3"></a>Lua实现v3</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lastTime = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"><span class="keyword">local</span> tokensPend = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;tokens_pend&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">tokensPend = <span class="built_in">math</span>.<span class="built_in">max</span>(<span class="number">0</span>, tokensPend - (now - lastTime) * rate)</span><br><span class="line">redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>, now)</span><br><span class="line"><span class="keyword">if</span> tokensPend &lt; capacity <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;tokens_pend&#x27;</span>, tokensPend + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>漏桶算法有以下特点：</p>
+<ul>
+<li>漏桶容量固定，漏洞出水速率是固定的（请求处理速度固定）</li>
+<li>流量进入漏桶的速率是没有限制的（但不会立即处理，需要排队等待经过漏洞）</li>
+<li>桶满了以后会溢出（拒绝新的请求）</li>
+</ul>
+<p>漏桶算法限制的关键『请求处理速度』，即使遇到突发流量，我们的处理速度依然不变，因此会有一部分请求在排队，会等待延迟处理，但结果输出始终不会超出『请求处理速度』的限制。</p>
+<h2 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h2><p>令牌桶算法用来控制发送到网络上的数据的数目，并允许突发数据的发送。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/token_bucket_1.png"></p>
+<p>令牌桶算法和漏桶算法的方向刚好是相反的，我们有一个固定的桶，桶里存放着令牌（token）。一开始桶是空的，系统按固定的时间（rate）往桶里添加令牌，直到桶里的令牌数满，多余的请求会被丢弃。当请求来的时候，从桶里移除一个令牌，如果桶是空的则拒绝请求或者阻塞。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/token_bucket.png"></p>
+<h3 id="PHP实现v4"><a href="#PHP实现v4" class="headerlink" title="PHP实现v4"></a>PHP实现v4</h3><figure class="highlight php"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">tokenBucketRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> $prefix   = <span class="string">&quot;ratelimiter:tokenbucket:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> $key      = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $rate     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> $capacity = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $rate     产生令牌的速率（个/秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int     $capacity 漏桶容量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> $key, <span class="keyword">int</span> $rate, <span class="keyword">int</span> $capacity</span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;capacity = $capacity;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;key      = <span class="keyword">$this</span>-&gt;prefix . $key;</span><br><span class="line">        <span class="keyword">$this</span>-&gt;rate     = $rate;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//当前时间</span></span><br><span class="line">        $time = time();</span><br><span class="line">        [$lastTime, $tokensLeft] = Predis::hmget(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="string">&#x27;tokens_left&#x27;</span>);</span><br><span class="line">        <span class="comment">//推算新产生的token数量</span></span><br><span class="line">        $tokensAppend = ($time - $lastTime) * $rate;</span><br><span class="line">        <span class="comment">//当前剩余 tokens 数量</span></span><br><span class="line">        $tokensLeft = min(<span class="keyword">$this</span>-&gt;capacity, $tokensLeft + $tokensAppend);</span><br><span class="line">        <span class="comment">//更新上次请求的时间</span></span><br><span class="line">        Predis::set(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, $time);</span><br><span class="line">        <span class="comment">//判断token是否足够</span></span><br><span class="line">        <span class="keyword">if</span> ($tokensLeft &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            Predis::set(<span class="keyword">$this</span>-&gt;key, <span class="string">&#x27;tokens_left&#x27;</span>, $tokensPend - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现v4"><a href="#Lua实现v4" class="headerlink" title="Lua实现v4"></a>Lua实现v4</h3><figure class="highlight lua"><table><tr><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lastTime = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"><span class="keyword">local</span> tokensLeft = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;tokens_left&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">tokensLeft = <span class="built_in">math</span>.<span class="built_in">min</span>(capacity, tokensLeft + (now - lastTime) * rate)</span><br><span class="line">redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>, now)</span><br><span class="line"><span class="keyword">if</span> tokensLeft &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;tokens_left&#x27;</span>, tokensLeft - <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>往令牌桶中以固定速率增加令牌</li>
+<li>令牌桶的容量有限，如果桶满了，新令牌溢出丢弃</li>
+<li>如果桶中可用令牌不足时，该请求会被限流</li>
+</ul>
+<p>令牌桶算法中流量的流入速率是不限制的，流出速率也是没有强制限制的（令牌消耗瞬间峰值是桶的大小），但是令牌的产生和积攒需要时间，因此既支持一定程度突发流量，又能满足总体限流的目标。</p>
+<p>对比<code>漏桶算法</code>和<code>令牌桶算法</code>，我们发现，<code>漏桶算法</code>能够强行限制数据的传输速率，而<code>令牌桶算法</code>在能够限制数据的平均传输速率外，还允许某种程度的突发传输。</p>
+<div class="note default"><p>原文链接：<a href="https://rmingwang.com/api-rate-limiting-algorithm-practices.html">接口限流常用算法实践</a></p>
+</div>]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>Api</tag>
+        <tag>rate-limiter</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis Pipeline</title>
+    <url>/Redis/redis-pipeline/</url>
+    <content><![CDATA[<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在命令行中是没有 redis pipeline 功能的，但 redis 是支持 pipeline 的，而且在各个语言版的 client 中都有相应的实现。</p>
+<p>简单概括 redis pipeline 的功能就是将单次请求变为批量请求。</p>
+<p>由于网络开销延迟，就算 redis server 端有很强的处理能力，也会由于收到的 client 消息少，而造成吞吐量小。当 client 使用 pipelining 发送命令时，redis server 会将请求放到队列中（使用内存），执行完毕后一次性发送结果。</p>
+<p>Pipeline 在某些场景下非常有用，比如有多个 command 需要被“及时的”提交，而且他们对相应结果没有互相依赖，对结果响应也无需立即获得，那么 pipeline 就可以充当这种“批处理”的工具；而且在一定程度上，可以较大的提升性能，性能提升的原因主要是 TCP 连接中减少了“交互往返”的时间。</p>
+<p>管道（pipeline）可以一次性发送多条命令并在执行完后一次性将结果返回，pipeline 通过减少客户端与 redis 的通信次数来实现降低往返延时时间，而且 Pipeline 实现的原理是队列，而队列的原理是时先进先出，这样就保证数据的顺序性。 Pipeline 的默认的同步的个数为 53 个，也就是说 arges 中累加到 53 条数据时会把数据提交。</p>
+<p>需要注意到是用 pipeline 方式打包命令发送，redis 必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并不是打包的命令越多越好。具体多少合适需要根据具体情况测试。</p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>有些系统可能对可靠性要求很高，每次操作都需要立马知道这次操作是否成功，是否数据已经写进 redis 了，那这种场景就不适合。</p>
+<p>还有的系统，可能是批量的将数据写入 redis，允许一定比例的写入失败，那么这种场景就可以使用了，比如 10000 条一下进入 redis，可能失败了 2 条无所谓，后期有补偿机制就行了，比如短信群发这种场景，如果一下群发 10000 条，按照第一种模式去实现，那这个请求过来，要很久才能给客户端响应，这个延迟就太长了，如果客户端请求设置了超时时间 5 秒，那肯定就抛出异常了，而且本身群发短信要求实时性也没那么高，这时候用 pipeline 最好了。</p>
+]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>Pipeline</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Redis 事务</title>
+    <url>/Redis/redis-transactions/</url>
+    <content><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>概念：</strong> 可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。</p>
+<p><strong>Redis 部分支持事务，不支持的是：强一致性</strong></p>
+<p><strong>能干嘛：</strong> 一个队列中，一次性、顺序性、排他性的执行一系列命令</p>
+<p><strong>常用命令：</strong></p>
+<ul>
+<li><code>MULTI</code>：开启一个事务，<code>MULTI</code> 执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中。</li>
+<li><code>EXEC</code>：执行队列中所有的命令</li>
+<li><code>DISCARD</code>：清空事务队列,并放弃执行事务</li>
+<li><code>UNWATCH</code>：取消 <code>WATCH</code> 命令对所有 key 的监视</li>
+<li><code>WATCH key1 key2 ...</code>    ：监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><strong>正常执行：</strong></p>
+<p><img src="/images/Redis/redis-transactions/16a167bf936bde78.png"></p>
+<a id="more"></a>
+
+<p><strong>放弃事务：</strong></p>
+<p><img src="/images/Redis/redis-transactions/16a167bf97fab508.png"></p>
+<p><strong>全体连坐：</strong></p>
+<p>一个指令语法错误，注意：我说的是语法错误！EXEC执行报错。</p>
+<p><img src="/images/Redis/redis-transactions/16a167bf9860844a.png"></p>
+<p><strong>冤头债主（部分支持事务）：</strong></p>
+<p>冤有头，债有主，对的放行，谁错找谁。这也就说明：Redis 部分支持事务，对的放行，错的报错。</p>
+<p><img src="/images/Redis/redis-transactions/16a1cc44c6ab8001.png"></p>
+<p><strong>WATCH监控：先监控，后开启事务</strong></p>
+<p>缓存的数据，谁都可以拿，可以改，所以必须打标记来监控行为。这里涉及到锁的问题：悲观锁/乐观锁/CAS(Check And Set)</p>
+<ul>
+<li><code>悲观锁(Pessimistic Lock)</code>： 顾名思义，就是很悲观，每次去拿数据的时候都认为别人会修改，所以每次在拿数据的时候都会上锁，这样别人想拿这个数据就会block直到它拿到锁。传统的关系型数据库里边就用到了很多这种锁机制，比如行锁，表锁等，读锁，写锁等，都是在做操作之前先上锁。</li>
+<li><code>乐观锁(Optimistic Lock)</code>： 顾名思义，就是很乐观，每次去拿数据的时候都认为别人不会修改，所以不会上锁，但是在更新的时候会判断一下，在此期间别人有没有去更新这个数据，可以使用版本号等机制。乐观锁适用于多读的应用类型，这样可以提高吞吐量，</li>
+<li>乐观锁策略（常用）：提交版本必须大于记录当前版本才能执行更新。这样既不影响并发性，有可以满足需求。</li>
+</ul>
+<p><strong>案例演示：信用卡和欠额</strong></p>
+<p>正常情况：无加塞篡改</p>
+<p><img src="/images/Redis/redis-transactions/16a167ddd704b271.png"></p>
+<p>有加塞篡改的情况：</p>
+<p><img src="/images/Redis/redis-transactions/16a167c0051f8812.png"></p>
+<p>在 WATCH 监控后，有人修改了balance，会导致事务会被打断，必须更新最新值，才能成功执行事务，类似于乐观锁的版本号机制。</p>
+<h2 id="事务三阶段"><a href="#事务三阶段" class="headerlink" title="事务三阶段"></a>事务三阶段</h2><ol>
+<li>开启：以 <code>MULTI</code> 开始一个事务</li>
+<li>入队：将多个命令入队到事务中，接到这些命令并不会立即执行，而是放到等待执行的事务队列里面</li>
+<li>执行：由 <code>EXEC</code> 命令触发事务</li>
+</ol>
+<h2 id="事务三特性"><a href="#事务三特性" class="headerlink" title="事务三特性"></a>事务三特性</h2><ol>
+<li>单独的隔离操作：事务中的所有命令都会序列化、按顺序地执行。事务在执行的过程中，不会被其他客户端发送来的命令请求所打断。</li>
+<li>没有隔离级别的概念：队列中的命令没有提交之前都不会实际的被执行，因为事务提交前任何指令都不会被实际执行，也就不存在”事务内的查询要看到事务里的更新，在事务外查询不能看到”这个让人万分头痛的问题</li>
+<li><strong>（重点）</strong>不保证原子性：redis同一个事务中如果有一条命令执行失败，其后的命令仍然会被执行，没有回滚，这也就是：Redis 部分支持事务。</li>
+</ol>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>通过 <code>WATCH</code> 命令在事务执行之前监控了多个 <code>Keys</code>，倘若在 <code>WATCH</code> 之后有任何 <code>Key</code> 的值发生了变化，<code>EXEC</code> 命令执行的事务都将被放弃，同时返回 <code>Null multi-bulk</code> 应答以通知调用者事务执行失败</p>
+<div class="note default"><p>原文链接：<a href="https://juejin.im/post/6844903818010837006">谁说Redis不支持事务？</a></p>
+</div>]]></content>
+      <categories>
+        <category>Redis</category>
+      </categories>
+      <tags>
+        <tag>Redis</tag>
+        <tag>事务</tag>
+      </tags>
+  </entry>
 </search>

@@ -214,19 +214,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-count">33</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-count">11</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">32</span>
+        <span class="site-state-item-count">37</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -533,6 +533,317 @@ if(canvas.getContext){
       
 
       
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/PHP/api-rate-limiting-algorithm-practices/" class="post-title-link" itemprop="url">接口限流常用算法实践</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-20T00:00:00+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/PHP/api-rate-limiting-algorithm-practices/" class="post-meta-item leancloud_visitors" data-flag-title="接口限流常用算法实践" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。</p>
+<ul>
+<li>如何限制每分钟访问 <code>/api/books</code> 接口不能超过 120 次 ？</li>
+</ul>
+<p>我们先定义一个接口：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">RateLimiter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="固定时间窗口算法"><a href="#固定时间窗口算法" class="headerlink" title="固定时间窗口算法"></a>固定时间窗口算法</h2><p>固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。</p>
+<p>固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png"></p>
+<p>举个例子，如果 A 用户访问接口的时间分布如下：</p>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>访问次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00:00 ~ 00:30</td>
+<td>20</td>
+</tr>
+<tr>
+<td>00:30 ~ 01:00</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:00 ~ 01:30</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:30 ~ 02:00</td>
+<td>20</td>
+</tr>
+</tbody></table>
+<p>显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 <code>00:30 ~ 01:30</code> 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/PHP/api-rate-limiting-algorithm-practices/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Redis/redis-pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/Redis/redis-pipeline/" class="post-title-link" itemprop="url">Redis Pipeline</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-20T00:00:00+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/Redis/redis-pipeline/" class="post-meta-item leancloud_visitors" data-flag-title="Redis Pipeline" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>在命令行中是没有 redis pipeline 功能的，但 redis 是支持 pipeline 的，而且在各个语言版的 client 中都有相应的实现。</p>
+<p>简单概括 redis pipeline 的功能就是将单次请求变为批量请求。</p>
+<p>由于网络开销延迟，就算 redis server 端有很强的处理能力，也会由于收到的 client 消息少，而造成吞吐量小。当 client 使用 pipelining 发送命令时，redis server 会将请求放到队列中（使用内存），执行完毕后一次性发送结果。</p>
+<p>Pipeline 在某些场景下非常有用，比如有多个 command 需要被“及时的”提交，而且他们对相应结果没有互相依赖，对结果响应也无需立即获得，那么 pipeline 就可以充当这种“批处理”的工具；而且在一定程度上，可以较大的提升性能，性能提升的原因主要是 TCP 连接中减少了“交互往返”的时间。</p>
+<p>管道（pipeline）可以一次性发送多条命令并在执行完后一次性将结果返回，pipeline 通过减少客户端与 redis 的通信次数来实现降低往返延时时间，而且 Pipeline 实现的原理是队列，而队列的原理是时先进先出，这样就保证数据的顺序性。 Pipeline 的默认的同步的个数为 53 个，也就是说 arges 中累加到 53 条数据时会把数据提交。</p>
+<p>需要注意到是用 pipeline 方式打包命令发送，redis 必须在处理完所有命令前先缓存起所有命令的处理结果。打包的命令越多，缓存消耗内存也越多。所以并不是打包的命令越多越好。具体多少合适需要根据具体情况测试。</p>
+<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>有些系统可能对可靠性要求很高，每次操作都需要立马知道这次操作是否成功，是否数据已经写进 redis 了，那这种场景就不适合。</p>
+<p>还有的系统，可能是批量的将数据写入 redis，允许一定比例的写入失败，那么这种场景就可以使用了，比如 10000 条一下进入 redis，可能失败了 2 条无所谓，后期有补偿机制就行了，比如短信群发这种场景，如果一下群发 10000 条，按照第一种模式去实现，那这个请求过来，要很久才能给客户端响应，这个延迟就太长了，如果客户端请求设置了超时时间 5 秒，那肯定就抛出异常了，而且本身群发短信要求实时性也没那么高，这时候用 pipeline 最好了。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Redis/redis-transactions/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/Redis/redis-transactions/" class="post-title-link" itemprop="url">Redis 事务</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-20T00:00:00+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/Redis/redis-transactions/" class="post-meta-item leancloud_visitors" data-flag-title="Redis 事务" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>概念：</strong> 可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。</p>
+<p><strong>Redis 部分支持事务，不支持的是：强一致性</strong></p>
+<p><strong>能干嘛：</strong> 一个队列中，一次性、顺序性、排他性的执行一系列命令</p>
+<p><strong>常用命令：</strong></p>
+<ul>
+<li><code>MULTI</code>：开启一个事务，<code>MULTI</code> 执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中。</li>
+<li><code>EXEC</code>：执行队列中所有的命令</li>
+<li><code>DISCARD</code>：清空事务队列,并放弃执行事务</li>
+<li><code>UNWATCH</code>：取消 <code>WATCH</code> 命令对所有 key 的监视</li>
+<li><code>WATCH key1 key2 ...</code>    ：监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。</li>
+</ul>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><strong>正常执行：</strong></p>
+<p><img src="/images/Redis/redis-transactions/16a167bf936bde78.png"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Redis/redis-transactions/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
@@ -1336,296 +1647,10 @@ if(canvas.getContext){
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Linux/install-zsh-shell-ubuntu-18-04/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="novnan">
-      <meta itemprop="description" content="胡编一通，乱写一气">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="novnan's notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux/install-zsh-shell-ubuntu-18-04/" class="post-title-link" itemprop="url">Ubuntu 18.04 LTS中安装和美化ZSH Shell</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-03-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">2019-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/Linux/install-zsh-shell-ubuntu-18-04/" class="post-meta-item leancloud_visitors" data-flag-title="Ubuntu 18.04 LTS中安装和美化ZSH Shell" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <blockquote>
-<p>ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。</p>
-</blockquote>
-<h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>Ubuntu 18.04.2 LTS</p>
-</div>
-
-<h2 id="安装ZSH-Shell"><a href="#安装ZSH-Shell" class="headerlink" title="安装ZSH Shell"></a>安装ZSH Shell</h2><p>ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt update</span><br><span class="line">sudo apt install zsh</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/Linux/install-zsh-shell-ubuntu-18-04/bd9f206bly1g1jqcbjc1yj210y0xg79k.jpg"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Linux/install-zsh-shell-ubuntu-18-04/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/combining-arrays-using-plus-versus-array-merge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="novnan">
-      <meta itemprop="description" content="胡编一通，乱写一气">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="novnan's notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/PHP/combining-arrays-using-plus-versus-array-merge/" class="post-title-link" itemprop="url">array_merge 和 array+ 的区别</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-03-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-03-29T00:00:00+08:00">2019-03-29</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/PHP/combining-arrays-using-plus-versus-array-merge/" class="post-meta-item leancloud_visitors" data-flag-title="array_merge 和 array+ 的区别" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PHP version 7.1.26</p>
-</div>
-
-<h2 id="键名是string，两者区别"><a href="#键名是string，两者区别" class="headerlink" title="键名是string，两者区别"></a>键名是string，两者区别</h2><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PHP&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;PYTHON&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1, $arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//再比如</span></span><br><span class="line">$arr1 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">$arr2 = [<span class="string">&#x27;a&#x27;</span> =&gt; <span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;b&#x27;</span> =&gt; <span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;c&#x27;</span> =&gt; <span class="string">&#x27;2&#x27;</span>];</span><br><span class="line">print_r(array_merge($arr1,$arr2));</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 3 [c] =&gt; 2 )</span></span><br><span class="line">print_r($arr1 + $arr2);</span><br><span class="line"><span class="comment">// Array ( [a] =&gt; 1 [b] =&gt; 2 [c] =&gt; 2 )</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/PHP/combining-arrays-using-plus-versus-array-merge/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/confusing-strtotime/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="novnan">
-      <meta itemprop="description" content="胡编一通，乱写一气">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="novnan's notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/PHP/confusing-strtotime/" class="post-title-link" itemprop="url">令人困惑的strtotime</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2018-07-31 00:00:00" itemprop="dateCreated datePublished" datetime="2018-07-31T00:00:00+08:00">2018-07-31</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/PHP/confusing-strtotime/" class="post-meta-item leancloud_visitors" data-flag-title="令人困惑的strtotime" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>今天是 <code>2018-07-31</code> 执行代码</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">date(<span class="string">&quot;Y-m-d&quot;</span>,strtotime(<span class="string">&quot;-1 month&quot;</span>));</span><br></pre></td></tr></table></figure>
-
-<p>按正常理解输出应该是 <code>2018-06-30</code>，但实际输出是 <code>2018-07-01</code></p>
-<p>虽然这个问题看起来很迷惑，但从内部逻辑上来说呢，其实是”对”的。<br>我们来模拟下date内部的对于这种事情的处理逻辑：</p>
-<ol>
-<li>先做-1 month，那么当前是07-31，减去一以后就是06-31</li>
-<li>再做日期规范化，因为6月没有31号，所以就好像2点60等于3点一样，6月31就等于了7月1</li>
-</ol>
-<p>是不是逻辑很”清晰”呢? 我们也可以手动验证第二个步骤，比如:</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var_dump(date(<span class="string">&quot;Y-m-d&quot;</span>, strtotime(<span class="string">&quot;2017-06-31&quot;</span>)));</span><br><span class="line"><span class="comment">//输出2017-07-01</span></span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/PHP/confusing-strtotime/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 

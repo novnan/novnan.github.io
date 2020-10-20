@@ -6,7 +6,7 @@
   <link href="https://novnan.github.io/atom.xml" rel="self"/>
   
   <link href="https://novnan.github.io/"/>
-  <updated>2020-10-15T13:52:10.632Z</updated>
+  <updated>2020-10-20T09:11:00.329Z</updated>
   <id>https://novnan.github.io/</id>
   
   <author>
@@ -15,6 +15,122 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>接口限流常用算法实践</title>
+    <link href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/"/>
+    <id>https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2020-10-20T09:11:00.329Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何限制每分钟访问 &lt;code&gt;/api/books&lt;/code&gt; 接口不能超过 120 次 ？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们先定义一个接口：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;RateLimiter&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;class&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;access&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;)&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;固定时间窗口算法&quot;&gt;&lt;a href=&quot;#固定时间窗口算法&quot; class=&quot;headerlink&quot; title=&quot;固定时间窗口算法&quot;&gt;&lt;/a&gt;固定时间窗口算法&lt;/h2&gt;&lt;p&gt;固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。&lt;/p&gt;
+&lt;p&gt;固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;举个例子，如果 A 用户访问接口的时间分布如下：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;时间段&lt;/th&gt;
+&lt;th&gt;访问次数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;00:00 ~ 00:30&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;00:30 ~ 01:00&lt;/td&gt;
+&lt;td&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;01:00 ~ 01:30&lt;/td&gt;
+&lt;td&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;01:30 ~ 02:00&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 &lt;code&gt;00:30 ~ 01:30&lt;/code&gt; 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="Api" scheme="https://novnan.github.io/tags/Api/"/>
+    
+    <category term="rate-limiter" scheme="https://novnan.github.io/tags/rate-limiter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis Pipeline</title>
+    <link href="https://novnan.github.io/Redis/redis-pipeline/"/>
+    <id>https://novnan.github.io/Redis/redis-pipeline/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2020-10-20T09:14:25.590Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;在命令行中是没有 redis pipeline 功能的，但 redis 是支持 pipeline 的，而且在各个语言版的 client</summary>
+        
+      
+    
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/categories/Redis/"/>
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/tags/Redis/"/>
+    
+    <category term="Pipeline" scheme="https://novnan.github.io/tags/Pipeline/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis 事务</title>
+    <link href="https://novnan.github.io/Redis/redis-transactions/"/>
+    <id>https://novnan.github.io/Redis/redis-transactions/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2020-10-20T10:40:42.236Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;概念：&lt;/strong&gt; 可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Redis 部分支持事务，不支持的是：强一致性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;能干嘛：&lt;/strong&gt; 一个队列中，一次性、顺序性、排他性的执行一系列命令&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;常用命令：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MULTI&lt;/code&gt;：开启一个事务，&lt;code&gt;MULTI&lt;/code&gt; 执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;EXEC&lt;/code&gt;：执行队列中所有的命令&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DISCARD&lt;/code&gt;：清空事务队列,并放弃执行事务&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UNWATCH&lt;/code&gt;：取消 &lt;code&gt;WATCH&lt;/code&gt; 命令对所有 key 的监视&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WATCH key1 key2 ...&lt;/code&gt;    ：监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;使用&quot;&gt;&lt;a href=&quot;#使用&quot; class=&quot;headerlink&quot; title=&quot;使用&quot;&gt;&lt;/a&gt;使用&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;正常执行：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/Redis/redis-transactions/16a167bf936bde78.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/categories/Redis/"/>
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/tags/Redis/"/>
+    
+    <category term="事务" scheme="https://novnan.github.io/tags/%E4%BA%8B%E5%8A%A1/"/>
+    
+  </entry>
   
   <entry>
     <title>本博客当前使用的插件总结</title>
@@ -617,93 +733,6 @@
     <category term="dd" scheme="https://novnan.github.io/tags/dd/"/>
     
     <category term="Chrome" scheme="https://novnan.github.io/tags/Chrome/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>将空目录添加至 Git 版本库</title>
-    <link href="https://novnan.github.io/Git/add-an-empty-directory-to-a-git-repository/"/>
-    <id>https://novnan.github.io/Git/add-an-empty-directory-to-a-git-repository/</id>
-    <published>2017-12-06T16:00:00.000Z</published>
-    <updated>2020-08-06T07:41:19.847Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;p&gt;git 没有跟踪空目录，所以需要跟踪那么就需要添加文件，就是在目录下新建一个 &lt;code&gt;.gitkeep&lt;/code&gt; 文件（文件名其实随意，不过常见的是 &lt;code&gt;.gitkeep&lt;/code&gt; 和</summary>
-        
-      
-    
-    
-    
-    <category term="Git" scheme="https://novnan.github.io/categories/Git/"/>
-    
-    
-    <category term="Git" scheme="https://novnan.github.io/tags/Git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>微信退款异步通知 aes-256-ecb 解密</title>
-    <link href="https://novnan.github.io/Weixin/wxpay-refund/"/>
-    <id>https://novnan.github.io/Weixin/wxpay-refund/</id>
-    <published>2017-12-05T16:00:00.000Z</published>
-    <updated>2020-08-06T07:41:19.854Z</updated>
-    
-    
-      
-      
-        
-        
-    <summary type="html">&lt;h2 id=&quot;实现代码&quot;&gt;&lt;a href=&quot;#实现代码&quot; class=&quot;headerlink&quot; title=&quot;实现代码&quot;&gt;&lt;/a&gt;实现代码&lt;/h2&gt;&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td</summary>
-        
-      
-    
-    
-    
-    <category term="weixin" scheme="https://novnan.github.io/categories/weixin/"/>
-    
-    
-    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
-    
-    <category term="wxpay" scheme="https://novnan.github.io/tags/wxpay/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PHP7中的异常与错误处理</title>
-    <link href="https://novnan.github.io/PHP/throwable-exceptions-and-errors-in-php7/"/>
-    <id>https://novnan.github.io/PHP/throwable-exceptions-and-errors-in-php7/</id>
-    <published>2017-12-04T16:00:00.000Z</published>
-    <updated>2020-08-06T07:41:19.852Z</updated>
-    
-    
-    <summary type="html">&lt;h2 id=&quot;PHP-中的-Exception-Error-Throwable&quot;&gt;&lt;a href=&quot;#PHP-中的-Exception-Error-Throwable&quot; class=&quot;headerlink&quot; title=&quot;PHP 中的 Exception, Error, Throwable&quot;&gt;&lt;/a&gt;PHP 中的 Exception, Error, Throwable&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;PHP 中将代码自身异常(一般是环境或者语法非法所致)称作错误 &lt;code&gt;Error&lt;/code&gt;，将运行中出现的逻辑错误称为异常 &lt;code&gt;Exception&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;错误是没法通过代码处理的，而异常则可以通过 &lt;code&gt;try/catch&lt;/code&gt; 来处理&lt;/li&gt;
-&lt;li&gt;PHP7 中出现了 &lt;code&gt;Throwable&lt;/code&gt; 接口，该接口由 &lt;code&gt;Error&lt;/code&gt; 和 &lt;code&gt;Exception&lt;/code&gt; 实现，用户不能直接实现 &lt;code&gt;Throwable&lt;/code&gt; 接口，而只能通过继承 &lt;code&gt;Exception&lt;/code&gt; 来实现接口&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&quot;PHP7-异常处理机制&quot;&gt;&lt;a href=&quot;#PHP7-异常处理机制&quot; class=&quot;headerlink&quot; title=&quot;PHP7 异常处理机制&quot;&gt;&lt;/a&gt;PHP7 异常处理机制&lt;/h2&gt;&lt;p&gt;过去的 PHP，处理致命错误几乎是不可能的。致命错误不会调用由 &lt;code&gt;set_error_handler()&lt;/code&gt; 设置的处理方式，而是简单的停止脚本的执行。&lt;/p&gt;
-&lt;p&gt;在 PHP7 中，当致命错误和可捕获的错误(&lt;code&gt;E_ERROR&lt;/code&gt; 和 &lt;code&gt;E_RECOVERABLE_ERROR&lt;/code&gt;)发生时会抛出异常，而不是直接停止脚本的运行。对于某些情况，比如内存溢出，致命错误则仍然像之前一样直接停止脚本执行。在 PHP7 中，&lt;strong&gt;一个未捕获的异常也会是一个致命错误&lt;/strong&gt;。这意味着在 PHP5.x 中致命错误抛出的异常未捕获，在 PHP7 中也是致命错误。&lt;/p&gt;
-&lt;div class=&quot;note danger&quot;&gt;&lt;p&gt;注意：其他级别的错误如 &lt;code&gt;warning&lt;/code&gt; 和 &lt;code&gt;notice&lt;/code&gt;，和之前一样不会抛出异常，只有 &lt;code&gt;fatal&lt;/code&gt; 和 &lt;code&gt;recoverable&lt;/code&gt; 级别的错误会抛出异常。&lt;/p&gt;
-&lt;/div&gt;</summary>
-    
-    
-    
-    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
-    
-    
-    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
-    
-    <category term="PHP7" scheme="https://novnan.github.io/tags/PHP7/"/>
-    
-    <category term="Exception" scheme="https://novnan.github.io/tags/Exception/"/>
-    
-    <category term="Error" scheme="https://novnan.github.io/tags/Error/"/>
-    
-    <category term="Throwable" scheme="https://novnan.github.io/tags/Throwable/"/>
     
   </entry>
   
