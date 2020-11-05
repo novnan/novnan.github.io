@@ -2004,4 +2004,234 @@
         <tag>事务</tag>
       </tags>
   </entry>
+  <entry>
+    <title>WSL2 + Docker + Laradock 配置</title>
+    <url>/WSL/WSL2+Docker+Laradock/</url>
+    <content><![CDATA[<h2 id="系统环境介绍"><a href="#系统环境介绍" class="headerlink" title="系统环境介绍"></a>系统环境介绍</h2><div class="note info"><p>Win 10 2004<br>WSL2(Ubuntu 20.04)<br>Docker 19.03.13</p>
+</div>
+
+<h2 id="启用-Linux-子系统"><a href="#启用-Linux-子系统" class="headerlink" title="启用 Linux 子系统"></a>启用 Linux 子系统</h2><p>打开 <code>控制面板 -&gt; 程序 -&gt; 启用或关闭Windows功能</code>。找到<code>适用于Linux的Windows子系统</code>和<code>虚拟机平台</code>，勾选这两项之后确定，并重新启动计算机。</p>
+<h2 id="切换系统-WSL-默认版本到-2"><a href="#切换系统-WSL-默认版本到-2" class="headerlink" title="切换系统 WSL 默认版本到 2"></a>切换系统 WSL 默认版本到 2</h2><p>使用管理员用户打开 <code>Windows PowerShell</code>，运行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wsl --set-default-version 2</span><br></pre></td></tr></table></figure>
+
+<p>注意，有可能会出现如下提示：</p>
+<div class="note warning"><p>WSL 2 需要更新其内核组件。有关信息，请访问 <a href="https://aka.ms/wsl2kernel">https://aka.ms/wsl2kernel</a></p>
+</div>
+
+<p>出现这个提示，说明需要更新 WSL2 的内核。按照提示打开链接。点击下图中的下载链接，下载并安装 WSL2 内核。</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/72ab658461070fe25ee5e27.png"></p>
+<a id="more"></a>
+
+<h2 id="安装-Ubuntu-发行版"><a href="#安装-Ubuntu-发行版" class="headerlink" title="安装 Ubuntu 发行版"></a>安装 Ubuntu 发行版</h2><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>打开 <code>Microsoft Store</code>，搜索 Ubuntu，界面如下所示：</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/1327b4d296971908b11e2d.png"></p>
+<p>根据自己的需要，选择对应的 Ubuntu 版本并安装。<br>完成之后在开始菜单会出现 Ubuntu 菜单项。打开它，Ubuntu 将会进行初始化操作。等待几分钟后按照提示，为 Ubuntu 设置用户名和密码。<br>最后，我们需要验证 Ubuntu 是否在 WSL2 的环境下启动。以管理员用户打开 <code>Windows PowerShell</code>，执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wsl -l -v</span><br></pre></td></tr></table></figure>
+
+<p>如果看到如下信息：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">  NAME            STATE           VERSION</span><br><span class="line">* Ubuntu-20.04    Running         2</span><br></pre></td></tr></table></figure>
+
+<p>说明 Ubuntu 在 WSL2 环境下运行。到此为止安装完毕。<br>如果发现 VERSION 为 1，说明 Ubuntu 运行在 WSL1 下。需要手工切换。<br>首先关闭 WSL下运行的 Linux，执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wsl --shutdown</span><br></pre></td></tr></table></figure>
+
+<p>然后执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wsl --set-version &lt;Linux发行版名称&gt; 2</span><br><span class="line">这边就是输入 wsl --set-version Ubuntu-20.04 2</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>Linux发行版名称</code> 为前面安装的 Linux 名称，可以通过 <code>wsl -l -v</code> 命令查看。执行命令后等待片刻。等命令行提示转换完成，我们已经成功将 Linux 切换到 WSL2 环境。</p>
+<h3 id="systemctl-无法使用的问题"><a href="#systemctl-无法使用的问题" class="headerlink" title="systemctl 无法使用的问题"></a>systemctl 无法使用的问题</h3><p>WSL2 经过测试无法使用 <code>systemctl</code> 命令，报如下错误：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">System has not been booted with systemd as init system (PID 1). Can<span class="string">&#x27;t operate.</span></span><br><span class="line"><span class="string">Failed to connect to bus: Host is down</span></span><br></pre></td></tr></table></figure>
+
+<p>参考了<a href="https://forum.snapcraft.io/t/running-snaps-on-wsl2-insiders-only-for-now/13033">Running Snaps on WSL2 (Insiders only for now)</a> 之后给出如下解决方案：</p>
+<ol>
+<li>安装 <code>daemonize</code> 和 <code>fontconfig</code></li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt update</span><br><span class="line">apt install -y fontconfig daemonize</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>编辑 <code>/etc/profile</code> 脚本，加入如下内容：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">SYSTEMD_PID=$(ps -ef | grep <span class="string">&#x27;/lib/systemd/systemd --system-unit=basic.target$&#x27;</span> | grep -v unshare | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -z <span class="string">&quot;<span class="variable">$SYSTEMD_PID</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">   sudo /usr/bin/daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target</span><br><span class="line">   SYSTEMD_PID=$(ps -ef | grep <span class="string">&#x27;/lib/systemd/systemd --system-unit=basic.target$&#x27;</span> | grep -v unshare | awk <span class="string">&#x27;&#123;print $2&#125;&#x27;</span>)</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ -n <span class="string">&quot;<span class="variable">$SYSTEMD_PID</span>&quot;</span> ] &amp;&amp; [ <span class="string">&quot;<span class="variable">$SYSTEMD_PID</span>&quot;</span> != <span class="string">&quot;1&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">exec</span> sudo /usr/bin/nsenter -t <span class="variable">$SYSTEMD_PID</span> -a su - <span class="variable">$LOGNAME</span></span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>修改 <code>/etc/sudoers</code> 文件，加入如下内容：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">%sudo ALL=(ALL) NOPASSWD: /usr/sbin/daemonize /usr/bin/unshare --fork --pid --mount-proc /lib/systemd/systemd --system-unit=basic.target</span><br><span class="line">%sudo ALL=(ALL) NOPASSWD: /usr/bin/nsenter -t [0-9]* -a su - [a-zA-Z0-9]*</span><br></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>执行 <code>source /etc/profile</code> 或者是重新打开 <code>terminal</code>，执行 <code>systemctl</code> 验证是否能够正常操作。</li>
+</ol>
+<h3 id="开启-ssh"><a href="#开启-ssh" class="headerlink" title="开启 ssh"></a>开启 ssh</h3><ul>
+<li>安装 ssh server（已经安装过就忽略）</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">apt install openssh-server</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改 ssh server 配置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim /etc/ssh/sshd_config</span><br></pre></td></tr></table></figure>
+
+<p>修改以下配置：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Port 22 #默认即可，如果有端口占用可以自己修改</span><br><span class="line">PasswordAuthentication yes（允许用户名密码方式登录）</span><br><span class="line">PermitRootLogin yes （允许root用户远程登录，有需要 root 登录就开起来）</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>重启服务</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo service ssh --full-restart</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>连接</li>
+</ul>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/200d2ce9b2c039eed97770.png"></p>
+<ul>
+<li>设置 ssh 开机自动启动</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 开机自动启动ssh命令</span></span><br><span class="line">sudo systemctl <span class="built_in">enable</span> ssh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 关闭ssh开机自动启动命令</span></span><br><span class="line">sudo systemctl <span class="built_in">disable</span> ssh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单次开启ssh</span></span><br><span class="line">sudo systemctl start ssh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 单次关闭ssh</span></span><br><span class="line">sudo systemctl stop ssh</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置好后重启系统</span></span><br><span class="line">reboot</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看ssh是否启动，看到Active: active (running)即表示成功</span></span><br><span class="line">sudo systemctl status ssh</span><br></pre></td></tr></table></figure>
+
+<h2 id="安装-Docker-Desktop-in-Windows-10"><a href="#安装-Docker-Desktop-in-Windows-10" class="headerlink" title="安装 Docker Desktop in Windows 10"></a>安装 Docker Desktop in Windows 10</h2><p>官网：<a href="https://www.docker.com/products/Docker-desktop">https://www.Docker.com/products/Docker-desktop</a></p>
+<p>现在 <code>Docker Desktop Windows</code> 版已经能够支持 WSL 作为 Docker Engine 运行，可以同时支持在 Linux 和 Windows 命令行下操作 Docker。</p>
+<ul>
+<li>确保 Ubuntu 内的 Docker 已经卸载，如果没有卸载，可以执行：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sudo apt remove docker-ce</span><br><span class="line">sudo apt remove docker-ce-cli</span><br></pre></td></tr></table></figure>
+
+<p>注意：如果发现在 Ubuntu 内无法执行 <code>docker</code> 命令，可以通过如下操作打开：<br>进入 Docker Desktop 的 settings，如下所示：</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/6ed5b7509e226ff601af04fc.png"></p>
+<p>保存下，即可在 Ubuntu 内直接使用 <code>docker</code> 命令。</p>
+<h2 id="迁移-WSL-到非系统盘"><a href="#迁移-WSL-到非系统盘" class="headerlink" title="迁移 WSL 到非系统盘"></a>迁移 WSL 到非系统盘</h2><p>默认 WSL 总是安装到 C 盘，这样对于C盘空间紧张的用户完全不友好。</p>
+<p>我们可以使用 <code>LxRunOffline</code> 工具来迁移WSL到其他磁盘分区。</p>
+<p><code>LxRunOffline</code> 的<a href="https://github.com/DDoSolitary/LxRunOffline/releases">下载链接</a>。在 Windows PowerShell 运行需要下载 <code>LxRunOffline-vx.x.x-msvc.zip</code> 版本。解压到任意目录即可使用。</p>
+<blockquote>
+<p><code>LxRunOffline</code> 是一个第三方 WSL Linux 发行版管理工具，可以认为是 WSL 命令的增强版。它可以安装和卸载 Linux 发行版，迁移，复制，导入导出和设置环境变量等。具体的使用帮助可执行 <code>.\LxRunOffline.exe \h</code> 查看命令介绍。</p>
+</blockquote>
+<p>迁移过程分为3步：</p>
+<ol>
+<li>获取准备迁移的发行版名称。执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">PS C:\Users\xxx\Desktop&gt; .\LxRunOffline.exe list</span><br><span class="line">Ubuntu-20.04</span><br></pre></td></tr></table></figure>
+
+<p>获取系统当前已安装的发行版。例子中返回的发行版名称为 <code>Ubuntu-20.04</code></p>
+<ol start="2">
+<li>执行迁移命令。格式如下：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.\LxRunOffline.exe m -n &lt;发行版名称&gt; -d &lt;目标路径&gt;</span><br></pre></td></tr></table></figure>
+
+<p>比如我们要将 <code>Ubuntu-20.04</code> 移动到 <code>D:\wsl\Ubuntu-20.04</code>(要确保 D:\wsl 目录存在)，执行如下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">.\LxRunOffline.exe m -n Ubuntu-20.04 -d D:\wsl\Ubuntu-20.04</span><br></pre></td></tr></table></figure>
+
+<p>如果 Ubuntu 正在运行，需要先关闭在进行迁移，关闭命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">PS C:\Users\xxx\Desktop&gt; wsl --shutdown</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动命令为 wsl -d Ubuntu-20.04</span></span><br></pre></td></tr></table></figure>
+
+<p>等待命令执行完毕返回。</p>
+<ol start="3">
+<li>查看迁移后发行版的安装路径。执行：</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">PS C:\Users\xxx\Desktop&gt; .\LxRunOffline.exe di -n Ubuntu-20.04</span><br><span class="line">D:\wsl\Ubuntu-20.04</span><br></pre></td></tr></table></figure>
+
+<p>返回的安装位置是 <code>D:\wsl\Ubuntu-20.04</code>，说明迁移成功。</p>
+<h2 id="文件系统相互访问"><a href="#文件系统相互访问" class="headerlink" title="文件系统相互访问"></a>文件系统相互访问</h2><h3 id="在-Win10-下访问-Linux-子系统文件"><a href="#在-Win10-下访问-Linux-子系统文件" class="headerlink" title="在 Win10 下访问 Linux 子系统文件"></a>在 Win10 下访问 Linux 子系统文件</h3><p>进入 <code>CMD</code> 或者 <code>Windows PowerShell</code>，输入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> \\wsl$\Ubuntu-20.04\</span><br></pre></td></tr></table></figure>
+
+<p>可以进入到 Linux 子系统根目录。如下图所示：</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/c1d97508855edd74660c4.png"></p>
+<p>或者打开文件资源管理器，在地址栏输入 <code>\\wsl$\Ubuntu-20.04</code>，也可以跳转到 Linux 子系统根目录。</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/b35aa3e075c9c062cf121ae7d5.png"></p>
+<p>或者在 Linux 子系统中，输入：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">explorer.exe .</span><br></pre></td></tr></table></figure>
+
+<p>会自动打开Linux 子系统目录。</p>
+<h3 id="Linux-子系统访问-Win10-文件"><a href="#Linux-子系统访问-Win10-文件" class="headerlink" title="Linux 子系统访问 Win10 文件"></a>Linux 子系统访问 Win10 文件</h3><p>进入Linux子系统运行 <code>df -h</code>，看到如下输出：</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/bab99324dd79668c4ff76.png"></p>
+<p>注意观察后两行。本人电脑有两个分区。<code>/mnt/c</code> 和 <code>/mnt/d</code> 正好分别对应本机的C盘和D盘。</p>
+<h2 id="Laradock"><a href="#Laradock" class="headerlink" title="Laradock"></a>Laradock</h2><h3 id="下载-Laradock，在-Ubuntu-里运行："><a href="#下载-Laradock，在-Ubuntu-里运行：" class="headerlink" title="下载 Laradock，在 Ubuntu 里运行："></a>下载 Laradock，在 Ubuntu 里运行：</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> /www <span class="comment"># 目录自己随意</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/laradock/laradock.git</span><br></pre></td></tr></table></figure>
+
+<p>进入 <code>./laradock</code> 目录，将 <code>env-example</code> 复制为 <code>.env</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> laradock/</span><br><span class="line">cp env-example .env</span><br></pre></td></tr></table></figure>
+
+<p><code>.env</code> 文件中部分需要注意的变量</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 这个变量通常默认就行，最后此时的项目目录会映射到 workspace 容器的 &#96;&#x2F;var&#x2F;www&#x2F;&#96; 目录中</span><br><span class="line">APP_CODE_PATH_HOST&#x3D;..&#x2F;</span><br><span class="line"></span><br><span class="line"># 像mysql等需要volume的数据会存放在宿主机中的位置，如果有需要可以修改一下</span><br><span class="line">DATA_PATH_HOST&#x3D;~&#x2F;.laradock&#x2F;data</span><br><span class="line"></span><br><span class="line"># php版本（7.4 - 7.3 - 7.2 - 7.1 - 7.0 - 5.6）</span><br><span class="line">PHP_VERSION&#x3D;7.4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### MYSQL #################################################</span><br><span class="line"># mysql版本，默认是lastest，根据需要修改</span><br><span class="line">MYSQL_VERSION&#x3D;5.7</span><br><span class="line"># 默认数据库名字</span><br><span class="line">MYSQL_DATABASE&#x3D;laravel</span><br><span class="line"># 数据库用户名</span><br><span class="line">MYSQL_USER&#x3D;default</span><br><span class="line"># 数据库用户密码</span><br><span class="line">MYSQL_PASSWORD&#x3D;secret</span><br><span class="line"># 数据库端口</span><br><span class="line">MYSQL_PORT&#x3D;3306</span><br><span class="line"># 数据库root用户的密码</span><br><span class="line">MYSQL_ROOT_PASSWORD&#x3D;root</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 更换中国镜像源，改为true</span><br><span class="line">CHANGE_SOURCE&#x3D;true</span><br><span class="line"># 上面 &#96;CHANGE_SOURCE&#96; 改为&#96;true&#96;之后，就会更换为aliyun镜像源</span><br><span class="line">UBUNTU_SOURCE&#x3D;aliyun</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### WORKSPACE #############################################</span><br><span class="line"># 将comoser更换为阿里镜像源（更改为其他国内镜像源也可以，否则速度不稳定）</span><br><span class="line">WORKSPACE_COMPOSER_REPO_PACKAGIST&#x3D;https:&#x2F;&#x2F;mirrors.aliyun.com&#x2F;composer&#x2F;</span><br><span class="line"># 设置NVM安装node的淘宝镜像源</span><br><span class="line">WORKSPACE_NVM_NODEJS_ORG_MIRROR&#x3D;https:&#x2F;&#x2F;npm.taobao.org&#x2F;mirrors&#x2F;node</span><br><span class="line"># 设置node的淘宝的registry</span><br><span class="line">WORKSPACE_NPM_REGISTRY&#x3D;https:&#x2F;&#x2F;registry.npm.taobao.org&#x2F;</span><br><span class="line"># 时间改为PRC</span><br><span class="line">WORKSPACE_TIMEZONE&#x3D;PRC</span><br></pre></td></tr></table></figure>
+
+<p>如果不需要 node，可以将以下配置改为 false，上面的 node 淘宝镜像源就不需要配置了</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">WORKSPACE_INSTALL_NODE&#x3D;false</span><br><span class="line">WORKSPACE_INSTALL_YARN&#x3D;false</span><br><span class="line">WORKSPACE_INSTALL_NPM_GULP&#x3D;false</span><br><span class="line">WORKSPACE_INSTALL_NPM_BOWER&#x3D;false</span><br><span class="line">WORKSPACE_INSTALL_NPM_VUE_CLI&#x3D;false</span><br><span class="line">WORKSPACE_INSTALL_NPM_ANGULAR_CLI&#x3D;false</span><br></pre></td></tr></table></figure>
+
+<h3 id="构建并启动-Docker-容器"><a href="#构建并启动-Docker-容器" class="headerlink" title="构建并启动 Docker 容器"></a>构建并启动 Docker 容器</h3><div class="note default"><p>要在 ./laradock 目录下 执行命令</p>
+</div>
+
+<p>默认会启动 <code>workspace</code>、<code>php-fpm</code> 和 <code>composer</code> 等，都会自动配置</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">docker-compose up -d nginx mysql</span><br></pre></td></tr></table></figure>
+
+<div class="note success"><p>每次打 <code>docker-compose</code> 命令太长了，这边设置个 <code>dc</code> 别名：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">vim  ~/.bashrc</span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<p>添加别名：<code>alias dc=&#39;docker-compose&#39;</code></p>
+<p>保存退出，然后执行命令：<code>source ~/.bashrc</code></p>
+</div>
+
+<p>构建完成后，进入 workspace，安装 Laravel 框架</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 进入workspace容器</span></span><br><span class="line">$ dc <span class="built_in">exec</span> workspace bash</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在容器中执行composer命令将Laravel框架安装在 ./laravel 目录中</span></span><br><span class="line">root@b0cf8f8333e4:/var/www<span class="comment"># composer create-project --prefer-dist laravel/laravel laravel</span></span><br></pre></td></tr></table></figure>
+
+<p>配置 nginx 站点：<code>./laradock/nginx/sites/</code></p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">cp laravel.conf.example laravel.conf</span><br></pre></td></tr></table></figure>
+
+<p>修改 <code>laravel.conf</code> 配置：</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/ef5861f77083d6f5c2a25.png"></p>
+<p>重启 nginx 容器，使站点配置文件生效</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dc restart nginx</span><br><span class="line">或者</span><br><span class="line">dc <span class="built_in">exec</span> nginx nginx -s reload</span><br></pre></td></tr></table></figure>
+
+<p>在 <strong>Win10 hosts 文件</strong> 中加入对应的 ip 和域名，即可访问。</p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/a003d1980439b74f569cda3ff6.png"></p>
+<p>出现这个错误，说明目录没有权限，需要更改目录权限：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chown -R www-data:www-data /var/www/laravel</span><br><span class="line">项目目录的 storage 文件夹没有写入权限。在项目目录执行 chmod -R 777 storage</span><br></pre></td></tr></table></figure>
+
+<h3 id="Laravel-中数据库配置：-laravel-env"><a href="#Laravel-中数据库配置：-laravel-env" class="headerlink" title="Laravel 中数据库配置：./laravel/.env"></a>Laravel 中数据库配置：<code>./laravel/.env</code></h3><blockquote>
+<p>laradock 的 mysql 容器不是以 ip 地址连接的，而是以 mysql 标签名连接的所以 ./laravel/.env 中关于 DB_HOST 的值不是 ip 地址，而是 mysql 这个单词</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">DB_CONNECTION&#x3D;mysql</span><br><span class="line">DB_HOST&#x3D;mysql</span><br><span class="line">DB_PORT&#x3D;3306</span><br><span class="line">DB_DATABASE&#x3D;laravel</span><br><span class="line">DB_USERNAME&#x3D;root</span><br><span class="line">DB_PASSWORD&#x3D;root</span><br></pre></td></tr></table></figure>
+
+<h3 id="关于-mysql-数据库管理工具"><a href="#关于-mysql-数据库管理工具" class="headerlink" title="关于 mysql 数据库管理工具"></a>关于 mysql 数据库管理工具</h3><ul>
+<li>途径一：通过 phpmyadmin</li>
+</ul>
+<p>workspace 占用着 8080 端口，所以需要修改 <code>./laradock/.env</code> 中的端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 把phpmyadmin默认的8080改为不被占用的端口</span><br><span class="line">PMA_PORT&#x3D;8081</span><br></pre></td></tr></table></figure>
+
+<p>启动 phpmyadmin</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dc up -d phpmyadmin</span><br></pre></td></tr></table></figure>
+
+<p>浏览器网址：<code>localhost:8081</code></p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/bb86447b7020a080ece5cfc0a0cd1467.png"></p>
+<div class="note warning"><p>如果用户名：root，密码：root 并不能正常登录 phpmyadmin</p>
+</div>
+
+<p>这是 PHP7 和 MySQL8 的 authentication 方法不一致的问题，重新修改用户名密码即可：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED WITH mysql_native_password BY &#39;root&#39;;</span><br><span class="line">ALTER USER &#39;root&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;root&#39;;</span><br><span class="line">ALTER USER &#39;default&#39;@&#39;%&#39; IDENTIFIED WITH mysql_native_password BY &#39;secret&#39;;</span><br></pre></td></tr></table></figure>
+
+<p>回到 phpmyadmin 中，使用 host: mysql, user: root, password: root 就可以正常登录了</p>
+<ul>
+<li>途径二：通过 adminer</li>
+</ul>
+<p>修改 <code>./laradock/.env</code> 中的端口</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"># 把adminer默认的8080改为不被占用的端口</span><br><span class="line">ADM_PORT&#x3D;8082</span><br></pre></td></tr></table></figure>
+
+<p>启动 adminer</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">dc up -d adminer</span><br></pre></td></tr></table></figure>
+
+<p>浏览器网址：<code>localhost:8082</code></p>
+<p><img src="/images/WSL/WSL2+Docker+Laradock/fec42f8e94bef61b14a6ce.png"></p>
+<ul>
+<li>途径三：通过宿主机数据库管理工具管理</li>
+</ul>
+<p>修改 <code>./laradock/.env</code> 中 mysql 客户端端口号</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">MYSQL_PORT=3308</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/WSL/WSL2+Docker+Laradock/b8cd1be2af0c5eb55946633.png"></p>
+<p>至此，基本的配置和安装都结束了。</p>
+<h2 id="WSL2-的一些网络访问问题"><a href="#WSL2-的一些网络访问问题" class="headerlink" title="WSL2 的一些网络访问问题"></a>WSL2 的一些网络访问问题</h2><p>参考此<a href="https://lengthmin.me/posts/wsl2-network-tricks/">链接</a></p>
+]]></content>
+      <categories>
+        <category>WSL</category>
+      </categories>
+      <tags>
+        <tag>WSL2</tag>
+        <tag>Docker</tag>
+        <tag>Laradock</tag>
+      </tags>
+  </entry>
 </search>

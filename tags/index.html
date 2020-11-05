@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 <meta name="generator" content="Hexo 5.2.0">
+
+
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
@@ -14,14 +16,14 @@
 
 <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Satisfy:300,300italic,400,400italic,700,700italic|Roboto+Slab:300,300italic,400,400italic,700,700italic|PT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 
-<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.0/css/all.min.css">
+<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.1/css/all.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css">
   <script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.js"></script>
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"novnan.github.io","root":"/","scheme":"Pisces","version":"8.0.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"novnan.github.io","root":"/","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
 
   <meta name="description" content="胡编一通，乱写一气">
@@ -200,13 +202,14 @@
         </li>
       </ul>
 
-      <!--noindex-->
-      <section class="post-toc-wrap sidebar-panel">
-      </section>
-      <!--/noindex-->
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <section class="post-toc-wrap sidebar-panel">
+        </section>
+        <!--/noindex-->
 
-      <section class="site-overview-wrap sidebar-panel">
-        <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <section class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
     <img class="site-author-image" itemprop="image" alt="novnan"
       src="/images/avatar.png">
   <p class="site-author-name" itemprop="name">novnan</p>
@@ -217,19 +220,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">33</span>
+          <span class="site-state-item-count">34</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-count">12</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">37</span>
+        <span class="site-state-item-count">40</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -513,7 +516,8 @@ if(canvas.getContext){
 
 })();
 </script>
-      </section>
+        </section>
+      </div>
     </div>
   </aside>
   <div class="sidebar-dimmer"></div>
@@ -561,10 +565,10 @@ if(canvas.getContext){
       <div class="post-body">
           <div class="tag-cloud">
   <div class="tag-cloud-title">
-    目前共计 37 个标签
+    目前共计 40 个标签
   </div>
   <div class="tag-cloud-tags">
-    <a href="/tags/Api/" style="font-size: 12px;" class="tag-cloud-0">Api</a> <a href="/tags/BT-Panel/" style="font-size: 12px;" class="tag-cloud-0">BT Panel</a> <a href="/tags/CentOS/" style="font-size: 12px;" class="tag-cloud-0">CentOS</a> <a href="/tags/Chrome/" style="font-size: 12px;" class="tag-cloud-0">Chrome</a> <a href="/tags/Composer/" style="font-size: 25.5px;" class="tag-cloud-8">Composer</a> <a href="/tags/Container/" style="font-size: 12px;" class="tag-cloud-0">Container</a> <a href="/tags/Error/" style="font-size: 12px;" class="tag-cloud-0">Error</a> <a href="/tags/Exception/" style="font-size: 12px;" class="tag-cloud-0">Exception</a> <a href="/tags/Generator/" style="font-size: 12px;" class="tag-cloud-0">Generator</a> <a href="/tags/Git/" style="font-size: 21px;" class="tag-cloud-5">Git</a> <a href="/tags/Git-Submodule/" style="font-size: 12px;" class="tag-cloud-0">Git Submodule</a> <a href="/tags/Hexo/" style="font-size: 25.5px;" class="tag-cloud-8">Hexo</a> <a href="/tags/Iterator/" style="font-size: 12px;" class="tag-cloud-0">Iterator</a> <a href="/tags/Laravel/" style="font-size: 16.5px;" class="tag-cloud-3">Laravel</a> <a href="/tags/NexT/" style="font-size: 16.5px;" class="tag-cloud-3">NexT</a> <a href="/tags/Nginx/" style="font-size: 12px;" class="tag-cloud-0">Nginx</a> <a href="/tags/PHP/" style="font-size: 30px;" class="tag-cloud-10">PHP</a> <a href="/tags/PHP7/" style="font-size: 12px;" class="tag-cloud-0">PHP7</a> <a href="/tags/PhpStorm/" style="font-size: 16.5px;" class="tag-cloud-3">PhpStorm</a> <a href="/tags/Pipeline/" style="font-size: 12px;" class="tag-cloud-0">Pipeline</a> <a href="/tags/Redis/" style="font-size: 16.5px;" class="tag-cloud-3">Redis</a> <a href="/tags/Throwable/" style="font-size: 12px;" class="tag-cloud-0">Throwable</a> <a href="/tags/Ubuntu/" style="font-size: 12px;" class="tag-cloud-0">Ubuntu</a> <a href="/tags/Xdebug/" style="font-size: 12px;" class="tag-cloud-0">Xdebug</a> <a href="/tags/dd/" style="font-size: 16.5px;" class="tag-cloud-3">dd</a> <a href="/tags/emoji/" style="font-size: 12px;" class="tag-cloud-0">emoji</a> <a href="/tags/empty/" style="font-size: 12px;" class="tag-cloud-0">empty</a> <a href="/tags/mysql-8-0/" style="font-size: 12px;" class="tag-cloud-0">mysql 8.0</a> <a href="/tags/oh-my-zsh/" style="font-size: 12px;" class="tag-cloud-0">oh my zsh</a> <a href="/tags/rate-limiter/" style="font-size: 12px;" class="tag-cloud-0">rate-limiter</a> <a href="/tags/shadowsocks/" style="font-size: 12px;" class="tag-cloud-0">shadowsocks</a> <a href="/tags/ss/" style="font-size: 12px;" class="tag-cloud-0">ss</a> <a href="/tags/strtotime/" style="font-size: 12px;" class="tag-cloud-0">strtotime</a> <a href="/tags/ubuntu/" style="font-size: 12px;" class="tag-cloud-0">ubuntu</a> <a href="/tags/wxpay/" style="font-size: 12px;" class="tag-cloud-0">wxpay</a> <a href="/tags/zsh/" style="font-size: 12px;" class="tag-cloud-0">zsh</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 12px;" class="tag-cloud-0">事务</a>
+    <a href="/tags/Api/" style="font-size: 12px;" class="tag-cloud-0">Api</a> <a href="/tags/BT-Panel/" style="font-size: 12px;" class="tag-cloud-0">BT Panel</a> <a href="/tags/CentOS/" style="font-size: 12px;" class="tag-cloud-0">CentOS</a> <a href="/tags/Chrome/" style="font-size: 12px;" class="tag-cloud-0">Chrome</a> <a href="/tags/Composer/" style="font-size: 25.5px;" class="tag-cloud-8">Composer</a> <a href="/tags/Container/" style="font-size: 12px;" class="tag-cloud-0">Container</a> <a href="/tags/Docker/" style="font-size: 12px;" class="tag-cloud-0">Docker</a> <a href="/tags/Error/" style="font-size: 12px;" class="tag-cloud-0">Error</a> <a href="/tags/Exception/" style="font-size: 12px;" class="tag-cloud-0">Exception</a> <a href="/tags/Generator/" style="font-size: 12px;" class="tag-cloud-0">Generator</a> <a href="/tags/Git/" style="font-size: 21px;" class="tag-cloud-5">Git</a> <a href="/tags/Git-Submodule/" style="font-size: 12px;" class="tag-cloud-0">Git Submodule</a> <a href="/tags/Hexo/" style="font-size: 25.5px;" class="tag-cloud-8">Hexo</a> <a href="/tags/Iterator/" style="font-size: 12px;" class="tag-cloud-0">Iterator</a> <a href="/tags/Laradock/" style="font-size: 12px;" class="tag-cloud-0">Laradock</a> <a href="/tags/Laravel/" style="font-size: 16.5px;" class="tag-cloud-3">Laravel</a> <a href="/tags/NexT/" style="font-size: 16.5px;" class="tag-cloud-3">NexT</a> <a href="/tags/Nginx/" style="font-size: 12px;" class="tag-cloud-0">Nginx</a> <a href="/tags/PHP/" style="font-size: 30px;" class="tag-cloud-10">PHP</a> <a href="/tags/PHP7/" style="font-size: 12px;" class="tag-cloud-0">PHP7</a> <a href="/tags/PhpStorm/" style="font-size: 16.5px;" class="tag-cloud-3">PhpStorm</a> <a href="/tags/Pipeline/" style="font-size: 12px;" class="tag-cloud-0">Pipeline</a> <a href="/tags/Redis/" style="font-size: 16.5px;" class="tag-cloud-3">Redis</a> <a href="/tags/Throwable/" style="font-size: 12px;" class="tag-cloud-0">Throwable</a> <a href="/tags/Ubuntu/" style="font-size: 12px;" class="tag-cloud-0">Ubuntu</a> <a href="/tags/WSL2/" style="font-size: 12px;" class="tag-cloud-0">WSL2</a> <a href="/tags/Xdebug/" style="font-size: 12px;" class="tag-cloud-0">Xdebug</a> <a href="/tags/dd/" style="font-size: 16.5px;" class="tag-cloud-3">dd</a> <a href="/tags/emoji/" style="font-size: 12px;" class="tag-cloud-0">emoji</a> <a href="/tags/empty/" style="font-size: 12px;" class="tag-cloud-0">empty</a> <a href="/tags/mysql-8-0/" style="font-size: 12px;" class="tag-cloud-0">mysql 8.0</a> <a href="/tags/oh-my-zsh/" style="font-size: 12px;" class="tag-cloud-0">oh my zsh</a> <a href="/tags/rate-limiter/" style="font-size: 12px;" class="tag-cloud-0">rate-limiter</a> <a href="/tags/shadowsocks/" style="font-size: 12px;" class="tag-cloud-0">shadowsocks</a> <a href="/tags/ss/" style="font-size: 12px;" class="tag-cloud-0">ss</a> <a href="/tags/strtotime/" style="font-size: 12px;" class="tag-cloud-0">strtotime</a> <a href="/tags/ubuntu/" style="font-size: 12px;" class="tag-cloud-0">ubuntu</a> <a href="/tags/wxpay/" style="font-size: 12px;" class="tag-cloud-0">wxpay</a> <a href="/tags/zsh/" style="font-size: 12px;" class="tag-cloud-0">zsh</a> <a href="/tags/%E4%BA%8B%E5%8A%A1/" style="font-size: 12px;" class="tag-cloud-0">事务</a>
   </div>
 </div>
 
@@ -644,7 +648,7 @@ translateInitilization();
   </footer>
 
   
-  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.0/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
 <script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
 
   
