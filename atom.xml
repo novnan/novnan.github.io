@@ -6,7 +6,7 @@
   <link href="https://novnan.github.io/atom.xml" rel="self"/>
   
   <link href="https://novnan.github.io/"/>
-  <updated>2020-11-05T09:54:13.734Z</updated>
+  <updated>2020-11-11T08:47:52.134Z</updated>
   <id>https://novnan.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://novnan.github.io/WSL/WSL2+Docker+Laradock/"/>
     <id>https://novnan.github.io/WSL/WSL2+Docker+Laradock/</id>
     <published>2020-11-03T16:00:00.000Z</published>
-    <updated>2020-11-05T09:54:13.734Z</updated>
+    <updated>2020-11-11T08:47:52.134Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;系统环境介绍&quot;&gt;&lt;a href=&quot;#系统环境介绍&quot; class=&quot;headerlink&quot; title=&quot;系统环境介绍&quot;&gt;&lt;/a&gt;系统环境介绍&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Win 10 2004&lt;br&gt;WSL2(Ubuntu 20.04)&lt;br&gt;Docker 19.03.13&lt;/p&gt;
@@ -172,7 +172,7 @@
     <link href="https://novnan.github.io/Hexo/plugins-used-in-this-blog/"/>
     <id>https://novnan.github.io/Hexo/plugins-used-in-this-blog/</id>
     <published>2020-10-14T16:00:00.000Z</published>
-    <updated>2020-10-15T13:52:10.632Z</updated>
+    <updated>2020-11-11T08:52:01.382Z</updated>
     
     
     <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Hexo 5.2.0&lt;br&gt;NexT 8.0.1&lt;/p&gt;
