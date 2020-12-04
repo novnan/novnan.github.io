@@ -24,10 +24,9 @@
 
 <script class="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.0.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
+    var CONFIG = {"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","version":"8.1.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}};
   </script>
-
-  <meta name="description" content="胡编一通，乱写一气">
+<meta name="description" content="胡编一通，乱写一气">
 <meta property="og:type" content="website">
 <meta property="og:title" content="novnan&#39;s notes">
 <meta property="og:url" content="https://novnan.github.io/index.html">
@@ -50,12 +49,8 @@
     lang   : 'zh-CN'
   };
 </script>
-
-  <title>novnan's notes</title>
+<title>novnan's notes</title>
   
-
-
-
 
 
 
@@ -131,21 +126,9 @@
 
 <nav class="site-nav">
   <ul class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
       <li class="menu-item menu-item-search">
         <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
         </a>
@@ -156,8 +139,7 @@
 
 
   <div class="search-pop-overlay">
-    <div class="popup search-popup">
-        <div class="search-header">
+    <div class="popup search-popup"><div class="search-header">
   <span class="search-icon">
     <i class="fa fa-search"></i>
   </span>
@@ -218,19 +200,19 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-count">36</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">40</span>
+        <span class="site-state-item-count">41</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -535,9 +517,207 @@ if(canvas.getContext){
 
 
     <div class="main-inner index posts-expand">
-      
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/foreach_problems_caused_by_circular_references/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/PHP/foreach_problems_caused_by_circular_references/" class="post-title-link" itemprop="url">foreach ($data as &$item) 循环引用产生的问题</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-04 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-04T00:00:00+08:00">2020-12-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/PHP/foreach_problems_caused_by_circular_references/" class="post-meta-item leancloud_visitors" data-flag-title="foreach ($data as &$item) 循环引用产生的问题" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>PHP version 7.4</p>
+</div>
+
+<h2 id="问题呈现"><a href="#问题呈现" class="headerlink" title="问题呈现"></a>问题呈现</h2><p>最小化分析代码：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$data = [<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> &amp;$item) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> $item) &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">print_r($data);</span><br></pre></td></tr></table></figure>
+
+
+<p>输出结果：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">Array</span></span><br><span class="line">(</span><br><span class="line">[<span class="number">0</span>] =&gt; <span class="string">&#x27;foo&#x27;</span></span><br><span class="line">[<span class="number">1</span>] =&gt; <span class="string">&#x27;foo&#x27;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>我们可以发现，$data的值莫名奇妙变了，而它只是经过了两个空循环而已，发生了什么？！</p>
+<p>先总结一下 PHP 中两条关于引用的两个规则：</p>
+<ul>
+<li>给引用变量赋值，实际上是给引用所指向的变量赋值</li>
+<li>一个引用变量可以被修改为对另外一个变量的引用</li>
+</ul>
+<p>下面我来一行行代码分析产生这个问题的原因：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$data = [<span class="string">&#x27;foo&#x27;</span>, <span class="string">&#x27;bar&#x27;</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 循环开始，$item 变量不存在，新建一个$item 变量，且是一个引用变量，它不指向任何变量地址</span></span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> &amp;$item) &#123;</span><br><span class="line">    <span class="comment">// loop 1: 执行了 $item = &amp;$data[0]；$item 指向 $data[0] 的地址</span></span><br><span class="line">    <span class="comment">// loop 2: 执行了 $item = &amp;$data[1]；$item 指向 $data[1] 的地址</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 提示：这个循环没有改变 $data 的数据，只是 $item 依然指向第二个元素 的地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 循环开始，$item 变量存在，不会新建变量</span></span><br><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> $item) &#123;</span><br><span class="line">    <span class="comment">// loop 1: 执行了 $item = $data[0]；$item 所指向的变量（即 第二个元素）的值被修改为$data[0]（即&#x27;foo&#x27;），这里已经导致了$data 两个元素都等于 &#x27;foo&#x27;</span></span><br><span class="line">    <span class="comment">// loop 2: 执行了 $item = $data[1]；由于$item 指向的是$data[1]，实际上相当于执行$data[1] = $data[1]，没有任何意义</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 最后$data 中的两个元素都是 &#x27;foo&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>如何避免这个问题1：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">foreach</span> ($data <span class="keyword">as</span> &amp;$item) &#123;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每次 loop 销毁$item （实际上只要在最后一次 loop 销毁即可，因此你可以把 unset 写到 foreach 后面，就是不是很好看）</span></span><br><span class="line"><span class="keyword">unset</span>($item);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如何避免这个问题2：</p>
+<div class="note primary"><p>不使用引用</p>
+</div>
 
       
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/MySQL/isolation-levels-in-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/MySQL/isolation-levels-in-mysql/" class="post-title-link" itemprop="url">事务隔离级别</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-03 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-03T00:00:00+08:00">2020-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/MySQL/isolation-levels-in-mysql/" class="post-meta-item leancloud_visitors" data-flag-title="事务隔离级别" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>mysql version 8.0.13</p>
+</div>
+
+<h2 id="事务隔离级别概述"><a href="#事务隔离级别概述" class="headerlink" title="事务隔离级别概述"></a>事务隔离级别概述</h2><p>mysql 中，InnoDB 所提供的事务符合 ACID 的要求，而事务通过事务日志中的 redo log 和 undo log 满足了原子性、一致性、持久性，事务还会通过锁机制满足隔离性，在 InnoDB 存储引擎中，有不同的隔离级别，它们有着不同的隔离性。</p>
+<p>什么是事务的隔离级别？如果只是从概念上理解的话可能比较模糊，咱们直接看看不同隔离级别下的实际表现是什么样子的，再结合理论去理解，就会明了很多。首先，打开两个终端，同时连接到当前数据库，如下图所示，我们对两个回话进行编号，并且以颜色区分，1号会话使用黄色进行标识，2号会话使用红色进行标识。</p>
+<p>两个会话使用相同的数据库。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204162840.png"></p>
+<p>两个会话中同时各自开启一个事务。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204163421.png"></p>
+<p>由于下面的所有操作会在两个会话中来回切换，所以，为了方便描述，我们为每个操作的顺序进行编号，例如下图中，我们先在会话1的事务1中执行了更新操作，然后在事务1中执行了查询操作，最后又在会话2中的事务2中执行了查询操作，按照操作顺序，为各个操作进行了顺序编号。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/MySQL/isolation-levels-in-mysql/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
     
 
 
@@ -559,8 +739,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/WSL/WSL2+Docker+Laradock/" class="post-title-link" itemprop="url">WSL2 + Docker + Laradock 配置</a>
+          <a href="/WSL/WSL2+Docker+Laradock/" class="post-title-link" itemprop="url">WSL2 + Docker + Laradock 配置</a>
         </h2>
 
         <div class="post-meta-container">
@@ -659,8 +838,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/PHP/api-rate-limiting-algorithm-practices/" class="post-title-link" itemprop="url">接口限流常用算法实践</a>
+          <a href="/PHP/api-rate-limiting-algorithm-practices/" class="post-title-link" itemprop="url">接口限流常用算法实践</a>
         </h2>
 
         <div class="post-meta-container">
@@ -782,8 +960,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Redis/redis-pipeline/" class="post-title-link" itemprop="url">Redis Pipeline</a>
+          <a href="/Redis/redis-pipeline/" class="post-title-link" itemprop="url">Redis Pipeline</a>
         </h2>
 
         <div class="post-meta-container">
@@ -870,8 +1047,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Redis/redis-transactions/" class="post-title-link" itemprop="url">Redis 事务</a>
+          <a href="/Redis/redis-transactions/" class="post-title-link" itemprop="url">Redis 事务</a>
         </h2>
 
         <div class="post-meta-container">
@@ -970,8 +1146,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Hexo/plugins-used-in-this-blog/" class="post-title-link" itemprop="url">本博客当前使用的插件总结</a>
+          <a href="/Hexo/plugins-used-in-this-blog/" class="post-title-link" itemprop="url">本博客当前使用的插件总结</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1065,8 +1240,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Hexo/update_hexo/" class="post-title-link" itemprop="url">Hexo版本升级指南</a>
+          <a href="/Hexo/update_hexo/" class="post-title-link" itemprop="url">Hexo版本升级指南</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1160,8 +1334,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/" class="post-title-link" itemprop="url">宝塔Linux面板小内存服务器编译安装 MySQL 8.0</a>
+          <a href="/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/" class="post-title-link" itemprop="url">宝塔Linux面板小内存服务器编译安装 MySQL 8.0</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1261,8 +1434,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Composer/modify-the-project-dependency-to-the-new-mirror-address/" class="post-title-link" itemprop="url">Composer 修改项目依赖为新的镜像地址</a>
+          <a href="/Composer/modify-the-project-dependency-to-the-new-mirror-address/" class="post-title-link" itemprop="url">Composer 修改项目依赖为新的镜像地址</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1331,334 +1503,10 @@ if(canvas.getContext){
 
 
 
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Composer/introduction-to-composer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="novnan">
-      <meta itemprop="description" content="胡编一通，乱写一气">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="novnan's notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Composer/introduction-to-composer/" class="post-title-link" itemprop="url">你生产环境的 Composer 是这样吗？</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2019-06-12T00:00:00+08:00">2019-06-12</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Composer/" itemprop="url" rel="index"><span itemprop="name">Composer</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/Composer/introduction-to-composer/" class="post-meta-item leancloud_visitors" data-flag-title="你生产环境的 Composer 是这样吗？" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h2 id="composer-配置项"><a href="#composer-配置项" class="headerlink" title="composer 配置项"></a>composer 配置项</h2><blockquote>
-<p>具体的每个配置项细节请参考  <a target="_blank" rel="noopener" href="https://docs.phpcomposer.com/04-schema.html">Composer 官网</a></p>
-</blockquote>
-<h3 id="配置列表"><a href="#配置列表" class="headerlink" title="配置列表"></a>配置列表</h3><table>
-<thead>
-<tr>
-<th>ID</th>
-<th>配置项</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>1</td>
-<td><code>name</code></td>
-<td>包的名称，它包括供应商名称和项目名称，使用 / 分隔。</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>description</code></td>
-<td>包描述</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>version</code></td>
-<td>版本</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>type</code></td>
-<td>安装类型</td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>keywords</code></td>
-<td>关键字</td>
-</tr>
-<tr>
-<td>6</td>
-<td><code>homepage</code></td>
-<td>项目主页</td>
-</tr>
-<tr>
-<td>7</td>
-<td><code>time</code></td>
-<td>版本发布时间</td>
-</tr>
-<tr>
-<td>8</td>
-<td><code>license</code></td>
-<td>许可协议</td>
-</tr>
-<tr>
-<td>9</td>
-<td><code>authors</code></td>
-<td>作者</td>
-</tr>
-<tr>
-<td>10</td>
-<td><code>support</code></td>
-<td>支持,获取项目支持的向相关信息对象。</td>
-</tr>
-<tr>
-<td>11</td>
-<td><code>require</code></td>
-<td>自动加载的包</td>
-</tr>
-<tr>
-<td>12</td>
-<td><code>require-dev</code></td>
-<td>在DEV下自动加载的包</td>
-</tr>
-<tr>
-<td>13</td>
-<td><code>conflict</code></td>
-<td>此列表中的包与当前包的这个版本冲突。它们将不允许同时被安装</td>
-</tr>
-<tr>
-<td>14</td>
-<td><code>suggest</code></td>
-<td>建议安装的包，它们增强或能够与当前包良好的工作。这些只是信息，并显示在依赖包安装完成之后，给你的用户一个建议，他们可以添加更多的包。</td>
-</tr>
-<tr>
-<td>15</td>
-<td><code>autoload</code></td>
-<td>自动加载,分别有四种加载机制 <code>psr-4</code> <code>psr-0</code> <code>classmap</code> <code>file</code></td>
-</tr>
-<tr>
-<td>16</td>
-<td><code>include-path</code></td>
-<td>保留传统,不建议使用</td>
-</tr>
-<tr>
-<td>17</td>
-<td><code>target-dir</code></td>
-<td>定义当前包安装的目标文件夹</td>
-</tr>
-<tr>
-<td>18</td>
-<td><code>minimum-stability</code></td>
-<td>安装包的时候通过稳定性过滤包的默认行为, <code>dev</code> <code>alpha</code> <code>beta</code> <code>RC</code> <code>stable</code> 可选</td>
-</tr>
-<tr>
-<td>19</td>
-<td><code>prefer-stable</code></td>
-<td>安装包的时候优先使用更稳定的包版本, <code>&quot;prefer-stable&quot;: true</code></td>
-</tr>
-<tr>
-<td>20</td>
-<td><code>repositories</code></td>
-<td>使用自定义的包资源库。默认情况下 composer 只使用 packagist 作为包的资源库。通过指定资源库，你可以从其他地方获取资源包。</td>
-</tr>
-<tr>
-<td>21</td>
-<td><code>config</code></td>
-<td>配置参数，eg：<code>process-timeout</code> <code>vendor-dir</code></td>
-</tr>
-<tr>
-<td>22</td>
-<td><code>scripts </code></td>
-<td>Composer 允许你在安装过程中的各个阶段挂接脚本。</td>
-</tr>
-<tr>
-<td>23</td>
-<td><code>extra</code></td>
-<td>任意的，供 <code>scripts</code> 使用的额外数据。</td>
-</tr>
-<tr>
-<td>24</td>
-<td><code>bin</code></td>
-<td>该属性用于标注一组应被视为二进制脚本的文件，他们会被软链接到（config 对象中的）bin-dir 属性所标注的目录，以供其他依赖包调用。</td>
-</tr>
-<tr>
-<td>25</td>
-<td><code>archive</code></td>
-<td>这些选项在创建包存档时使用。</td>
-</tr>
-</tbody></table>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Composer/introduction-to-composer/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Composer/six-lesser-known-composer-commands-you-should-know/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.png">
-      <meta itemprop="name" content="novnan">
-      <meta itemprop="description" content="胡编一通，乱写一气">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="novnan's notes">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/Composer/six-lesser-known-composer-commands-you-should-know/" class="post-title-link" itemprop="url">六个鲜为人知的 Composer 命令</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-05-20 00:00:00" itemprop="dateCreated datePublished" datetime="2019-05-20T00:00:00+08:00">2019-05-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/Composer/" itemprop="url" rel="index"><span itemprop="name">Composer</span></a>
-        </span>
-    </span>
-
-  
-    <span id="/Composer/six-lesser-known-composer-commands-you-should-know/" class="post-meta-item leancloud_visitors" data-flag-title="六个鲜为人知的 Composer 命令" title="阅读次数">
-      <span class="post-meta-item-icon">
-        <i class="far fa-eye"></i>
-      </span>
-      <span class="post-meta-item-text">阅读次数：</span>
-      <span class="leancloud-visitors-count"></span>
-    </span>
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p>Composer 是 PHP 的一个依赖管理工具。 如果你是一名 PHP 开发人员，那么你很可能每天都在使用它并且频繁的运行命令 <code>require</code>， <code>install</code> 和 <code>update</code>。也许你并没有意识到， 我们可以使用一些其他的 Composer 命令，来更加轻松的使用它。</p>
-<p>它有许多的命令可以使用，但今天我将分享我使用的并且每天都有帮助的 6 个命令。</p>
-<h2 id="show"><a href="#show" class="headerlink" title="show"></a>show</h2><p>先说下 <code>show</code> 命令。它允许您查看项目的所有已安装包(包括依赖项)，以及查看相关包的说明。所有这些信息都可以在Composer锁文件(composer.lock)中找到, 但是使用 <code>show</code> 命令相对来说是一种更简单、更方便的一种查看包信息的方法。</p>
-<p>要列出所有已安装的包及其版本号和说明，只需使用 <code>show</code>:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer show</span><br></pre></td></tr></table></figure>
-
-<p>有时候把这些信息用依赖关系树的形式查看会更容易理解， 可以通过 <code>--tree</code> or <code>-t</code> 参数:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">composer show -t</span><br></pre></td></tr></table></figure>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/Composer/six-lesser-known-composer-commands-you-should-know/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-
-  
   <nav class="pagination">
     <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
-
-
-      
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -1681,18 +1529,14 @@ if(canvas.getContext){
     });
   }
 </script>
-
-    </div>
+</div>
   </main>
 
   <footer class="footer">
     <div class="footer-inner">
-      
 
-      
 
 <div class="copyright">
-  
   &copy; 2017 – 
   <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
@@ -1728,18 +1572,7 @@ translateInitilization();
 
   
 
-
-
-
-  <script src="/js/local-search.js"></script>
-
-
-
-
-
-
-
-
+<script src="/js/local-search.js"></script>
 
 
 
@@ -1766,11 +1599,7 @@ translateInitilization();
     });
   </script>
 
-
   
-
-
-
 
 
 
@@ -1869,9 +1698,6 @@ translateInitilization();
 
   
 
-  
-
-  
   <script src="//cdn.jsdelivr.net/npm/quicklink@2.0.0/dist/quicklink.umd.js"></script>
   <script>
       window.addEventListener('load', () => {
