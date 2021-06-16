@@ -2358,4 +2358,173 @@
         <tag>mysql</tag>
       </tags>
   </entry>
+  <entry>
+    <title>CGI/FastCGI/php-cgi/php-fpm的区别</title>
+    <url>/PHP/CGI_FastCGI_php-cgi_php-fpm/</url>
+    <content><![CDATA[<h2 id="一、最早的Web服务器"><a href="#一、最早的Web服务器" class="headerlink" title="一、最早的Web服务器"></a>一、最早的Web服务器</h2><p>最早的Web服务器简单地响应浏览器发来的HTTP静态文件请求，并将存储在服务器上的静态文件（例如： jpg、htm、html）返回给浏览器。如图是处理流程</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/76df2b.png"></p>
+<p>比如我访问：<code>http://www.example.com/index.html</code>，那么网络服务器就会去对应目录中找到 <code>index.html</code>这个文件，并返回给浏览器。</p>
+<h2 id="二、CGI的出现"><a href="#二、CGI的出现" class="headerlink" title="二、CGI的出现"></a>二、CGI的出现</h2><p><strong>首先说明：CGI是一种协议</strong></p>
+<p>事物总是不断发展，网站也越来越复杂，所以出现动态技术。但是Web服务器并不能直接运行 php/asp 这样的文件，自己不能做，外包给别人吧，但是要与第三做个约定，我给你什么，然后你给我什么，就是我把请求参数发送给你，然后我接收你的处理结果再给客户端。这个约定就是 CGI协议(Common Gateway Interface)，协议只是一个“规定、规则”，理论上用什么语言都能实现，比如用 vb/c/perl/php/python 来实现。</p>
+<p>在2000年或更早的时候，CGI 比较盛行。那时，Perl 是编写 CGI 的主流语言，以至于一般的 CGI 程序(遵循 CGI 协议的程序)就是 Perl 程序（例如世界上80%的网站所采用的编程语言 php 语言刚开始的版本就是用Perl语言写的）。</p>
+<p>CGI 是 “Common Gateway Interface” 的缩写，翻成中文叫“公共网关接口”，它是 web 服务器与外部应用程序（CGI 程序）之间传递信息的接口标准。通过 CGI 接口，web 服务器就能够获取客户端提交的信息，并转交给服务器端的 CGI 程序处理，最后返回结果给客户端。也就是说，CGI 实际上是一个接口标准。我们通常所说的 CGI 是指 CGI 程序，即实现了 CGI 接口标准的程序。只要某种语言具有标准输入、输出和环境变量，如 perl/PHP/C 等，就可以用来编写 CGI 程序。CGI 只是接口协议，根本不是什么语言。</p>
+<span id="more"></span>
+
+<h3 id="CGI程序的工作方式"><a href="#CGI程序的工作方式" class="headerlink" title="CGI程序的工作方式"></a>CGI程序的工作方式</h3><p>web 服务器一般只处理静态文件请求（如 jpg、htm、html），如果碰到一个动态脚本请求（如 php），web 服务器主进程，就 fork 出一个新的进程来启动 CGI 程序，也就是说将动态脚本请求交给 CGI 程序来处理。启动 CGI 程序需要一个过程，比如，读取配置文件，加载扩展等。CGI 程序启动后，就会解析动态脚本，然后将结果返回给 web 服务器，最后 web 服务器再将结果返回给客户端，刚才 fork 的进程也会随之关闭。这样，每次用户请求动态脚本，web 服务器都要重新 fork 一个新进程，去启动 CGI 程序，由 CGI 程序来处理动态脚本，处理完后进程随之关闭。毫无疑问，这种工作方式的效率是非常低下的。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/42e54.png"></p>
+<p>CGI程序与web服务器传递数据：</p>
+<p>CGI 程序通过标准输入（STDIN）和标准输出（STDOUT）来进行输入输出。此外 CGI 程序还通过环境变量来得到输入，操作系统提供了许多环境变量，它们定义了程序的执行环境，应用程序可以存取这些环境变量。web 服务器和 CGI 接口又另外设置了一些环境变量，用来向CGI程序传递一些重要的参 数。CGI 的 GET 方法还通过环境变量 QUERY-STRING 向 CGI 程序传递 Form 中的数据。 下面是一些常用的 CGI 环境变量：</p>
+<table>
+<thead>
+<tr>
+<th align="left">变量名</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CONTENT_TYPE</td>
+<td align="left">这个环境变量的值指示所传递来的信息的MIME类型。目前，环境变量CONTENT_TYPE一般都是：application/x-www-form-urlencoded，他表示数据来自于HTML表单。</td>
+</tr>
+<tr>
+<td align="left">CONTENT_LENGTH</td>
+<td align="left">如果服务器与CGI程序信息的传递方式是POST，这个环境变量即使从标准输入STDIN中可以读到的有效数据的字节数。这个环境变量在读取所输入的数据时必须使用。</td>
+</tr>
+<tr>
+<td align="left">HTTP_COOKIE</td>
+<td align="left">客户机内的 COOKIE 内容。</td>
+</tr>
+<tr>
+<td align="left">HTTP_USER_AGENT</td>
+<td align="left">提供包含了版本数或其他专有数据的客户浏览器信息。</td>
+</tr>
+<tr>
+<td align="left">PATH_INFO</td>
+<td align="left">这个环境变量的值表示紧接在CGI程序名之后的其他路径信息。它常常作为CGI程序的参数出现。</td>
+</tr>
+<tr>
+<td align="left">QUERY_STRING</td>
+<td align="left">如果服务器与CGI程序信息的传递方式是GET，这个环境变量的值即是所传递的信息。这个信息经跟在CGI程序名的后面，两者中间用一个问号?分隔，多个参数用&amp;号连接。</td>
+</tr>
+<tr>
+<td align="left">REMOTE_ADDR</td>
+<td align="left">这个环境变量的值是发送请求的客户机的IP地址，例如上面的192.168.1.67。这个值总是存在的。而且它是Web客户机需要提供给Web服务器的唯一标识，可以在CGI程序中用它来区分不同的Web客户机。</td>
+</tr>
+<tr>
+<td align="left">REMOTE_HOST</td>
+<td align="left">这个环境变量的值包含发送CGI请求的客户机的主机名。如果不支持你想查询，则无需定义此环境变量。</td>
+</tr>
+<tr>
+<td align="left">REQUEST_METHOD</td>
+<td align="left">提供脚本被调用的方法。对于使用 HTTP/1.0 协议的脚本，仅 GET 和 POST 有意义。</td>
+</tr>
+<tr>
+<td align="left">SCRIPT_FILENAME</td>
+<td align="left">CGI脚本的完整路径。</td>
+</tr>
+<tr>
+<td align="left">SCRIPT_NAME</td>
+<td align="left">CGI脚本的的名称。</td>
+</tr>
+<tr>
+<td align="left">SERVER_NAME</td>
+<td align="left">这是你的 WEB 服务器的主机名、别名或IP地址。</td>
+</tr>
+<tr>
+<td align="left">SERVER_SOFTWARE</td>
+<td align="left">这个环境变量的值包含了调用CGI程序的HTTP服务器的名称和版本号。例如，上面的值为Apache/2.2.14(Unix)。</td>
+</tr>
+</tbody></table>
+<h3 id="web服务器内置模块"><a href="#web服务器内置模块" class="headerlink" title="web服务器内置模块"></a>web服务器内置模块</h3><p>后来，出现了一种比较高效的方式：web 服务器内置模块。例如，apache 的 mod_php 模块。将 php 解释器做成模块，然后加载到 apache 服务器中。</p>
+<p>这样，apache 服务器在启动的时候，就会同时启动 php 模块。当客户端请求 php 文件时，apache 服务器就不用再 fork 出一个新进程来启动 php 解释器，而是直接将 php 文件交给运行中的 php 模块处理。显然，这种方式下，效率会比较高。</p>
+<p>由于在 apache 服务器启动时，才会读取 php 的配置文件，加载 php 模块，在 apache 的运行过程中 ，不会再重新读取 php 的配置文件。所以，每次我们修改了 php 的配置文件后，必须重启 apache，新的php配置文件才会生效。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/081a0b3.png"></p>
+<h3 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h3><p><strong>FastCGI是一种协议</strong>，它是在<strong>CGI标准协议</strong>基础上发展出来的一个变种协议，它的主要目标是减轻 web 服务器与 CGI 程序之间交互时的负载，这样一台服务器就可以在同一时间处理更多的 web 请求。</p>
+<p>FASTCGI 的定义相关文章：<a href="http://www.mit.edu/~yandros/doc/specs/fcgi-spec.html#S1">FastCGI Specification</a>、<a href="http://www.mit.edu/afs.new/sipb/project/merakidev/src/openwrt-meraki/openwrt/build_mips/lighttpd-1.4.11/doc/fastcgi.txt">the FastCGI Interface</a></p>
+<p><strong>FastCGI进程管理器</strong>是遵循<strong>FastCGI协议</strong>的程序，只要你有能力就可以写出遵循 “FastCGI协议” 的 “FastCGI进程管理器”，毫无疑问，“FastCGI进程管理器” 并不是一个程序的名称，而是指遵循<strong>FastCGI协议</strong>的一类程序。</p>
+<p>当客户端请求 Web 服务器上的动态脚本时，Web 服务器会将动态脚本通过 Unix 域套接字(Unix domain socket)，或命名管道(named pipe)，或 TCP 连接(TCP connection)交给 FastCGI 主进程，FastCGI 主进程根据情况，安排一个空闲的子进程来解析动态脚本，处理完成后将结果返回给 Web 服务器，Web 服务器再将结果返回给客户端。该客户端请求处理完毕后，FastCGI 子进程并不会随之关闭，而是继续等待主进程安排工作任务。由此可知，FastCGI 的工作效率是非常高的。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6153419.png"></p>
+<h3 id="php-fpm"><a href="#php-fpm" class="headerlink" title="php-fpm"></a>php-fpm</h3><p><strong>fpm</strong>是<strong>FastCGI Process Manager</strong>的缩写，中文叫 “FastCGI进程管理器”，而 php-fpm 就是用于 php 语言的 FastCGI 进程管理器（前面说过，“FastCGI进程管理器”是一类程序，而 php-fpm 就属于这一类程序中的其中一个）。对于 php5.3 之前的版本来说，php-fpm 是一个第三方的补丁包，旨在将 FastCGI 进程管理整合进PHP包中。在 php5.3 之后的版本中，php-fpm 不再是第三方的包，它已经被集成到 php 的源码中了，因为 php-fpm 提供了更好的PHP进程管理方式，可以有效控制内存和进程、可以平滑重载 PHP 配置，比 spawn-fcgi 具有更多优点，所以 php-fpm 被 PHP 官方集成了。</p>
+<h3 id="php-cgi"><a href="#php-cgi" class="headerlink" title="php-cgi"></a>php-cgi</h3><p>PHP为什么叫PHP</p>
+<div class="note info"><p>PHP于1994年由Rasmus Lerdorf创建，刚刚开始是Rasmus Lerdorf为了要维护个人网页而制作的一个简单的用Perl语言编写的程序。这些工具程序用来显示 Rasmus Lerdorf 的个人履历，以及统计网页流量。后来又用C语言重新编写，包括可以访问数据库。他将这些程序和一些表单直译器整合起来，称为 PHP/FI。</p>
+<p>而PHP/FI，是“Personal Home Page/Form Interpreter”的缩写，意思是“个人主页/表单解释器”，也就是说，PHP最初还不是一门“语言”，而是“Rasmus Lerdorf”为了维护他自己的个人主页而写的一个简单的“表单解释器”。</p>
+<p>不过后来，PHP被重新定义为<strong>“PHP: HyperText Preprocessor”</strong>的缩写，注意不是“HyperText Preprocessor”而是“PHP: HyperText Preprocessor”，这种将名称放到定义中的写法被称作<a href="https://baike.baidu.com/item/%E9%80%92%E5%BD%92%E7%BC%A9%E5%86%99">递归缩写</a></p>
+<p>所以，PHP现在的定义就是一个“超文本预处理器”，用于“把php语言写的程序解释成超文本”(说白了就是把你写的php代码转换成html，当然现在的能力不止是解释成html)，安装好php后，对于Linux/Mac会在安装目录下有一个 <code>php</code> 和一个<code>php-cgi</code>，对于Win则是<code>php.exe</code>和<code>php-cgi.exe</code>。</p>
+</div>
+
+<h3 id="php-cgi与php的区别"><a href="#php-cgi与php的区别" class="headerlink" title="php-cgi与php的区别"></a>php-cgi与php的区别</h3><p>php-cgi与php的区别(在win下就是php-cgi.exe与php.exe)在于，php/php.exe是命令模式的php解释器，而php-cgi/php-cgi.exe是支持“通用网关接口”的php解释器，而通用网关接口就是我们前面说的“CGI”(从它的名称就能看出来啦，它都标明了“-cgi”了)，不过现在的php-cgi是即支持“CGI”协议，也支持“CGI协议”的改进版——“fastCGI协议”的。</p>
+<p><strong>举例说明php与php-cgi都是php解释器：</strong> 运行<code>php -i</code>是“查看php的配置信息(i是info的缩写)”，而运行<code>php-cgi -i</code>同样是“查看php的配置信息”，只不过<code>php -i</code>是以命令版的格式返回(说白了就是纯字符串，最多加上换行)，而<code>php-cgi -i</code>返回的格式，却是html格式的，你可以用 <code>php-cgi -i &gt; /path/to/php-cgi.html</code>保存成html文件再来打开，可以发现跟你在php文件中用<code>phpinfo();</code>函数是一样的。</p>
+<h3 id="php-cgi支持fastCGI协议"><a href="#php-cgi支持fastCGI协议" class="headerlink" title="php-cgi支持fastCGI协议"></a>php-cgi支持fastCGI协议</h3><p>为什么说<code>php-cgi</code>既支持普通的CGI协议，也支持“fastCGI”协议呢？运行<code>php-cgi -h</code>输出结果如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Usage: php [-q] [-h] [-s] [-v] [-i] [-f &lt;file&gt;]</span><br><span class="line">       php &lt;file&gt; [args...]</span><br><span class="line">  -a               Run interactively</span><br><span class="line">  -b &lt;address:port&gt;|&lt;port&gt; Bind Path for external FASTCGI Server mode</span><br><span class="line">  -C               Do not chdir to the script&#39;s directory</span><br><span class="line">  -c &lt;path&gt;|&lt;file&gt; Look for php.ini file in this directory</span><br><span class="line">  -n               No php.ini file will be used</span><br><span class="line">  -d foo[&#x3D;bar]     Define INI entry foo with value &#39;bar&#39;</span><br><span class="line">  -e               Generate extended information for debugger&#x2F;profiler</span><br><span class="line">  -f &lt;file&gt;        Parse &lt;file&gt;.  Implies &#96;-q&#39;</span><br><span class="line">  -h               This help</span><br><span class="line">  -i               PHP information</span><br><span class="line">  -l               Syntax check only (lint)</span><br><span class="line">  -m               Show compiled in modules</span><br><span class="line">  -q               Quiet-mode.  Suppress HTTP Header output.</span><br><span class="line">  -s               Display colour syntax highlighted source.</span><br><span class="line">  -v               Version number</span><br><span class="line">  -w               Display source with stripped comments and whitespace.</span><br><span class="line">  -z &lt;file&gt;        Load Zend extension &lt;file&gt;.</span><br><span class="line">  -T &lt;count&gt;       Measure execution time of script repeated &lt;count&gt; times.</span><br></pre></td></tr></table></figure>
+
+<p>其中有这句“Bind Path for external FASTCGI Server mode”：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-b &lt;address:port&gt;|&lt;port&gt; Bind Path for external FASTCGI Server mode</span><br></pre></td></tr></table></figure>
+
+<p>意思是“绑定路径以作为外部FASTCGI服务器模式来使用”，那么不绑定呢？不绑定就是作为“非FASTCGI”模式使用呗。</p>
+<p>当然，php-cgi支持“标准CGI”接口只是我的猜测，我无法用实际的例子来解释（而且就算可以，也没人会用这种方式了），但是php-cgi支持“FASTCGI”这是绝对绝对可以确定的，因为我有实例可以证明！！</p>
+<p>相信现在绝大部分人都是用nginx+php-fpm模式来运行网站的，我这个例子就以这个来解释！下列配置，只要配置过nginx+php-fpm的童鞋应该都很熟悉，意思就是当nginx遇到<code>.php</code>结尾的文件，就“调用php-fpm”来解释这个php文件，此时php-fpm相当于“服务器”，“127.0.0.1:9000”就是php-fpm服务器监听的ip和端口，而nginx相当于“客户端”：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">location ~ \.php$ &#123;</span><br><span class="line">    include fastcgi.conf;</span><br><span class="line">    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">    fastcgi_index  index.php;</span><br><span class="line">    fastcgi_buffer_size 128k;</span><br><span class="line">    fastcgi_buffers 4 256k;</span><br><span class="line">    fastcgi_busy_buffers_size 256k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们把上述配置修改一个地方，把<code>9000</code>改成<code>9001</code>(如果你9001被占用了那就用其他未占用的端口，只要下边对应即可)，然后<code>sudo nginx -s reload</code>重载配置，毫无疑问，现在用浏览器访问你的php文件，比如<code>http://localhost/index.php</code>将会出现<code>502 Bad Gateway</code>，因为php-fpm监听的是9000端口，现在你修改成9001它当然找不到啊。</p>
+<p>还记得刚才前面说到的“绑定路径以作为外部FASTCGI服务器模式来使用”吗？现在我们就来使用它，进入php-cgi所在目录，运行：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.&#x2F;php-cgi -b 127.0.0.1:9001</span><br></pre></td></tr></table></figure>
+
+<p>再次刷新你的<code>http://localhost/index.php</code>，怎样？是不是没有502了？是不是正常了？但你要知道，现在解释你的<code>index.php</code>文件的是<code>php-cgi</code>而不再是<code>php-fpm</code>了，这就证明了<code>php-cgi</code>确实是支持“FASTCGI”协议的，为什么？因为nginx里用的参数，都是<code>fastcgi_</code>开头的啊，这就是“FASTCGI”协议啊。</p>
+<p>实验结束，<code>ctrl+C</code>就可以关闭你刚才运行的<code>php-cgi</code>了，因为刚才是直接在前台运行的，然后把9001改加9000，再执行<code>sudo nginx -s reload</code>就恢复到用<code>php-fpm</code>了。</p>
+<p><strong>另一个用于证明php-cgi即支持“CGI”又支持“fastCGI”的例子：</strong></p>
+<p>由于Windows不支持默认php-fpm(因为php-fpm是基于Linux的fork()创建子进程的，而Windows不支持这个，不过可以用Cygwin模拟)，而像一些集成工具一般都是直接使用php-cgi.exe代替php-fpm，比如phpStudy，我们选择用php+nginx：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6155930.jpg"></p>
+<p>然后查看phpStudy的子进程，里面就有一个<code>CGI / FastCGI(32 bit)</code>，这个就是“php-cgi.exe”，你可以右击它→点击“属性”→点击“安全”，就能看到它的路径：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/9f36463c.jpg"></p>
+<p><strong>证明例子3：</strong><a href="https://php.net/manual/en/install.fpm.php#121725">https://php.net/manual/en/install.fpm.php#121725</a>，这个老外说了，php-cgi是fastCGI接口但不是fpm，所以这又证明了“php-cgi”是支持fastCGI协议的。</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/60157.png"></p>
+<p>前面说了php-cgi与php的相同点——它们都是php解释器，只是一个只支持使用“命令行方式调用”，一个支持“通用网关接口”方式调用。</p>
+<h3 id="php-cgi与php-fpm的区别"><a href="#php-cgi与php-fpm的区别" class="headerlink" title="php-cgi与php-fpm的区别"></a>php-cgi与php-fpm的区别</h3><p>那么php-cgi与php-fpm又有什么不同？其实你可以认为“php-fpm”就是“php-cgi”的改进版，前面我说了php-cgi就是一个“遵循通用网关接口的php解释器”，而php-fpm是php-cgi的改进版，说明php-fpm同样也是一个“遵循通用网关接口的php解释器”，并且这里的“通用网关接口”指的是“FASTCGI”而不是“CGI”，因为前面都已经用实例证明了“php-cgi”是支持“FASTCGI”协议的，既然php-cgi都支持，那么它的改进版——php-fpm肯定就更支持了，从它的名字“fpm”里就能看出来，“fpm”是“Fastcgi Process Manager”，意思是“支持fastCGI协议的进程管理器”，那么“php-fpm”就是用于php的“支持fastCGI协议的进程管理器”，因为“支持fastCGI协议的进程管理器”不一定只有用于php，也许还有其他的呢？</p>
+<p>好了，既然php-fpm也是“遵循通用网关接口的php解释器”，那么有一点可以确定的是，php-fpm不会调用php-cgi也不会依赖php-cgi，因为它本身就是“php-cgi”的改进版，没有理由去调用(去依赖php-cgi)，确定方法很简单，先停掉你的php-fpm，然后把php-cgi改个名或者移动到另一个目录，再启动php-fpm，看一切是否正常？答案是肯定正常的，php-fpm根本不依赖php-cgi。</p>
+<p>前面说，“php-fpm”是“php-cgi”的改进版（当然这个“改进版”是我自己的说法，实际上php-fpm是不是在php-cgi的基础上改进的，我也不知道，但说它是改进版是没有问题的），既然是改进版，那改进了什么呢？请看官方文档：<a href="https://www.php.net/manual/zh/install.fpm.php">FastCGI 进程管理器(fpm)</a></p>
+<ul>
+<li>支持平滑停止/启动的高级进程管理功能；</li>
+<li>可以工作于不同的 uid/gid/chroot 环境下，并监听不同的端口和使用不同的 php.ini 配置文件（可取代 safe_mode 的设置）；</li>
+<li>stdout 和 stderr 日志记录;</li>
+<li>在发生意外情况的时候能够重新启动并缓存被破坏的 opcode;</li>
+<li>文件上传优化支持;</li>
+<li>“慢日志” – 记录脚本（不仅记录文件名，还记录 PHP backtrace 信息，可以使用 ptrace或者类似工具读取和分析远程进程的运行数据）运行所导致的异常缓慢;</li>
+<li>fastcgi_finish_request() – 特殊功能：用于在请求完成和刷新数据后，继续在后台执行耗时的工作（录入视频转换、统计处理等）；</li>
+<li>动态／静态子进程产生；</li>
+<li>基本 SAPI 运行状态信息（类似Apache的 mod_status）；</li>
+<li>基于 php.ini 的配置文件。</li>
+</ul>
+<p>由前面的phpStudy我们可以看到，运行php-cgi.exe(在Mac/Linux上是php-cgi)时，只有一个进程，当网站并发数大时，这个进程很容易就“挂掉”，挂掉就再也无法处理nginx的请求了。而php-fpm是一个进程管理器，启动它时，它除了有一个“主进程(master)”外，还会创建很多“子进程”，如下图：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/b5a89c.jpeg"></p>
+<p>这些子进程，才是真正的“遵循通用网关接口的php解释器”，而主进程只不过是把请求分配给这些子进程而已，所以php-fpm才叫“php fastCGI进程管理器”，当网站并发数大时，主进程会不断把请求分配给这些子进程，从而可以同时处理高并发而不“挂掉”。</p>
+<p>另外，子进程的多少，主进程还会“自动分配”，比如并发数大时，主进程会多创建一些子进程，用于同时处理更多的请求，而当并发数小时，则会自动关闭一些进程，从而“减少这些子进程对服务器内存的占用”，当然这个取决于php-fpm配置的进程管理方式(static方式不会自动)。</p>
+<p><strong>注意：</strong>网上很多人说，php-fpm是用于管理php-cgi的，这个说法对也不对，说他对，是因为在php5.4以前确实是这样的，但php5.4以后，php-fpm已被php官方收编，本身已经自带了解析php的功能，不只是做进程管理，也不再依赖php-cgi来解析php了。</p>
+<h3 id="php-fpm管理进程的三种方式"><a href="#php-fpm管理进程的三种方式" class="headerlink" title="php-fpm管理进程的三种方式"></a>php-fpm管理进程的三种方式</h3><p>php-fpm的进程管理方式有：</p>
+<ul>
+<li>static：静态方式，即子进程数是固定的，不会随着并发数的多少而自动调整子进程数，有两个缺点，1、当并发数少时，如果子进程太多会浪费内存，2、当并发数大时也不会自动增加子进程，比如“死板”，我们一般不会用这种方式。</li>
+<li>dynamic：动态分配，当空闲时，会自动缩小到最少子进程数(通过pm.min_spare_servers指定)，当并发数大时，会按需求增加子进程数，当然这个增加并不是无止境的，而是有最大子进程数的(通过pm.max_children指定，另外也有空闲时的最大子进程数，通过pm.max_spare_servers指定)，一般我们都采用这种进程管理方式。</li>
+<li>ondemand：启动php-fpm时，只有主进程，没有子进程，当有请求过来时，才会创建子进程，并发数越多创建的子进程数就越多，但有个极限值(由pm.max_children指定)，空闲的进程会在pm.process_idle_timeout秒内被关闭，这种方式无法及时的“响应并处理”nginx的请求，虽然这会让php-fpm在空闲时占用内存最小，但没有必要，因为服务器不缺这点内存，这种方式一般也不会使用。</li>
+</ul>
+<h3 id="php-fpm平滑重启原理"><a href="#php-fpm平滑重启原理" class="headerlink" title="php-fpm平滑重启原理"></a>php-fpm平滑重启原理</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">kill -SIGUSR2 主进程id</span><br></pre></td></tr></table></figure>
+
+<p>因为php-fpm本身并没有类似nginx的<code>reload</code>之类的命令，你用<code>man php-fpm</code>也能看出来，确实没有，如果你有在网上看到过<code>php-fpm reload</code>或<code>service php-fpm reload</code>之类的命令或者你使用过，它本身并不是<code>php-fpm</code>，而是一个shell脚本而已，它所在的位置有在<code>/etc/init.d/php-fpm</code>，而这个<code>reload</code>的本质，其实就是给php-fpm主进程发送<code>-SIGUSR2</code>信号，而php-fpm规定了<code>-SIGUSR2</code>信号为平滑重启信号(参见<a href="https://www.jianshu.com/p/2ea78b789263">php-fpm信号，你造么？</a>)。</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/3f6876.jpg"></p>
+<p><strong>平滑重启步骤：</strong></p>
+<ul>
+<li>master通过给子进程发送SIGQUIT信号的方式，平滑关闭所有的子进程</li>
+<li>如果过一段时间，有些子进程还没退出，给子进程发送SIGTERM信号，强制关闭子进程</li>
+<li>如果还没关闭，给子进程发送SIGKILL信号，强制关闭</li>
+<li>等所有的子进程退出后，master重新启动</li>
+</ul>
+<div class="note default"><p>原文链接：<a href="https://www.xiebruce.top/606.html">CGI/FastCGI/php-cgi/php-fpm的区别</a></p>
+</div>]]></content>
+      <categories>
+        <category>PHP</category>
+      </categories>
+      <tags>
+        <tag>CGI</tag>
+        <tag>FastCGI</tag>
+        <tag>php-cgi</tag>
+        <tag>php-fpm</tag>
+      </tags>
+  </entry>
 </search>
