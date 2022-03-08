@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="背景为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。  如何限制每分钟访问 &#x2F;api&#x2F;books 接口不能超过 120 次 ？  我们先定义一个接口： 1234interface RateLimiter&amp;#123;    public function access();&amp;#125;  固定时间窗口算法固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="接口限流常用算法实践">
+<meta property="og:url" content="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="背景为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。  如何限制每分钟访问 &#x2F;api&#x2F;books 接口不能超过 120 次 ？  我们先定义一个接口： 1234interface RateLimiter&amp;#123;    public function access();&amp;#125;  固定时间窗口算法固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/sliding_window1.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/sliding_window2.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/leaky_bucket.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/token_bucket_1.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/token_bucket.png">
+<meta property="article:published_time" content="2020-10-19T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.284Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="Api">
+<meta property="article:tag" content="rate-limiter">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/","path":"PHP/api-rate-limiting-algorithm-practices/","title":"接口限流常用算法实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>接口限流常用算法实践 | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BA%E5%AE%9A%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">固定时间窗口算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.1.</span> <span class="nav-text">PHP实现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">Lua实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95"><span class="nav-number">3.</span> <span class="nav-text">滑动时间窗口算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%AE%9E%E7%8E%B0v1"><span class="nav-number">3.1.</span> <span class="nav-text">PHP实现v1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%AE%9E%E7%8E%B0v2"><span class="nav-number">3.2.</span> <span class="nav-text">PHP实现v2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E5%AE%9E%E7%8E%B0v2"><span class="nav-number">3.3.</span> <span class="nav-text">Lua实现v2</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">漏桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%AE%9E%E7%8E%B0v3"><span class="nav-number">4.1.</span> <span class="nav-text">PHP实现v3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E5%AE%9E%E7%8E%B0v3"><span class="nav-number">4.2.</span> <span class="nav-text">Lua实现v3</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="nav-number">5.</span> <span class="nav-text">令牌桶算法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PHP%E5%AE%9E%E7%8E%B0v4"><span class="nav-number">5.1.</span> <span class="nav-text">PHP实现v4</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lua%E5%AE%9E%E7%8E%B0v4"><span class="nav-number">5.2.</span> <span class="nav-text">Lua实现v4</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="接口限流常用算法实践 | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          接口限流常用算法实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-10-20 00:00:00" itemprop="dateCreated datePublished" datetime="2020-10-20T00:00:00+08:00">2020-10-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/PHP/api-rate-limiting-algorithm-practices/" class="post-meta-item leancloud_visitors" data-flag-title="接口限流常用算法实践" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。</p>
+<ul>
+<li>如何限制每分钟访问 <code>/api/books</code> 接口不能超过 120 次 ？</li>
+</ul>
+<p>我们先定义一个接口：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">RateLimiter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="固定时间窗口算法"><a href="#固定时间窗口算法" class="headerlink" title="固定时间窗口算法"></a>固定时间窗口算法</h2><p>固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。</p>
+<p>固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png"></p>
+<p>举个例子，如果 A 用户访问接口的时间分布如下：</p>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>访问次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00:00 ~ 00:30</td>
+<td>20</td>
+</tr>
+<tr>
+<td>00:30 ~ 01:00</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:00 ~ 01:30</td>
+<td>100</td>
+</tr>
+<tr>
+<td>01:30 ~ 02:00</td>
+<td>20</td>
+</tr>
+</tbody></table>
+<p>显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 <code>00:30 ~ 01:30</code> 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。</p>
+<span id="more"></span>
+
+<h3 id="PHP实现"><a href="#PHP实现" class="headerlink" title="PHP实现"></a>PHP实现</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FixedWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$prefix</span> = <span class="string">&quot;ratelimiter:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$key</span>    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$window</span> = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$limit</span>  = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">int</span> <span class="variable">$window</span>, <span class="keyword">int</span> <span class="variable">$limit</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;key    = <span class="variable language_">$this</span>-&gt;prefix . <span class="variable">$key</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;window = <span class="variable">$window</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;limit  = <span class="variable">$limit</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$count</span> = <span class="title class_">Redis</span>::<span class="title function_ invoke__">get</span>(<span class="variable language_">$this</span>-&gt;key);</span><br><span class="line">        <span class="comment">//首次访问</span></span><br><span class="line">        <span class="keyword">if</span> (!<span class="variable">$count</span>) &#123;</span><br><span class="line">            <span class="title class_">Redis</span>::<span class="title function_ invoke__">pipeline</span>(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$pipe</span></span>) </span>&#123;</span><br><span class="line">                <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">incr</span>(<span class="variable language_">$this</span>-&gt;key);</span><br><span class="line">                <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">expire</span>(<span class="variable language_">$this</span>-&gt;key, <span class="variable language_">$this</span>-&gt;window);</span><br><span class="line">            &#125;);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//判断计数</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$count</span> &gt;= <span class="variable language_">$this</span>-&gt;limit) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="title class_">Redis</span>::<span class="title function_ invoke__">incr</span>(<span class="variable language_">$this</span>-&gt;key);</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>调用：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$rateLimiter</span> = <span class="keyword">new</span> <span class="title class_">FixedWindowRateLimiter</span>(<span class="string">&quot;api:books&quot;</span>, <span class="number">60</span>, <span class="number">120</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable">$rateLimiter</span>-&gt;<span class="title function_ invoke__">access</span>()) &#123;</span><br><span class="line">    <span class="title function_ invoke__">abort</span>(<span class="number">404</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现"><a href="#Lua实现" class="headerlink" title="Lua实现"></a>Lua实现</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--- 资源唯一标识</span></span><br><span class="line"><span class="keyword">local</span> key = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="comment">--- 时间窗最大并发数</span></span><br><span class="line"><span class="keyword">local</span> max_window_concurrency = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])  </span><br><span class="line"><span class="comment">--- 时间窗</span></span><br><span class="line"><span class="keyword">local</span> window = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])   </span><br><span class="line"><span class="comment">--- 时间窗内当前并发数</span></span><br><span class="line"><span class="keyword">local</span> curr_window_concurrency = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;get&#x27;</span>, key) <span class="keyword">or</span> <span class="number">0</span>)  </span><br><span class="line"><span class="keyword">if</span> current + <span class="number">1</span> &gt; limit <span class="keyword">then</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    redis.call(<span class="string">&quot;INCRBY&quot;</span>, key,<span class="number">1</span>)    </span><br><span class="line">    <span class="keyword">if</span> window &gt; <span class="number">-1</span> <span class="keyword">then</span></span><br><span class="line">        redis.call(<span class="string">&quot;expire&quot;</span>, key,window)    </span><br><span class="line">    <span class="keyword">end</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="滑动时间窗口算法"><a href="#滑动时间窗口算法" class="headerlink" title="滑动时间窗口算法"></a>滑动时间窗口算法</h2><p>固定时间窗口算法的问题是统计区间太大，限流不够精确，而且在第二个统计区间 <code>01:00 ~ 02:00</code> 时没有考虑与前一个统计区间的关系与影响（第一个区间后半段 + 第二个区间前半段也是一分钟）。</p>
+<p>为了解决上面我们提到的临界问题，我们试图把每个统计区间分为更小的统计区间，更精确的统计计数。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/sliding_window1.png"></p>
+<p>如上图所示，我们把每分钟分为三份，每个小格是20秒，对每个小格都会分别计数：</p>
+<table>
+<thead>
+<tr>
+<th>时间段</th>
+<th>访问次数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>00:00 ~ 00:20</td>
+<td>2</td>
+</tr>
+<tr>
+<td>00:20 ~ 00:40</td>
+<td>2</td>
+</tr>
+<tr>
+<td>00:40 ~ 01:00</td>
+<td>116</td>
+</tr>
+<tr>
+<td>01:00 ~ 01:20</td>
+<td>116</td>
+</tr>
+</tbody></table>
+<p>第一次统计，我们先看 <code>01:00 ~ 02:00</code>，计数 120 次，没有超过流量限制，然而在下一个 20 秒中，流量请求集中，在 <code>00:20 ~ 01:20</code> 这一分钟的统计范围内，流量超过了限制，则可以限制访问。</p>
+<p>计数器算法其实就是滑动窗口算法。只是它没有对时间窗口做进一步地划分，所以只有1格；由此可见，当滑动窗口的格子划分的越多，那么滑动窗口的滚动就越平滑，限流的统计就会越精确。</p>
+<h3 id="PHP实现v1"><a href="#PHP实现v1" class="headerlink" title="PHP实现v1"></a>PHP实现v1</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SlidingWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span>    <span class="variable">$remaining</span> = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$prefix</span>    = <span class="string">&quot;ratelimiter:sliding:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$key</span>       = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$window</span>    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$limit</span>     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$blocks</span>    = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $blocks   窗口分块数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">int</span> <span class="variable">$window</span>, <span class="keyword">int</span> <span class="variable">$limit</span>, <span class="keyword">int</span> <span class="variable">$blocks</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;key    = <span class="variable language_">$this</span>-&gt;prefix . <span class="variable">$key</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;window = <span class="variable">$window</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;limit  = <span class="variable">$limit</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;blocks = <span class="variable">$blocks</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$time</span>           = <span class="title function_ invoke__">time</span>();</span><br><span class="line">        <span class="variable">$lastBlockTime</span>  = <span class="variable">$time</span> - <span class="variable">$time</span> % (<span class="title function_ invoke__">ceil</span>(<span class="variable language_">$this</span>-&gt;window / <span class="variable language_">$this</span>-&gt;blocks));</span><br><span class="line">        <span class="variable">$firstBlockTime</span> = <span class="variable">$lastBlockTime</span> - <span class="variable language_">$this</span>-&gt;window;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//移除已经过期的 blocks</span></span><br><span class="line">        <span class="title class_">Redis</span>::<span class="title function_ invoke__">zremrangebylex</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;[0&#x27;</span>, <span class="string">&#x27;(&#x27;</span>.<span class="variable">$firstBlockTime</span>);</span><br><span class="line">        <span class="variable">$blocks</span>    = <span class="title class_">Redis</span>::<span class="title function_ invoke__">zrange</span>(<span class="variable language_">$this</span>-&gt;key, <span class="number">0</span>, -<span class="number">1</span>, <span class="string">&#x27;WITHSCORES&#x27;</span>);</span><br><span class="line">        <span class="variable">$scores</span>    = <span class="title function_ invoke__">array_sum</span>(<span class="variable">$blocks</span>);</span><br><span class="line">        <span class="variable">$remaining</span> = <span class="variable language_">$this</span>-&gt;limit - <span class="variable">$scores</span>;</span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$remaining</span> &lt;= <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="title class_">Redis</span>::<span class="title function_ invoke__">zincrby</span>(<span class="variable language_">$this</span>-&gt;key, <span class="number">1</span>, <span class="variable">$lastBlockTime</span>);</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;remaining = <span class="variable">$remaining</span> - <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>滑动窗口真的可以解决临界问题么？</strong></p>
+<p>我们再来看一个例子，在下面的例子中，流量主要集中于滑动窗口的 last block 和 窗口滑动后的 next block。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/sliding_window2.png"></p>
+<p>同样的请求情况，我们先把一个滑动窗口分为三格，窗口滑动前后都是符合限流要求的；然后我们把原来的每一格都分为两格，如图2，那么此时，窗口滑动前后的状况就不同了。</p>
+<p>由此可见，滑动窗口算法很难完全符合限流需求，除非我们把统计区间变得更小，更甚至细化到每个请求，随之带来的问题是我们需要消耗更多存储空间。</p>
+<h3 id="PHP实现v2"><a href="#PHP实现v2" class="headerlink" title="PHP实现v2"></a>PHP实现v2</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SlidingWindowRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span>    <span class="variable">$remaining</span> = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$prefix</span>    = <span class="string">&quot;ratelimiter:sliding:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$key</span>       = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$window</span>    = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$limit</span>     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$blocks</span>    = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $window   窗口时间（秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $limit    次数限制</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $blocks   窗口分块数量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">int</span> <span class="variable">$window</span>, <span class="keyword">int</span> <span class="variable">$limit</span>, <span class="keyword">int</span> <span class="variable">$blocks</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;key    = <span class="variable language_">$this</span>-&gt;prefix . <span class="variable">$key</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;window = <span class="variable">$window</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;limit  = <span class="variable">$limit</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;blocks = <span class="variable">$blocks</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable">$now</span> = <span class="title function_ invoke__">microtime</span>(<span class="literal">true</span>);</span><br><span class="line">        <span class="variable">$result</span> = <span class="title class_">Redis</span>::<span class="title function_ invoke__">pipeline</span>(<span class="function"><span class="keyword">function</span> (<span class="params"><span class="variable">$pipe</span></span>) <span class="keyword">use</span> (<span class="params"><span class="variable">$now</span></span>) </span>&#123;</span><br><span class="line">            <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">zrangebyscore</span>(<span class="variable language_">$this</span>-&gt;key, <span class="number">0</span>, <span class="variable">$now</span> - <span class="variable language_">$this</span>-&gt;window);</span><br><span class="line">            <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">zrange</span>(<span class="variable language_">$this</span>-&gt;key, <span class="number">0</span>, -<span class="number">1</span>);</span><br><span class="line">            <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">zadd</span>(<span class="variable language_">$this</span>-&gt;key, <span class="variable">$now</span>, <span class="variable">$now</span>);</span><br><span class="line">            <span class="variable">$pipe</span>-&gt;<span class="title function_ invoke__">expire</span>(<span class="variable language_">$this</span>-&gt;key, <span class="variable language_">$this</span>-&gt;window);</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// The second command inside the transaction was ZRANGE,</span></span><br><span class="line">        <span class="comment">// which returns a list of timestamps within the last hour.</span></span><br><span class="line">        <span class="variable">$timestamps</span> = <span class="variable">$result</span>[<span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">$this</span>-&gt;remaining = <span class="title function_ invoke__">max</span>(<span class="number">0</span>, <span class="variable language_">$this</span>-&gt;limit - <span class="title function_ invoke__">count</span>(<span class="variable">$timestamps</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="variable language_">$this</span>-&gt;remaining &gt; <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现v2"><a href="#Lua实现v2" class="headerlink" title="Lua实现v2"></a>Lua实现v2</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"><span class="keyword">local</span> window = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> limit = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> clearBefore = now - window</span><br><span class="line">redis.call(<span class="string">&#x27;ZREMRANGEBYSCORE&#x27;</span>, token, <span class="number">0</span>, clearBefore)</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> amount = redis.call(<span class="string">&#x27;ZCARD&#x27;</span>, token)</span><br><span class="line"><span class="keyword">if</span> amount &lt; limit <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;ZADD&#x27;</span>, token, now, now)</span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">redis.call(<span class="string">&#x27;EXPIRE&#x27;</span>, token, window)</span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> limit - amount</span><br></pre></td></tr></table></figure>
+
+<h2 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h2><p>漏桶算法（Leaky Bucket）是什么呢？大家都用过水龙头，打开龙头开关水就会流下滴到水桶里，而漏桶指的是水桶下面有个漏洞可以出水。如果水龙头开的特别大那么水流速就会过大，这样就可能导致水桶的水满了然后溢出。</p>
+<p>而我们讨论的漏桶算法的思路也很简单，水龙头打开后流下的水（请求）以一定的速率流到漏桶里（限流容器），漏桶以一定的速度出水（接口响应速率），如果水流速度过大（请求过多）就可能会导致漏桶的水溢出（访问频率超过接口响应速率），这时候我们需要关掉水龙头（拒绝请求），下面是经典的漏桶算法图示：</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/leaky_bucket.png"></p>
+<h3 id="PHP实现v3"><a href="#PHP实现v3" class="headerlink" title="PHP实现v3"></a>PHP实现v3</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LeakyBucketRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$prefix</span>   = <span class="string">&quot;ratelimiter:leaky:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$key</span>      = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$rate</span>     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$capacity</span> = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $rate     请求处理速率（个/秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int     $capacity 漏桶容量（最大队列长度）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">int</span> <span class="variable">$rate</span>, <span class="keyword">int</span> <span class="variable">$capacity</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;capacity = <span class="variable">$capacity</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;key      = <span class="variable language_">$this</span>-&gt;prefix . <span class="variable">$key</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;rate     = <span class="variable">$rate</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//当前时间</span></span><br><span class="line">        <span class="variable">$time</span> = <span class="title function_ invoke__">time</span>();</span><br><span class="line">        [<span class="variable">$lastTime</span>, <span class="variable">$tokensPend</span>] = <span class="title class_">Redis</span>::<span class="title function_ invoke__">hmget</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="string">&#x27;tokens_pend&#x27;</span>);</span><br><span class="line">        <span class="comment">//推算已经处理过的数量</span></span><br><span class="line">        <span class="variable">$tokensHandled</span> = (<span class="variable">$time</span> - <span class="variable">$lastTime</span>) * <span class="variable">$rate</span>;</span><br><span class="line">        <span class="comment">//当前剩余 tokens 数量（队列待处理）</span></span><br><span class="line">        <span class="variable">$tokensPend</span> = <span class="title function_ invoke__">max</span>(<span class="number">0</span>, <span class="variable">$tokensPend</span> - <span class="variable">$tokensHandled</span>);</span><br><span class="line">        <span class="comment">//更新上次请求的时间</span></span><br><span class="line">        <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="variable">$time</span>);</span><br><span class="line">        <span class="comment">//判断漏桶是否满了</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$tokensPend</span> &lt; <span class="variable language_">$this</span>-&gt;capacity) &#123;</span><br><span class="line">            <span class="comment">//可以加入队列等待处理</span></span><br><span class="line">            <span class="title class_">Redis</span>::<span class="title function_ invoke__">set</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;tokens_pend&#x27;</span>, <span class="variable">$tokensPend</span> + <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="comment">//队列已经满了</span></span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>备注：</strong></p>
+<ul>
+<li>代码中对 redis 的操作存在并发问题，代码仅供参考程序逻辑，使用 redis+lua 脚本才是更靠谱的方案。</li>
+<li>代码仅处理了漏桶满时溢出、漏桶不满时允许进入队列，但是实际请求的处理，还需要后续使用队列或延时处理保证漏桶流出的速率。</li>
+</ul>
+<p>调用：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$mobile</span>      = <span class="string">&quot;13888888888&quot;</span>;</span><br><span class="line"><span class="variable">$rateLimiter</span> = <span class="keyword">new</span> <span class="title class_">LeakyBucketRateLimiter</span>(<span class="title function_ invoke__">sprintf</span>(<span class="string">&quot;api:sms:send:%s&quot;</span>, <span class="variable">$mobile</span>), <span class="number">2</span>, <span class="number">5</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="variable">$rateLimiter</span>-&gt;<span class="title function_ invoke__">access</span>()) &#123;</span><br><span class="line">    <span class="title function_ invoke__">abort</span>(<span class="number">404</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="title class_">Queue</span>::<span class="title function_ invoke__">smsSend</span>(<span class="variable">$mobile</span>, <span class="variable">$sms</span>);</span><br></pre></td></tr></table></figure>
+
+<p>漏桶算法中必须保证请求处理速率是恒定的，不然限流就只能做到『漏桶满时溢出』的程度了。<br>因此，在我看来，这种限流处理后置的算法，可能更适合异步任务或者离线处理。</p>
+<h3 id="Lua实现v3"><a href="#Lua实现v3" class="headerlink" title="Lua实现v3"></a>Lua实现v3</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lastTime = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"><span class="keyword">local</span> tokensPend = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;tokens_pend&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">tokensPend = <span class="built_in">math</span>.<span class="built_in">max</span>(<span class="number">0</span>, tokensPend - (now - lastTime) * rate)</span><br><span class="line">redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>, now)</span><br><span class="line"><span class="keyword">if</span> tokensPend &lt; capacity <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;tokens_pend&#x27;</span>, tokensPend + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>漏桶算法有以下特点：</p>
+<ul>
+<li>漏桶容量固定，漏洞出水速率是固定的（请求处理速度固定）</li>
+<li>流量进入漏桶的速率是没有限制的（但不会立即处理，需要排队等待经过漏洞）</li>
+<li>桶满了以后会溢出（拒绝新的请求）</li>
+</ul>
+<p>漏桶算法限制的关键『请求处理速度』，即使遇到突发流量，我们的处理速度依然不变，因此会有一部分请求在排队，会等待延迟处理，但结果输出始终不会超出『请求处理速度』的限制。</p>
+<h2 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h2><p>令牌桶算法用来控制发送到网络上的数据的数目，并允许突发数据的发送。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/token_bucket_1.png"></p>
+<p>令牌桶算法和漏桶算法的方向刚好是相反的，我们有一个固定的桶，桶里存放着令牌（token）。一开始桶是空的，系统按固定的时间（rate）往桶里添加令牌，直到桶里的令牌数满，多余的请求会被丢弃。当请求来的时候，从桶里移除一个令牌，如果桶是空的则拒绝请求或者阻塞。</p>
+<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/token_bucket.png"></p>
+<h3 id="PHP实现v4"><a href="#PHP实现v4" class="headerlink" title="PHP实现v4"></a>PHP实现v4</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">tokenBucketRateLimiter</span> <span class="keyword">implements</span> <span class="title">RateLimiter</span> </span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$prefix</span>   = <span class="string">&quot;ratelimiter:tokenbucket:&quot;</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$key</span>      = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$rate</span>     = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> <span class="variable">$capacity</span> = <span class="literal">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> string  $key      计数KEY</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> integer $rate     产生令牌的速率（个/秒）</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> int     $capacity 漏桶容量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">__construct</span>(<span class="params"><span class="keyword">string</span> <span class="variable">$key</span>, <span class="keyword">int</span> <span class="variable">$rate</span>, <span class="keyword">int</span> <span class="variable">$capacity</span></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;capacity = <span class="variable">$capacity</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;key      = <span class="variable language_">$this</span>-&gt;prefix . <span class="variable">$key</span>;</span><br><span class="line">        <span class="variable language_">$this</span>-&gt;rate     = <span class="variable">$rate</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">//当前时间</span></span><br><span class="line">        <span class="variable">$time</span> = <span class="title function_ invoke__">time</span>();</span><br><span class="line">        [<span class="variable">$lastTime</span>, <span class="variable">$tokensLeft</span>] = <span class="title class_">Predis</span>::<span class="title function_ invoke__">hmget</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="string">&#x27;tokens_left&#x27;</span>);</span><br><span class="line">        <span class="comment">//推算新产生的token数量</span></span><br><span class="line">        <span class="variable">$tokensAppend</span> = (<span class="variable">$time</span> - <span class="variable">$lastTime</span>) * <span class="variable">$rate</span>;</span><br><span class="line">        <span class="comment">//当前剩余 tokens 数量</span></span><br><span class="line">        <span class="variable">$tokensLeft</span> = <span class="title function_ invoke__">min</span>(<span class="variable language_">$this</span>-&gt;capacity, <span class="variable">$tokensLeft</span> + <span class="variable">$tokensAppend</span>);</span><br><span class="line">        <span class="comment">//更新上次请求的时间</span></span><br><span class="line">        <span class="title class_">Predis</span>::<span class="title function_ invoke__">set</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;last_time&#x27;</span>, <span class="variable">$time</span>);</span><br><span class="line">        <span class="comment">//判断token是否足够</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable">$tokensLeft</span> &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="title class_">Predis</span>::<span class="title function_ invoke__">set</span>(<span class="variable language_">$this</span>-&gt;key, <span class="string">&#x27;tokens_left&#x27;</span>, <span class="variable">$tokensPend</span> - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="Lua实现v4"><a href="#Lua实现v4" class="headerlink" title="Lua实现v4"></a>Lua实现v4</h3><figure class="highlight lua"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">local</span> token = KEYS[<span class="number">1</span>]</span><br><span class="line"><span class="keyword">local</span> now = <span class="built_in">tonumber</span>(ARGV[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> rate = <span class="built_in">tonumber</span>(ARGV[<span class="number">2</span>])</span><br><span class="line"><span class="keyword">local</span> capacity = <span class="built_in">tonumber</span>(ARGV[<span class="number">3</span>])</span><br><span class="line"></span><br><span class="line"><span class="keyword">local</span> lastTime = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"><span class="keyword">local</span> tokensLeft = <span class="built_in">tonumber</span>(redis.call(<span class="string">&#x27;HGET&#x27;</span>, token, <span class="string">&#x27;tokens_left&#x27;</span>) <span class="keyword">or</span> <span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">tokensLeft = <span class="built_in">math</span>.<span class="built_in">min</span>(capacity, tokensLeft + (now - lastTime) * rate)</span><br><span class="line">redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;last_time&#x27;</span>, now)</span><br><span class="line"><span class="keyword">if</span> tokensLeft &gt;= <span class="number">1</span> <span class="keyword">then</span></span><br><span class="line">    redis.call(<span class="string">&#x27;HSET&#x27;</span>, token, <span class="string">&#x27;tokens_left&#x27;</span>, tokensLeft - <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">return</span> <span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>往令牌桶中以固定速率增加令牌</li>
+<li>令牌桶的容量有限，如果桶满了，新令牌溢出丢弃</li>
+<li>如果桶中可用令牌不足时，该请求会被限流</li>
+</ul>
+<p>令牌桶算法中流量的流入速率是不限制的，流出速率也是没有强制限制的（令牌消耗瞬间峰值是桶的大小），但是令牌的产生和积攒需要时间，因此既支持一定程度突发流量，又能满足总体限流的目标。</p>
+<p>对比<code>漏桶算法</code>和<code>令牌桶算法</code>，我们发现，<code>漏桶算法</code>能够强行限制数据的传输速率，而<code>令牌桶算法</code>在能够限制数据的平均传输速率外，还允许某种程度的突发传输。</p>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://rmingwang.com/api-rate-limiting-algorithm-practices.html">接口限流常用算法实践</a></p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/" title="接口限流常用算法实践">https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Api/" rel="tag"># Api</a>
+              <a href="/tags/rate-limiter/" rel="tag"># rate-limiter</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Redis/redis-pipeline/" rel="prev" title="Redis Pipeline">
+                  <i class="fa fa-chevron-left"></i> Redis Pipeline
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/WSL/WSL2+Docker+Laradock/" rel="next" title="WSL2 + Docker + Laradock 配置">
+                  WSL2 + Docker + Laradock 配置 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

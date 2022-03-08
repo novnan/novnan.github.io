@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="快捷键控制光标位置 ctrl + m 将光标定位到文件中心 alt + j 多列模式进行选中,只会选择相同的单词 alt + shift + j 取消多列模式 home, end 移动到行首或行末 ctrl + shift + m 匹配括号的位置，会将光标移动到对应正括号和反括号位置 ctrl + [ 或 ] 具有相似功能 ctrl + shift + [ 或 ] 可已选中对应的括号区域 ctrl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHPStorm 实用的快捷键">
+<meta property="og:url" content="https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="快捷键控制光标位置 ctrl + m 将光标定位到文件中心 alt + j 多列模式进行选中,只会选择相同的单词 alt + shift + j 取消多列模式 home, end 移动到行首或行末 ctrl + shift + m 匹配括号的位置，会将光标移动到对应正括号和反括号位置 ctrl + [ 或 ] 具有相似功能 ctrl + shift + [ 或 ] 可已选中对应的括号区域 ctrl">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivscil9ydj20sg0ljmz8.png">
+<meta property="og:image" content="https://novnan.github.io/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivsdsl1tqj20sg0lhmzp.png">
+<meta property="article:published_time" content="2017-08-24T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.295Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="PhpStorm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivscil9ydj20sg0ljmz8.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/","path":"PhpStorm/phpstorm-useful-shortcuts/","title":"PHPStorm 实用的快捷键"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>PHPStorm 实用的快捷键 | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="nav-number">1.</span> <span class="nav-text">快捷键</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8E%A7%E5%88%B6%E5%85%89%E6%A0%87%E4%BD%8D%E7%BD%AE"><span class="nav-number">1.1.</span> <span class="nav-text">控制光标位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E8%BE%91%E6%96%87%E6%A1%A3"><span class="nav-number">1.2.</span> <span class="nav-text">编辑文档</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4"><span class="nav-number">1.2.1.</span> <span class="nav-text">删除</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6"><span class="nav-number">1.2.2.</span> <span class="nav-text">复制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E7%A7%BB%E5%8A%A8"><span class="nav-number">1.2.3.</span> <span class="nav-text">选择移动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8E%A7%E5%88%B6"><span class="nav-number">1.2.4.</span> <span class="nav-text">文件控制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E4%B8%8E%E6%9F%A5%E6%89%BE"><span class="nav-number">1.2.5.</span> <span class="nav-text">设置与查找</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E6%A0%87%E7%AD%BE"><span class="nav-number">1.2.6.</span> <span class="nav-text">设置标签</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E6%B3%A8%E9%87%8A"><span class="nav-number">1.2.7.</span> <span class="nav-text">添加注释</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E7%BC%96%E8%BE%91%E5%8A%9F%E8%83%BD"><span class="nav-number">1.2.8.</span> <span class="nav-text">高级编辑功能</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E7%AA%97%E5%8F%A3%E5%88%87%E6%8D%A2"><span class="nav-number">1.3.</span> <span class="nav-text">工作窗口切换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E6%A0%91%E5%92%8C%E6%96%87%E4%BB%B6%E4%B9%8B%E9%97%B4%E7%9A%84%E5%88%87%E6%8D%A2"><span class="nav-number">1.3.1.</span> <span class="nav-text">项目树和文件之间的切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B7%A5%E4%BD%9C%E7%AA%97%E5%8F%A3%E5%88%87%E6%8D%A2-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">工作窗口切换</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9D%82%E9%A1%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">杂项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">2.</span> <span class="nav-text">其他</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%AD%98"><span class="nav-number">2.1.</span> <span class="nav-text">缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%A0%8F%E6%B6%88%E5%A4%B1"><span class="nav-number">2.2.</span> <span class="nav-text">工具栏消失</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B8%85%E9%99%A4%E6%97%A0%E7%94%A8%E7%9A%84-css-%E6%A0%B7%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">清除无用的 css 样式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%81%A2%E5%A4%8D"><span class="nav-number">2.4.</span> <span class="nav-text">文件恢复</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%AF%B9%E9%BD%90"><span class="nav-number">2.5.</span> <span class="nav-text">文本对齐</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="PHPStorm 实用的快捷键 | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          PHPStorm 实用的快捷键
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-08-25 00:00:00" itemprop="dateCreated datePublished" datetime="2017-08-25T00:00:00+08:00">2017-08-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PhpStorm/" itemprop="url" rel="index"><span itemprop="name">PhpStorm</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/PhpStorm/phpstorm-useful-shortcuts/" class="post-meta-item leancloud_visitors" data-flag-title="PHPStorm 实用的快捷键" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="快捷键"><a href="#快捷键" class="headerlink" title="快捷键"></a>快捷键</h2><h3 id="控制光标位置"><a href="#控制光标位置" class="headerlink" title="控制光标位置"></a>控制光标位置</h3><ul>
+<li><code>ctrl + m</code> 将光标定位到文件中心</li>
+<li><code>alt + j</code> 多列模式进行选中,只会选择相同的单词</li>
+<li><code>alt + shift + j</code> 取消多列模式</li>
+<li><code>home, end</code> 移动到行首或行末</li>
+<li><code>ctrl + shift + m</code> 匹配括号的位置，会将光标移动到对应正括号和反括号位置</li>
+<li><code>ctrl + [ 或 ]</code> 具有相似功能</li>
+<li><code>ctrl + shift + [ 或 ]</code> 可已选中对应的括号区域</li>
+<li><code>ctrl + pageup</code> 将光标移动到页面顶头</li>
+<li><code>ctrl + pagedown</code> 将光标移动到页面底部</li>
+<li><code>ctrl + g</code> 输入:行号:列号快速定位文件位置</li>
+</ul>
+<h3 id="编辑文档"><a href="#编辑文档" class="headerlink" title="编辑文档"></a>编辑文档</h3><h4 id="删除"><a href="#删除" class="headerlink" title="删除"></a>删除</h4><ul>
+<li><code>ctrl + y</code> 删除一行</li>
+<li><code>ctrl + delete</code> 删除光标后内容</li>
+<li><code>ctrl + backspace</code> 删除光标前一个字的内容</li>
+<li><code>ctrl + enter</code> 在行首会在该行前创建新行，行末会在改行后创建新行</li>
+</ul>
+<h4 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h4><ul>
+<li><code>ctrl + d</code> 复制选中块，若没有则只是复制当前行</li>
+<li><code>ctrl + shift + v</code> 粘贴文档时可以选择行数，多选时按住 shift，也可以显示剪切板历史</li>
+</ul>
+<span id="more"></span>
+
+<h4 id="选择移动"><a href="#选择移动" class="headerlink" title="选择移动"></a>选择移动</h4><ul>
+<li><code>ctrl + w</code> 进行选择扩展，加 shift 反向操作扩展</li>
+<li><code>shift + ↑ 或 ↓</code> 向上或向下移动一行</li>
+<li><code>shift + home 或 end</code> 选择光标到行首或行末的内容</li>
+<li><code>pageup, pagedown</code> 向上或向下移动一页</li>
+<li><code>shift pageup, pagedown</code> 向上或向下选择一页</li>
+<li><code>ctrl + shift + [ 或 ]</code> 选择匹配括号的内容，注意使用时光标要放在括号前后才起作用</li>
+<li><code>shift + alt + ↑ 或 ↓</code> 将光标对应行向上或向下移动，也可以选中多行进行移动</li>
+<li><code>shift + ctrl + ↑ 或 ↓</code> 对于函数等内容，它是向上或向下移动整个函数</li>
+<li><code>ctrl + shift + l</code> 格式化代码，再加上 alt 可以格式化全局</li>
+<li><code>alt + shift + insert</code> 实现按照矩形格式来选择文本的功能</li>
+</ul>
+<h4 id="文件控制"><a href="#文件控制" class="headerlink" title="文件控制"></a>文件控制</h4><ul>
+<li><code>ctrl + b</code> 跳转到函数 ，或者按住 ctrl 点击函数也可实现该效果。</li>
+<li><code>ctrl + f12</code> 显示函数之间的结构关系</li>
+<li><code>alt + ↑ 或 ↓</code> 函数跳转的上下切换</li>
+<li><code>ctrl + alt + ← 或 →</code> 实现前进和返回，但是在 windows 中这两个快捷键被用来转换屏幕,所以建议自定义快捷键</li>
+<li><code>ctrl + alt + backspace</code> 也可实现返回的功能</li>
+<li><code>F2</code> 当出现规则检查错误时进行导航，加 shift 为反向导航，利用 ctrl+f1 查看错误原因，alt+enter 查看解决办法</li>
+<li><code>F6 和 F5</code> 移动和复制文件，在弹出框中写入路径即可</li>
+<li><code>ctrl + alt + shift + t</code> 在项目文件树中使用，会出现对文件移动、复制等操作</li>
+<li><code>shift + f6</code> 项目窗口中使用可以重命名文件，在编辑模式下没有作用</li>
+<li><code>alt + insert</code> 新建文件</li>
+<li><code>ctrl + shift + f</code> 在工程中查找内容</li>
+<li><code>ctrl + shift + U</code> 或者 edit | toggle case 修改字母大小写</li>
+</ul>
+<h4 id="设置与查找"><a href="#设置与查找" class="headerlink" title="设置与查找"></a>设置与查找</h4><ul>
+<li><code>ctrl + n</code> 全局查找类</li>
+<li><code>ctrl + f</code> 文件中查找,支持正则</li>
+<li><code>ctrl + shift + f</code> 支持在整个项目中查找,甚至是整个磁盘中</li>
+<li><code>ctrl + r</code> 文件替换,支持正则</li>
+<li><code>ctrl + shift + r</code> 支持在项目中进行批量替换</li>
+<li><code>shift + f6</code> 可以利用该功能实现项目中变量或文件的重命名</li>
+<li><code>ctrl + shift + n</code> 全局查找文件，你可以在查找时追加:行号:列号快速定位文件位置</li>
+<li><code>ctrl + shift + n</code> 使用该方法也可以查找目录，只需要在搜索关键字后加上&#x2F;的路径索引符即可</li>
+<li><code>ctrl + shift + a</code> 查找 PhpStorm 命令的名称，及快捷键，可以迅速执行</li>
+<li><code>ctrl + q</code> 快速查找文档帮助在阅读函数时非常有用</li>
+<li><code>ctrl + alt + t</code> 利用此实现环绕</li>
+</ul>
+<h4 id="设置标签"><a href="#设置标签" class="headerlink" title="设置标签"></a>设置标签</h4><p><code>shift + f11, f11</code> 设置和清除标签,利用标签来进行文件的修改</p>
+<h4 id="添加注释"><a href="#添加注释" class="headerlink" title="添加注释"></a>添加注释</h4><ul>
+<li><code>ctrl + /</code> 添加单行注释</li>
+<li><code>ctrl + shift +\</code> 添加多行注释</li>
+</ul>
+<div class="note success"><p>注释模式会随着使用语言自动变化</p>
+</div>
+
+<h4 id="高级编辑功能"><a href="#高级编辑功能" class="headerlink" title="高级编辑功能"></a>高级编辑功能</h4><ul>
+<li><code>alt + enter</code> 在编辑 php 时，若字符串为 HTML 片段，可以利用该功能实现片段代码编写</li>
+<li><code>alt + enter</code> 该命令在不同环境有多种操作非常重要</li>
+<li><code>ctrl + alt + m</code> 在编码时，可以将选择的块新建成函数</li>
+<li><code>shift + F6</code> 在修改函数或文件名的同时，引用该函数或文件的地方也会同时修改</li>
+<li><code>ctrl + alt + n</code> 当光标在函数变量附近时，使用该快捷键会将变量内容变成内联模式</li>
+</ul>
+<h3 id="工作窗口切换"><a href="#工作窗口切换" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h3><h4 id="项目树和文件之间的切换"><a href="#项目树和文件之间的切换" class="headerlink" title="项目树和文件之间的切换"></a>项目树和文件之间的切换</h4><ul>
+<li><code>alt + f1 + 1</code> 在全局查找到文件以后，利用该快捷键迅速定位在项目树中的的位置</li>
+<li><code>f4</code> 实现在查找到的文件和项目树之间进行切换</li>
+<li><code>alt + 左右方向键</code> 进行文件切换</li>
+</ul>
+<h4 id="工作窗口切换-1"><a href="#工作窗口切换-1" class="headerlink" title="工作窗口切换"></a>工作窗口切换</h4><ul>
+<li><code>ctrl + tab + 左右方向键</code> 切换所有工作选项</li>
+<li><code>alt + number</code> 例如 alt + 1 打开关闭工程</li>
+<li><code>alt + 1</code> 打开关闭工程文件夹，可以直接在项目树中输入字符进行查找，也可利用上下左右键进行展开</li>
+<li><code>alt + 6</code> 查看 todo 信息</li>
+<li><code>alt + 7</code> 打开函数结构显示</li>
+<li><code>ctrl + tab</code> 切换显示工具栏</li>
+<li><code>alt + f12</code> 快速打开控制台</li>
+<li><code>F12</code> 打开最近关闭的窗口</li>
+<li><code>shift + esc</code> 退出，esc 也有退出功能。</li>
+<li><code>ctrl + f4</code> 在非编辑窗口下会退出，在编辑窗口下会关闭当前窗口</li>
+<li><code>f4 和 shift + f4</code> 打开工程文件夹中所在位置的文件，在新窗口中打开</li>
+<li><code>ctrl + shift + e</code> 打开最近编辑的文件列表，ctrl + e 相似</li>
+<li><code>alt + home</code> 迅速回到顶层导航栏位置，利用上下左右箭头切换文件，这是可以利用上下左右键进行切换和展开</li>
+<li><code>f2</code> 导航到下一个错误</li>
+<li><code>shift + f2</code> 上一个错误</li>
+<li><code>alt + f12</code> 打开终端</li>
+<li><code>ctrl + shift + t</code> 在打开终端下创建新终端</li>
+<li><code>ctrl + shift + w</code> 在打开终端下关闭终端</li>
+</ul>
+<div class="note success"><p>拖动工作路径和文件到终端下会创建一个指向该路径的新终端</p>
+</div>
+
+<h4 id="杂项"><a href="#杂项" class="headerlink" title="杂项"></a>杂项</h4><ul>
+<li><code>ctrl + j</code> 查询当前文件支持的自定义模板</li>
+</ul>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><h3 id="缓存"><a href="#缓存" class="headerlink" title="缓存"></a>缓存</h3><p>PhpStorm 极其占用缓存，当电脑变慢时，利用 <code>file -&gt; invalidate caches/restart</code> 重启应用</p>
+<h3 id="工具栏消失"><a href="#工具栏消失" class="headerlink" title="工具栏消失"></a>工具栏消失</h3><p>进入 view 菜单选择 <code>tool bar</code> 和 <code>tool button</code> 即可</p>
+<h3 id="清除无用的-css-样式"><a href="#清除无用的-css-样式" class="headerlink" title="清除无用的 css 样式"></a>清除无用的 css 样式</h3><ol>
+<li><code>code -&gt; run inspection by name</code> 或者利用快捷键 <code>alt + ctrl + shift + i</code></li>
+<li>输入 <code>unused css</code></li>
+<li>选择删除无效的 css 样式</li>
+</ol>
+<h3 id="文件恢复"><a href="#文件恢复" class="headerlink" title="文件恢复"></a>文件恢复</h3><ol>
+<li>右键点击工程文件夹</li>
+<li>选择 <code>local history</code></li>
+<li>选择 <code>show history</code></li>
+<li>选中想要还原的状态，点击返回箭头即可</li>
+</ol>
+<h3 id="文本对齐"><a href="#文本对齐" class="headerlink" title="文本对齐"></a>文本对齐</h3><ol>
+<li>键值对对齐</li>
+</ol>
+<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivscil9ydj20sg0ljmz8.png"></p>
+<ol start="2">
+<li>变量申明对齐</li>
+</ol>
+<p><img src="/images/PhpStorm/phpstorm-useful-shortcuts/bd9f206bgy1fivsdsl1tqj20sg0lhmzp.png"></p>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000010630844">phpstorm 使用指南</a></p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/" title="PHPStorm 实用的快捷键">https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/PhpStorm/" rel="tag"># PhpStorm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Linux/CentOS-7-1-switch-in-command-line-mode-and-desktop-mode/" rel="prev" title="CentOS 7.1 切换命令行模式与桌面模式">
+                  <i class="fa fa-chevron-left"></i> CentOS 7.1 切换命令行模式与桌面模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/PHP/php-single-entry-mode/" rel="next" title="PHP 单一入口模式">
+                  PHP 单一入口模式 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/PhpStorm/phpstorm-useful-shortcuts/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

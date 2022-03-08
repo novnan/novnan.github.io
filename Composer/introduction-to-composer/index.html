@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="composer 配置项 具体的每个配置项细节请参考  Composer 官网  配置列表   ID 配置项 说明    1 name 包的名称，它包括供应商名称和项目名称，使用 &#x2F; 分隔。   2 description 包描述   3 version 版本   4 type 安装类型   5 keywords 关键字   6 homepage 项目主页   7 time 版本发布时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你生产环境的 Composer 是这样吗？">
+<meta property="og:url" content="https://novnan.github.io/Composer/introduction-to-composer/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="composer 配置项 具体的每个配置项细节请参考  Composer 官网  配置列表   ID 配置项 说明    1 name 包的名称，它包括供应商名称和项目名称，使用 &#x2F; 分隔。   2 description 包描述   3 version 版本   4 type 安装类型   5 keywords 关键字   6 homepage 项目主页   7 time 版本发布时间">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/Composer/introduction-to-composer/pTpMMsHsDK.png">
+<meta property="og:image" content="https://novnan.github.io/images/Composer/introduction-to-composer/1czjx90v61.png">
+<meta property="article:published_time" content="2019-06-11T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.258Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="Composer">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/Composer/introduction-to-composer/pTpMMsHsDK.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/Composer/introduction-to-composer/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/Composer/introduction-to-composer/","path":"Composer/introduction-to-composer/","title":"你生产环境的 Composer 是这样吗？"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>你生产环境的 Composer 是这样吗？ | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#composer-%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="nav-number">1.</span> <span class="nav-text">composer 配置项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%88%97%E8%A1%A8"><span class="nav-number">1.1.</span> <span class="nav-text">配置列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E7%A7%8D%E9%85%8D%E7%BD%AE%E8%AF%A6%E7%BB%86%E8%AF%B4%E6%98%8E"><span class="nav-number">1.2.</span> <span class="nav-text">开发种配置详细说明</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#11-require"><span class="nav-number">1.2.1.</span> <span class="nav-text">11. require</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#12-require-dev"><span class="nav-number">1.2.2.</span> <span class="nav-text">12. require-dev</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#22-scripts"><span class="nav-number">1.2.3.</span> <span class="nav-text">22. scripts</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#15-autoload"><span class="nav-number">1.2.4.</span> <span class="nav-text">15 autoload</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#prs-4"><span class="nav-number">1.2.4.1.</span> <span class="nav-text">prs-4</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#prs-0"><span class="nav-number">1.2.4.2.</span> <span class="nav-text">prs-0</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#classmap"><span class="nav-number">1.2.4.3.</span> <span class="nav-text">classmap</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#file"><span class="nav-number">1.2.4.4.</span> <span class="nav-text">file</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">命令篇</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#composer-install"><span class="nav-number">2.1.</span> <span class="nav-text">composer install</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#composer-update"><span class="nav-number">2.2.</span> <span class="nav-text">composer update</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#composer-dump-autoload"><span class="nav-number">2.3.</span> <span class="nav-text">composer dump-autoload</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Composer/introduction-to-composer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="你生产环境的 Composer 是这样吗？ | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          你生产环境的 Composer 是这样吗？
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-06-12 00:00:00" itemprop="dateCreated datePublished" datetime="2019-06-12T00:00:00+08:00">2019-06-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Composer/" itemprop="url" rel="index"><span itemprop="name">Composer</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/Composer/introduction-to-composer/" class="post-meta-item leancloud_visitors" data-flag-title="你生产环境的 Composer 是这样吗？" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="composer-配置项"><a href="#composer-配置项" class="headerlink" title="composer 配置项"></a>composer 配置项</h2><blockquote>
+<p>具体的每个配置项细节请参考  <a target="_blank" rel="noopener" href="https://docs.phpcomposer.com/04-schema.html">Composer 官网</a></p>
+</blockquote>
+<h3 id="配置列表"><a href="#配置列表" class="headerlink" title="配置列表"></a>配置列表</h3><table>
+<thead>
+<tr>
+<th>ID</th>
+<th>配置项</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>name</code></td>
+<td>包的名称，它包括供应商名称和项目名称，使用 &#x2F; 分隔。</td>
+</tr>
+<tr>
+<td>2</td>
+<td><code>description</code></td>
+<td>包描述</td>
+</tr>
+<tr>
+<td>3</td>
+<td><code>version</code></td>
+<td>版本</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>type</code></td>
+<td>安装类型</td>
+</tr>
+<tr>
+<td>5</td>
+<td><code>keywords</code></td>
+<td>关键字</td>
+</tr>
+<tr>
+<td>6</td>
+<td><code>homepage</code></td>
+<td>项目主页</td>
+</tr>
+<tr>
+<td>7</td>
+<td><code>time</code></td>
+<td>版本发布时间</td>
+</tr>
+<tr>
+<td>8</td>
+<td><code>license</code></td>
+<td>许可协议</td>
+</tr>
+<tr>
+<td>9</td>
+<td><code>authors</code></td>
+<td>作者</td>
+</tr>
+<tr>
+<td>10</td>
+<td><code>support</code></td>
+<td>支持,获取项目支持的向相关信息对象。</td>
+</tr>
+<tr>
+<td>11</td>
+<td><code>require</code></td>
+<td>自动加载的包</td>
+</tr>
+<tr>
+<td>12</td>
+<td><code>require-dev</code></td>
+<td>在DEV下自动加载的包</td>
+</tr>
+<tr>
+<td>13</td>
+<td><code>conflict</code></td>
+<td>此列表中的包与当前包的这个版本冲突。它们将不允许同时被安装</td>
+</tr>
+<tr>
+<td>14</td>
+<td><code>suggest</code></td>
+<td>建议安装的包，它们增强或能够与当前包良好的工作。这些只是信息，并显示在依赖包安装完成之后，给你的用户一个建议，他们可以添加更多的包。</td>
+</tr>
+<tr>
+<td>15</td>
+<td><code>autoload</code></td>
+<td>自动加载,分别有四种加载机制 <code>psr-4</code> <code>psr-0</code> <code>classmap</code> <code>file</code></td>
+</tr>
+<tr>
+<td>16</td>
+<td><code>include-path</code></td>
+<td>保留传统,不建议使用</td>
+</tr>
+<tr>
+<td>17</td>
+<td><code>target-dir</code></td>
+<td>定义当前包安装的目标文件夹</td>
+</tr>
+<tr>
+<td>18</td>
+<td><code>minimum-stability</code></td>
+<td>安装包的时候通过稳定性过滤包的默认行为, <code>dev</code> <code>alpha</code> <code>beta</code> <code>RC</code> <code>stable</code> 可选</td>
+</tr>
+<tr>
+<td>19</td>
+<td><code>prefer-stable</code></td>
+<td>安装包的时候优先使用更稳定的包版本, <code>&quot;prefer-stable&quot;: true</code></td>
+</tr>
+<tr>
+<td>20</td>
+<td><code>repositories</code></td>
+<td>使用自定义的包资源库。默认情况下 composer 只使用 packagist 作为包的资源库。通过指定资源库，你可以从其他地方获取资源包。</td>
+</tr>
+<tr>
+<td>21</td>
+<td><code>config</code></td>
+<td>配置参数，eg：<code>process-timeout</code> <code>vendor-dir</code></td>
+</tr>
+<tr>
+<td>22</td>
+<td><code>scripts </code></td>
+<td>Composer 允许你在安装过程中的各个阶段挂接脚本。</td>
+</tr>
+<tr>
+<td>23</td>
+<td><code>extra</code></td>
+<td>任意的，供 <code>scripts</code> 使用的额外数据。</td>
+</tr>
+<tr>
+<td>24</td>
+<td><code>bin</code></td>
+<td>该属性用于标注一组应被视为二进制脚本的文件，他们会被软链接到（config 对象中的）bin-dir 属性所标注的目录，以供其他依赖包调用。</td>
+</tr>
+<tr>
+<td>25</td>
+<td><code>archive</code></td>
+<td>这些选项在创建包存档时使用。</td>
+</tr>
+</tbody></table>
+<span id="more"></span>
+
+<h3 id="开发种配置详细说明"><a href="#开发种配置详细说明" class="headerlink" title="开发种配置详细说明"></a>开发种配置详细说明</h3><h4 id="11-require"><a href="#11-require" class="headerlink" title="11. require"></a>11. <code>require</code></h4><table>
+<thead>
+<tr>
+<th>标识符</th>
+<th>含义</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>^</code></td>
+<td>安装的最新版本</td>
+<td><code>&quot;barryvdh/laravel-cors&quot;: &quot;^0.10.0&quot;</code> 安装laravel-cors最新版本</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>标识安装的最后一位区间版本</td>
+<td><code>&quot;barryvdh/laravel-cors&quot;: &quot;~0.10.0&quot;,</code> 安装laravel-cors <code>0.10.0-0.10.9</code></td>
+</tr>
+</tbody></table>
+<h4 id="12-require-dev"><a href="#12-require-dev" class="headerlink" title="12. require-dev"></a>12. <code>require-dev</code></h4><ol>
+<li><code>composer install</code> 会安装<code>require-dev</code>中的包,<code>require</code>中的包</li>
+<li><code>composer install --no-dev</code> 只会安装<code>require</code>中的包</li>
+</ol>
+<h4 id="22-scripts"><a href="#22-scripts" class="headerlink" title="22. scripts"></a>22. <code>scripts</code></h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    &quot;post-root-package-install&quot;: [</span><br><span class="line">        &quot;@php -r \&quot;file_exists(&#x27;.env&#x27;) || copy(&#x27;.env.example&#x27;, &#x27;.env&#x27;);\&quot;&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;post-create-project-cmd&quot;: [</span><br><span class="line">        &quot;@php artisan key:generate&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;post-autoload-dump&quot;: [</span><br><span class="line">        &quot;Illuminate\\Foundation\\ComposerScripts::postAutoloadDump&quot;,</span><br><span class="line">        &quot;@php artisan package:discover&quot;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>scripts</code> 是自定义执行SHELL命令，如上代码中，执行<code>post-root-package-install</code> 执行复制文件。</p>
+<h4 id="15-autoload"><a href="#15-autoload" class="headerlink" title="15 autoload"></a>15 <code>autoload</code></h4><blockquote>
+<p>PHP 自动加载文件,分别有四种加载机制 <code>psr-4</code> <code>psr-0</code> <code>classmap</code> <code>file</code></p>
+</blockquote>
+<blockquote>
+<p><strong>修改完 autoload 的内容之后要记得执行<code>composer dump-autoload</code> 来重新生成加载文件</strong></p>
+</blockquote>
+<h5 id="prs-4"><a href="#prs-4" class="headerlink" title="prs-4"></a><code>prs-4</code></h5><ol>
+<li>该目录下的 PHP 文件 采用 PSR-4 自动加载标准</li>
+<li><strong>Composer会将该结构下的文件映射关系写入 <code>autoload_classmap.php</code></strong></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;autoload&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;psr-4&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;App\\&quot;</span><span class="punctuation">:</span> <span class="string">&quot;app/&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    </span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="prs-0"><a href="#prs-0" class="headerlink" title="prs-0"></a><code>prs-0</code></h5><ol>
+<li>该目录下的 PHP 文件 采用 PSR-0 自动加载标准</li>
+<li><strong>Composer会将该结构下的文件映射关系写入 <code>autoload_namespaces.php</code></strong></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;autoload&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;psr-4&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Cx\\&quot;</span><span class="punctuation">:</span> <span class="string">&quot;prs0/&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">    </span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="classmap"><a href="#classmap" class="headerlink" title="classmap"></a><code>classmap</code></h5><ol>
+<li><strong>Composer 加载 <code>lib/</code> 目录下的所有文件,放入到 <code>autoload_classmap.php</code></strong></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;classmap&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;lib/&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="file"><a href="#file" class="headerlink" title="file"></a><code>file</code></h5><ol>
+<li><strong>Composer 加载 <code>src/test.php</code> 该文件,放入到 <code>autoload_files.php</code></strong></li>
+</ol>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span><span class="punctuation">[</span><span class="string">&quot;src/test.php&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+
+<hr>
+<h2 id="命令篇"><a href="#命令篇" class="headerlink" title="命令篇"></a>命令篇</h2><blockquote>
+<p>详细命名请参考 <a target="_blank" rel="noopener" href="https://docs.phpcomposer.com/03-cli.html">Composer 命令行</a></p>
+</blockquote>
+<h3 id="composer-install"><a href="#composer-install" class="headerlink" title="composer install"></a><code>composer install</code></h3><p>先安装<code>composer.lock</code> 文件中<code>packages</code>中的版本；即使<code>composer.json</code> 与 <code>composer.lock</code> 中版本不一致</p>
+<p>安装流程图</p>
+<p><img src="/images/Composer/introduction-to-composer/pTpMMsHsDK.png" alt="安装流程图"></p>
+<h3 id="composer-update"><a href="#composer-update" class="headerlink" title="composer update"></a><code>composer update</code></h3><p>先安装<code>composer.json</code>的版本，并且更新<code>composer.lock</code>中 <code>packages</code> 中的版本 </p>
+<p>安装流程图</p>
+<p><img src="/images/Composer/introduction-to-composer/1czjx90v61.png" alt="你生产环境的 composer 是这样吗？"></p>
+<h3 id="composer-dump-autoload"><a href="#composer-dump-autoload" class="headerlink" title="composer dump-autoload"></a><code>composer dump-autoload</code></h3><table>
+<thead>
+<tr>
+<th>CMD</th>
+<th>说明</th>
+<th>应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>composer dump-autoload</code></td>
+<td>打印自动加载索引,就是将 <code>autoload</code> 中的各项加载到本该指定的目录。</td>
+<td>开发环境 你更新了 <code>autoload</code> 中的各项,</td>
+</tr>
+<tr>
+<td><code>composer dump-autoload -o</code></td>
+<td>转换 PSR-0&#x2F;4 autoloading 到 classmap 获得更快的载入速度</td>
+<td>适用于生产环境</td>
+</tr>
+<tr>
+<td><code>composer dump-autoload -o --no-dev</code></td>
+<td>禁用 autoload-dev 规则</td>
+<td>适用于生产环境</td>
+</tr>
+<tr>
+<td><code>composer dump-autoload --classmap-authoritative</code></td>
+<td>只加载 ClassMap中的文件，必到磁盘文件系统进行任何检查</td>
+<td>适用于生产环境</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>因此生产请使用 <code>composer dump-autoload -o --no-dev --classmap-authoritative</code></strong></p>
+</blockquote>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://learnku.com/articles/26343">你生产环境的 Composer 是这样吗？</a></p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/Composer/introduction-to-composer/" title="你生产环境的 Composer 是这样吗？">https://novnan.github.io/Composer/introduction-to-composer/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Composer/" rel="tag"># Composer</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Composer/six-lesser-known-composer-commands-you-should-know/" rel="prev" title="六个鲜为人知的 Composer 命令">
+                  <i class="fa fa-chevron-left"></i> 六个鲜为人知的 Composer 命令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Composer/modify-the-project-dependency-to-the-new-mirror-address/" rel="next" title="Composer 修改项目依赖为新的镜像地址">
+                  Composer 修改项目依赖为新的镜像地址 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/Composer/introduction-to-composer/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

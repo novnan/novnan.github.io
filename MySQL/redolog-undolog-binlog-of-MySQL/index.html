@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="日志是mysql数据库的重要组成部分，记录着数据库运行期间各种状态信息。mysql日志主要包括错误日志、查询日志、慢查询日志、事务日志、二进制日志几大类。作为开发，我们重点需要关注的是二进制日志(binlog)和事务日志(包括redo log和undo log)，本文接下来会详细介绍这三种日志。 binlogbinlog用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="必须了解的mysql三大日志-binlog、redo log和undo log">
+<meta property="og:url" content="https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="日志是mysql数据库的重要组成部分，记录着数据库运行期间各种状态信息。mysql日志主要包括错误日志、查询日志、慢查询日志、事务日志、二进制日志几大类。作为开发，我们重点需要关注的是二进制日志(binlog)和事务日志(包括redo log和undo log)，本文接下来会详细介绍这三种日志。 binlogbinlog用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/redolog-undolog-binlog-of-MySQL/KjiB4LpnPY.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/redolog-undolog-binlog-of-MySQL/TDIN69GdQ6.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/redolog-undolog-binlog-of-MySQL/M1bGsdyr8a.png">
+<meta property="article:published_time" content="2020-12-17T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.279Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/MySQL/redolog-undolog-binlog-of-MySQL/KjiB4LpnPY.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/","path":"MySQL/redolog-undolog-binlog-of-MySQL/","title":"必须了解的mysql三大日志-binlog、redo log和undo log"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>必须了解的mysql三大日志-binlog、redo log和undo log | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#binlog"><span class="nav-number">1.</span> <span class="nav-text">binlog</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.1.</span> <span class="nav-text">binlog使用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog%E5%88%B7%E7%9B%98%E6%97%B6%E6%9C%BA"><span class="nav-number">1.2.</span> <span class="nav-text">binlog刷盘时机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#binlog%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">binlog日志格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redo-log"><span class="nav-number">2.</span> <span class="nav-text">redo log</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81redo-log"><span class="nav-number">2.1.</span> <span class="nav-text">为什么需要redo log</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="nav-number">2.2.</span> <span class="nav-text">redo log基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log%E8%AE%B0%E5%BD%95%E5%BD%A2%E5%BC%8F"><span class="nav-number">2.3.</span> <span class="nav-text">redo log记录形式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redo-log%E4%B8%8Ebinlog%E5%8C%BA%E5%88%AB"><span class="nav-number">2.4.</span> <span class="nav-text">redo log与binlog区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#undo-log"><span class="nav-number">3.</span> <span class="nav-text">undo log</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%82%E8%80%83"><span class="nav-number">4.</span> <span class="nav-text">参考</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="必须了解的mysql三大日志-binlog、redo log和undo log | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          必须了解的mysql三大日志-binlog、redo log和undo log
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-18 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-18T00:00:00+08:00">2020-12-18</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/MySQL/redolog-undolog-binlog-of-MySQL/" class="post-meta-item leancloud_visitors" data-flag-title="必须了解的mysql三大日志-binlog、redo log和undo log" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>日志是<code>mysql</code>数据库的重要组成部分，记录着数据库运行期间各种状态信息。<code>mysql</code>日志主要包括错误日志、查询日志、慢查询日志、事务日志、二进制日志几大类。作为开发，我们重点需要关注的是二进制日志(<code>binlog</code>)和事务日志(包括<code>redo log</code>和<code>undo log</code>)，本文接下来会详细介绍这三种日志。</p>
+<h2 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h2><p><code>binlog</code>用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。<code>binlog</code>是<code>mysql</code>的逻辑日志，并且由<code>Server</code>层进行记录，使用任何存储引擎的<code>mysql</code>数据库都会记录<code>binlog</code>日志。</p>
+<blockquote>
+<p>逻辑日志：<strong>可以简单理解为记录的就是sql语句</strong>。<br>物理日志：<strong>因为<code>mysql</code>数据最终是保存在数据页中的，物理日志记录的就是数据页变更</strong>。</p>
+</blockquote>
+<p><code>binlog</code>是通过追加的方式进行写入的，可以通过<code>max_binlog_size</code>参数设置每个<code>binlog</code>文件的大小，当文件大小达到给定值之后，会生成新的文件来保存日志。</p>
+<h3 id="binlog使用场景"><a href="#binlog使用场景" class="headerlink" title="binlog使用场景"></a>binlog使用场景</h3><p>在实际应用中，<code>binlog</code>的主要使用场景有两个，分别是<strong>主从复制</strong>和<strong>数据恢复</strong>。</p>
+<ol>
+<li><strong>主从复制</strong>：在<code>Master</code>端开启<code>binlog</code>，然后将<code>binlog</code>发送到各个<code>Slave</code>端，<code>Slave</code>端重放<code>binlog</code>从而达到主从数据一致。</li>
+<li><strong>数据恢复</strong>：通过使用<code>mysqlbinlog</code>工具来恢复数据。</li>
+</ol>
+<h3 id="binlog刷盘时机"><a href="#binlog刷盘时机" class="headerlink" title="binlog刷盘时机"></a>binlog刷盘时机</h3><p>对于<code>InnoDB</code>存储引擎而言，只有在事务提交时才会记录<code>biglog</code>，此时记录还在内存中，那么<code>biglog</code>是什么时候刷到磁盘中的呢？<code>mysql</code>通过<code>sync_binlog</code>参数控制<code>biglog</code>的刷盘时机，取值范围是<code>0-N</code>：</p>
+<ul>
+<li>0：不去强制要求，由系统自行判断何时写入磁盘；</li>
+<li>1：每次<code>commit</code>的时候都要将<code>binlog</code>写入磁盘；</li>
+<li>N：每N个事务，才会将<code>binlog</code>写入磁盘。</li>
+</ul>
+<p>从上面可以看出，<code>sync_binlog</code>最安全的是设置是<code>1</code>，这也是<code>MySQL 5.7.7</code>之后版本的默认值。但是设置一个大一些的值可以提升数据库性能，因此实际情况下也可以将值适当调大，牺牲一定的一致性来获取更好的性能。</p>
+<span id="more"></span>
+
+<h3 id="binlog日志格式"><a href="#binlog日志格式" class="headerlink" title="binlog日志格式"></a>binlog日志格式</h3><p><code>binlog</code>日志有三种格式，分别为<code>STATMENT</code>、<code>ROW</code>和<code>MIXED</code>。</p>
+<blockquote>
+<p>在 <code>MySQL 5.7.7</code>之前，默认的格式是<code>STATEMENT</code>，<code>MySQL 5.7.7</code>之后，默认值是<code>ROW</code>。日志格式通过<code>binlog-format</code>指定。</p>
+</blockquote>
+<ul>
+<li><code>STATMENT</code><br>基于<code>SQL</code>语句的复制(<code>statement-based replication, SBR</code>)，每一条会修改数据的sql语句会记录到<code>binlog</code>中。<br>优点：不需要记录每一行的变化，减少了<code>binlog</code>日志量，节约了<code>IO</code>, 从而提高了性能；<br>缺点：在某些情况下会导致主从数据不一致，比如执行<code>sysdate()</code>、<code>slepp()</code>等。</li>
+<li><code>ROW</code><br>基于行的复制(<code>row-based replication, RBR</code>)，不记录每条sql语句的上下文信息，仅需记录哪条数据被修改了。<br>优点：不会出现某些特定情况下的存储过程、或function、或trigger的调用和触发无法被正确复制的问题；<br>缺点：会产生大量的日志，尤其是<code>alter table</code>的时候会让日志暴涨</li>
+<li><code>MIXED</code><br>基于<code>STATMENT</code>和<code>ROW</code>两种模式的混合复制(<code>mixed-based replication, MBR</code>)，一般的复制使用<code>STATEMENT</code>模式保存<code>binlog</code>，对于<code>STATEMENT</code>模式无法复制的操作使用<code>ROW</code>模式保存<code>binlog</code></li>
+</ul>
+<h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><h3 id="为什么需要redo-log"><a href="#为什么需要redo-log" class="headerlink" title="为什么需要redo log"></a>为什么需要redo log</h3><p>我们都知道，事务的四大特性里面有一个是<strong>持久性</strong>，具体来说就是<strong>只要事务提交成功，那么对数据库做的修改就被永久保存下来了，不可能因为任何原因再回到原来的状态</strong>。那么<code>mysql</code>是如何保证一致性的呢？最简单的做法是在每次事务提交的时候，将该事务涉及修改的数据页全部刷新到磁盘中。但是这么做会有严重的性能问题，主要体现在两个方面：</p>
+<ol>
+<li>因为<code>Innodb</code>是以<code>页</code>为单位进行磁盘交互的，而一个事务很可能只修改一个数据页里面的几个字节，这个时候将完整的数据页刷到磁盘的话，太浪费资源了！</li>
+<li>一个事务可能涉及修改多个数据页，并且这些数据页在物理上并不连续，使用随机IO写入性能太差！</li>
+</ol>
+<p>因此<code>mysql</code>设计了<code>redo log</code>，<strong>具体来说就是只记录事务对数据页做了哪些修改</strong>，这样就能完美地解决性能问题了(相对而言文件更小并且是顺序IO)。</p>
+<h3 id="redo-log基本概念"><a href="#redo-log基本概念" class="headerlink" title="redo log基本概念"></a>redo log基本概念</h3><p><code>redo log</code>包括两部分：一个是内存中的日志缓冲(<code>redo log buffer</code>)，另一个是磁盘上的日志文件(<code>redo log file</code>)。<code>mysql</code>每执行一条<code>DML</code>语句，先将记录写入<code>redo log buffer</code>，后续某个时间点再一次性将多个操作记录写到<code>redo log file</code>。这种<strong>先写日志，再写磁盘</strong>的技术就是<code>MySQL</code>里经常说到的<code>WAL(Write-Ahead Logging)</code> 技术。</p>
+<p>在计算机操作系统中，用户空间(<code>user space</code>)下的缓冲区数据一般情况下是无法直接写入磁盘的，中间必须经过操作系统内核空间(<code>kernel space</code>)缓冲区(<code>OS Buffer</code>)。因此，<code>redo log buffer</code>写入<code>redo log file</code>实际上是先写入<code>OS Buffer</code>，然后再通过系统调用<code>fsync()</code>将其刷到<code>redo log file</code>中，过程如下：<br><img src="/images/MySQL/redolog-undolog-binlog-of-MySQL/KjiB4LpnPY.png"></p>
+<p><code>mysql</code>支持三种将<code>redo log buffer</code>写入<code>redo log file</code>的时机，可以通过<code>innodb_flush_log_at_trx_commit</code>参数配置，各参数值含义如下：</p>
+<table>
+<thead>
+<tr>
+<th>参数值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0（延迟写）</td>
+<td>事务提交时不会将<code>redo log buffer</code>中日志写入到<code>os buffer</code>，而是每秒写入<code>os buffer</code>并调用<code>fsync()</code>写入到<code>redo log file</code>中。也就是说设置为0时是(大约)每秒刷新写入到磁盘中的，当系统崩溃，会丢失1秒钟的数据。</td>
+</tr>
+<tr>
+<td>1（实时写，实时刷）</td>
+<td>事务每次提交都会将<code>redo log buffer</code>中的日志写入<code>os buffer</code>并调用<code>fsync()</code>刷到<code>redo log file</code>中。这种方式即使系统崩溃也不会丢失任何数据，但是因为每次提交都写入磁盘，IO的性能较差。</td>
+</tr>
+<tr>
+<td>2（实时写，延迟刷）</td>
+<td>每次提交都仅写入到<code>os buffer</code>，然后是每秒调用<code>fsync()</code>将<code>os buffer</code>中的日志写入到<code>redo log file</code>。</td>
+</tr>
+</tbody></table>
+<p><img src="/images/MySQL/redolog-undolog-binlog-of-MySQL/TDIN69GdQ6.png"></p>
+<h3 id="redo-log记录形式"><a href="#redo-log记录形式" class="headerlink" title="redo log记录形式"></a>redo log记录形式</h3><p>前面说过，<code>redo log</code>实际上记录数据页的变更，而这种变更记录是没必要全部保存，因此<code>redo log</code>实现上采用了大小固定，循环写入的方式，当写到结尾时，会回到开头循环写日志。如下图：<br><img src="/images/MySQL/redolog-undolog-binlog-of-MySQL/M1bGsdyr8a.png"><br>同时我们很容易得知，<strong>在innodb中，既有<code>redo log</code>需要刷盘，还有<code>数据页</code>也需要刷盘，<code>redo log</code>存在的意义主要就是降低对<code>数据页</code>刷盘的要求</strong>。在上图中，<code>write pos</code>表示<code>redo log</code>当前记录的<code>LSN</code>(逻辑序列号)位置，<code>check point</code>表示<strong>数据页更改记录</strong>刷盘后对应<code>redo log</code>所处的<code>LSN</code>(逻辑序列号)位置。<code>write pos</code>到<code>check point</code>之间的部分是<code>redo log</code>空着的部分，用于记录新的记录；<code>check point</code>到<code>write pos</code>之间是<code>redo log</code>待落盘的数据页更改记录。当<code>write pos</code>追上<code>check point</code>时，会先推动<code>check point</code>向前移动，空出位置再记录新的日志。</p>
+<p>启动<code>innodb</code>的时候，不管上次是正常关闭还是异常关闭，总是会进行恢复操作。因为<code>redo log</code>记录的是数据页的物理变化，因此恢复的时候速度比逻辑日志(如<code>binlog</code>)要快很多。<br>重启<code>innodb</code>时，首先会检查磁盘中数据页的<code>LSN</code>，如果数据页的<code>LSN</code>小于日志中的<code>LSN</code>，则会从<code>checkpoint</code>开始恢复。<br>还有一种情况，在宕机前正处于<code>checkpoint</code>的刷盘过程，且数据页的刷盘进度超过了日志页的刷盘进度，此时会出现数据页中记录的<code>LSN</code>大于日志中的<code>LSN</code>，这时超出日志进度的部分将不会重做，因为这本身就表示已经做过的事情，无需再重做。</p>
+<h3 id="redo-log与binlog区别"><a href="#redo-log与binlog区别" class="headerlink" title="redo log与binlog区别"></a>redo log与binlog区别</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>redo log</th>
+<th>binlog</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文件大小</td>
+<td><code>redo log</code>的大小是固定的。</td>
+<td><code>binlog</code>可通过配置参数<code>max_binlog_size</code>设置每个<code>binlog</code>文件的大小。</td>
+</tr>
+<tr>
+<td>实现方式</td>
+<td><code>redo log</code>是<code>InnoDB</code>引擎层实现的，并不是所有引擎都有。</td>
+<td><code>binlog</code>是<code>Server</code>层实现的，所有引擎都可以使用 <code>binlog</code>日志</td>
+</tr>
+<tr>
+<td>记录方式</td>
+<td>redo log 采用循环写的方式记录，当写到结尾时，会回到开头循环写日志。</td>
+<td>binlog 通过追加的方式记录，当文件大小大于给定值后，后续的日志会记录到新的文件上</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td><code>redo log</code>适用于崩溃恢复(crash-safe)</td>
+<td><code>binlog</code>适用于主从复制和数据恢复</td>
+</tr>
+</tbody></table>
+<p>由<code>binlog</code>和<code>redo log</code>的区别可知：<code>binlog</code>日志只用于归档，只依靠<code>binlog</code>是没有<code>crash-safe</code>能力的。但只有<code>redo log</code>也不行，因为<code>redo log</code>是<code>InnoDB</code>特有的，且日志上的记录落盘后会被覆盖掉。因此需要<code>binlog</code>和<code>redo log</code>二者同时记录，才能保证当数据库发生宕机重启时，数据不会丢失。</p>
+<h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><p>数据库事务四大特性中有一个是<strong>原子性</strong>，具体来说就是 <strong>原子性是指对数据库的一系列操作，要么全部成功，要么全部失败，不可能出现部分成功的情况</strong>。实际上，<strong>原子性</strong>底层就是通过<code>undo log</code>实现的。<code>undo log</code>主要记录了数据的逻辑变化，比如一条<code>INSERT</code>语句，对应一条<code>DELETE</code>的<code>undo log</code>，对于每个<code>UPDATE</code>语句，对应一条相反的<code>UPDATE</code>的<code>undo log</code>，这样在发生错误时，就能回滚到事务之前的数据状态。同时，<code>undo log</code>也是<code>MVCC</code>(多版本并发控制)实现的关键，这部分内容在<a target="_blank" rel="noopener" href="https://juejin.im/post/6855129007336521741">面试中的老大难-mysql事务和锁，一次性讲清楚！</a>中有介绍，不再赘述。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a target="_blank" rel="noopener" href="https://juejin.im/post/6844903794073960455">https://juejin.im/post/6844903794073960455</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html">https://www.cnblogs.com/f-ck-need-u/archive/2018/05/08/9010872.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ivy-zheng/p/11094528.html">https://www.cnblogs.com/ivy-zheng/p/11094528.html</a></li>
+<li><a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/592937">https://yq.aliyun.com/articles/592937</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/5af73b203f2a">https://www.jianshu.com/p/5af73b203f2a</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/20e10ed721d0">https://www.jianshu.com/p/20e10ed721d0</a></li>
+</ol>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6860252224930070536">必须了解的mysql三大日志-binlog、redo log和undo log</a></p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/" title="必须了解的mysql三大日志-binlog、redo log和undo log">https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/PHP/foreach_problems_caused_by_circular_references/" rel="prev" title="foreach ($data as &$item) 循环引用产生的问题">
+                  <i class="fa fa-chevron-left"></i> foreach ($data as &$item) 循环引用产生的问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/PHP/CGI_FastCGI_php-cgi_php-fpm/" rel="next" title="CGI/FastCGI/php-cgi/php-fpm的区别">
+                  CGI/FastCGI/php-cgi/php-fpm的区别 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

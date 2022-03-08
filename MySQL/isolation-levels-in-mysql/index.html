@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Versionmysql version 8.0.13   事务隔离级别概述mysql 中，InnoDB 所提供的事务符合 ACID 的要求，而事务通过事务日志中的 redo log 和 undo log 满足了原子性、一致性、持久性，事务还会通过锁机制满足隔离性，在 InnoDB 存储引擎中，有不同的隔离级别，它们有着不同的隔离性。 什么是事务的隔离级别？如果只是从概念上理解的话可能比较模糊，咱">
+<meta property="og:type" content="article">
+<meta property="og:title" content="事务隔离级别">
+<meta property="og:url" content="https://novnan.github.io/MySQL/isolation-levels-in-mysql/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="Versionmysql version 8.0.13   事务隔离级别概述mysql 中，InnoDB 所提供的事务符合 ACID 的要求，而事务通过事务日志中的 redo log 和 undo log 满足了原子性、一致性、持久性，事务还会通过锁机制满足隔离性，在 InnoDB 存储引擎中，有不同的隔离级别，它们有着不同的隔离性。 什么是事务的隔离级别？如果只是从概念上理解的话可能比较模糊，咱">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204162840.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204163421.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204163734.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204164108.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204164404.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204165028.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/02261710538155.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204170450.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204171329.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204171558.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204172455.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204173249.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204173507.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204173941.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204174532.png">
+<meta property="og:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204174835.png">
+<meta property="article:published_time" content="2020-12-02T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.277Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/MySQL/isolation-levels-in-mysql/20201204162840.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/MySQL/isolation-levels-in-mysql/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/MySQL/isolation-levels-in-mysql/","path":"MySQL/isolation-levels-in-mysql/","title":"事务隔离级别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>事务隔离级别 | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Version"><span class="nav-number">1.</span> <span class="nav-text">Version</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E6%A6%82%E8%BF%B0"><span class="nav-number">2.</span> <span class="nav-text">事务隔离级别概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E5%8F%AF%E9%87%8D%E8%AF%BB"><span class="nav-number">3.</span> <span class="nav-text">隔离级别：可重读</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E4%B8%B2%E8%A1%8C%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">隔离级别：串行化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E8%AF%BB%E5%B7%B2%E6%8F%90%E4%BA%A4"><span class="nav-number">5.</span> <span class="nav-text">隔离级别：读已提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%EF%BC%9A%E8%AF%BB%E6%9C%AA%E6%8F%90%E4%BA%A4"><span class="nav-number">6.</span> <span class="nav-text">隔离级别：读未提交</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%8F%E8%AF%BB%E3%80%81%E5%B9%BB%E8%AF%BB%E3%80%81%E4%B8%8D%E5%8F%AF%E9%87%8D%E8%AF%BB%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">7.</span> <span class="nav-text">脏读、幻读、不可重读的区别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E5%90%8C%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB%E6%89%80%E6%8B%A5%E6%9C%89%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-number">8.</span> <span class="nav-text">不同的隔离级别所拥有的问题</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/MySQL/isolation-levels-in-mysql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="事务隔离级别 | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          事务隔离级别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-12-03 00:00:00" itemprop="dateCreated datePublished" datetime="2020-12-03T00:00:00+08:00">2020-12-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/MySQL/" itemprop="url" rel="index"><span itemprop="name">MySQL</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/MySQL/isolation-levels-in-mysql/" class="post-meta-item leancloud_visitors" data-flag-title="事务隔离级别" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="Version"><a href="#Version" class="headerlink" title="Version"></a>Version</h2><div class="note info"><p>mysql version 8.0.13</p>
+</div>
+
+<h2 id="事务隔离级别概述"><a href="#事务隔离级别概述" class="headerlink" title="事务隔离级别概述"></a>事务隔离级别概述</h2><p>mysql 中，InnoDB 所提供的事务符合 ACID 的要求，而事务通过事务日志中的 redo log 和 undo log 满足了原子性、一致性、持久性，事务还会通过锁机制满足隔离性，在 InnoDB 存储引擎中，有不同的隔离级别，它们有着不同的隔离性。</p>
+<p>什么是事务的隔离级别？如果只是从概念上理解的话可能比较模糊，咱们直接看看不同隔离级别下的实际表现是什么样子的，再结合理论去理解，就会明了很多。首先，打开两个终端，同时连接到当前数据库，如下图所示，我们对两个回话进行编号，并且以颜色区分，1号会话使用黄色进行标识，2号会话使用红色进行标识。</p>
+<p>两个会话使用相同的数据库。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204162840.png"></p>
+<p>两个会话中同时各自开启一个事务。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204163421.png"></p>
+<p>由于下面的所有操作会在两个会话中来回切换，所以，为了方便描述，我们为每个操作的顺序进行编号，例如下图中，我们先在会话1的事务1中执行了更新操作，然后在事务1中执行了查询操作，最后又在会话2中的事务2中执行了查询操作，按照操作顺序，为各个操作进行了顺序编号。</p>
+<span id="more"></span>
+
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204163734.png"></p>
+<p>从上图可以看到，在事务1中显示的数据已经发生了改变，第2条数据对应的字符串已经变为test，事务2中显示的数据未发生改变，没错，你肯定会说，那是因为事务1还没有提交，所以，事务2中还无法看到被修改的数据，那么，我们将会话1中的事务提交试试看，看看事务1提交后，事务2中的数据会不会发生改变。</p>
+<p>那么，在事务提交之前，我们现在两个会话中再次查询一次，两个事务中的数据显示如下图中的操作1与操作2的显示结果。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204164108.png"></p>
+<p>然后我们执行上图中的第3步，将事务1中的修改操作进行提交，在事务2中再次查看t1表中的数据（第4步），经过查看发现，t1表中的第2条数据对应的字符串仍然没有发生改变，这种情况可能和我们一厢情愿想象的状况有些不同，在不了解事务的隔离级别之前，你可能会认为，当上图中的事务1提交以后，在事务2中再次查询同一张表的数据时，应该会看到事务1中的修改，但是实际上并没有，在会话2没有提交之前，从t1表中查询出的数据一直都是不变的，直到会话2提交以后，再次查询t1表的数据，才发现t1表的第2条数据对应的字符串已经发生了改变，出现这种现象，是因为 mysql 默认的隔离级别造成的，而不同的隔离级别会体现出不同的隔离效果，所以，事务的隔离级别，决定了各个事务之间的隔离性，我想，看到这里，你已经对事务的隔离性有了一个大概的了解，但是具体有几个隔离级别，每个隔离级别下有哪些特性，我们慢慢总结。</p>
+<p>此处，我们先列出innodb中事务的所有隔离级别，然后再逐个了解它们，事务的隔离级别一共有如下4种。</p>
+<p><strong>READ-UNCOMMITTED</strong> : 此隔离级别翻译为 “读未提交”。<br><strong>READ-COMMITTED</strong> : 此隔离级别翻译为 “读已提交” 或者 “读提交”。<br><strong>REPEATABLE-READ</strong> : 此隔离级别翻译为 “可重复读” 或者 “可重读”。<br><strong>SERIALIZABLE</strong> : 此隔离级别翻译为”串行化”。</p>
+<p>而 mysql 默认设置的隔离级别为 <code>REPEATABLE-READ</code>，即 “可重读”。使用如下语句可以查看当前设置的隔离级别</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select @@global.transaction_isolation,@@transaction_isolation;</span><br></pre></td></tr></table></figure>
+
+<p>如下图所示，默认设置的隔离级别为可重读。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204164404.png"></p>
+<h2 id="隔离级别：可重读"><a href="#隔离级别：可重读" class="headerlink" title="隔离级别：可重读"></a>隔离级别：可重读</h2><p>我们先来总结一下可重读隔离级别的特性，仍然以刚才文章开头的示例为例，下图中，再回话1与回话2中同时开启两个事务，在事务1的事务中修改了tl表的数据以后（将第二条数据的tlstr的值修改为test），事务2中查看到的数据仍然是事务1修改之前的数据，即使事务1提交了，在事务2没有提交之前，事务2中查看到的数据都是相同的，比如t1表中的第2条数据，不管事务1是否提交，在事务2没有提交之前，这条数据对于事务2来说一直都是没有发生改变的，这条数据在事务2中是可以重复的被读到，所以，这种隔离级别被称为”可重读”。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204165028.png"></p>
+<p>但是，你可能会有个问题，之前说过，事务的隔离性是由锁来实现的，那么，当上图中的事务1中执行更新语句时，事务1中应该对数据增加了写锁，但是在事务2中，仍然可以进行查询操作，即进行读操作，可是写锁是排他锁，在事务1中已经添加了写锁的情况下，为什么事务2还可以读取呢？这是因为 InnoDB 采用了”一致性非锁定读”的机制提高了数据库并发性。一致性非锁定读表示在如果当前行被施加了排他锁，那么当需要读取行数据时，则不会等待行上的锁的释放，而是会去读取一个快照数据，如下图所示</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/02261710538155.png"></p>
+<p>上图展示了 InnoDB 中一致性非锁定读的过程。之所以称其为非锁定读，是因为它不需要等待被访问的行上的排他锁的释放。而上图中的快照的实现是由事务日志所对应的undo段来完成，其实快照就是该行所对应的之前的版本的数据，即历史数据，一行记录可能有不止一个快照数据。并不是所有隔离级别都使用了一致性非锁定读，在”可重读”和”读提交”的隔离级别下，InnoDB 存储引擎使用了一致性非锁定读，但是在这两个隔离级别中，对于快照数据的定义也不相同，在”可重读”隔离级别下，快照数据是指当前事务开始时数据的样子，所以，在刚才的示例中，事务2中t1表对应的第二条记录的tlstr的值一直都是2，因为在事务2开始的时候，其值就是2，这也是其可重读的特性，但是在”读提交”的隔离级别下，由于对于快照的定义不同，所以显示的现象也不同，这在做”读提交”隔离级别的实验时我们自然就会明白。</p>
+<p>在可重读的隔离级别下，可能会出现”幻读”的问题，那么什么是幻读，我们一起来看一下。<br>当前的隔离级别仍然是”可重读”，现在来看一个幻读的示例，根据序号顺序查看下图中的操作即可。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204170450.png"></p>
+<p>从上图可以看出，从上图中的第5步开始，数据其实就已经发生了改变，到第7步时，事务2还是无法看到数据的改变，但是当事务2更新数据以后，发现莫名其妙的多出了一条数据。在同一个事务中，执行两次同样的 sql，第二次的 sql 会返回之前不存在的行，或者之前出现的数据不见了，这种现象被称之为”幻读”。</p>
+<div class="note warning"><p>注意：上例中第8步执行的update语句并没有指定任何条件，相当于更新表中的所有行的对应字段，如果你指定了条件，并且没有更新到”隐藏”的行，那么可能无法看到幻读现象</p>
+</div>
+
+<h2 id="隔离级别：串行化"><a href="#隔离级别：串行化" class="headerlink" title="隔离级别：串行化"></a>隔离级别：串行化</h2><p>所以，经过上述实验我们可以发现，事务处于 <code>REPEATABLE-READ</code> :”可重复读” 级别时，会出现幻读的情况，而在之前，我们已经提到过，不同的隔离级别，所引入的问题会有所不同，隔离性也有所不同，那么，有没有一种隔离级别，能够解决幻读的问题呢？<br><code>SERIALIZABLE</code> : “串行化”隔离级别就不会出现幻读的问题，我们来试试将事务的隔离级别设置为串行化时，事务是怎样工作的。<br>首先，我们将两个会话中的事务的隔离级别都设置为 <code>SERIALIZABLE</code> : “串行化”。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL SERIALIZABLE;</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204171329.png"></p>
+<p>如上图所示，当将两个会话中的事务隔离级别同时设置为串行化以后，分别在两个会话中开启了事务1与事务2，如上图中的第1步和第2步所示，然后，进行第3步，在事务1中插入了一条数据，此时，执行第4步，在事务2中查询表tl的数据，可以，第4步好像被”卡”住了，多等一会儿，发现第4步并未执行成功，而是报了一个错误，如下图。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204171558.png"></p>
+<p>从报错信息可以发现，事务2中的锁请求超时了，我们之前提到，事务的隔离性是由锁来实现的，当我们使用串行化的隔离级别时，由于事务1先对t1表施加了写锁，所以当事务2对tl表请求读锁时，会被阻塞，那么，出现请求锁超时的情况，也就算是比较正常了，所以，此时，我们是无法在事务2中读到tl表的数据的。</p>
+<p>那么，我们换一种实验方法，我们在事务1中插入一条数据，然后在事务2中执行查询tl表的语句，此时事务2中的查询语句会被阻塞，这时，我们提交事务1，看看会发生什么情况。</p>
+<p>趁着事务2中的查询语句被阻塞的时候，将事务1进行提交，如下图所示。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204172455.png"></p>
+<p>当在事务2中执行查询语句时，查询被阻塞，此时事务1被提交，当事务1被提交后的一瞬间，事务2中的语句已经查询出结果，从返回结果可以看出，这个查询语句被阻塞了20秒左右的时间，当事务1中的写锁释放时，事务2才读出了数据。从上述实验上来看，当事务处于串行化隔离级别时，是不可能出现幻读的情况的，因为如果另一个事务中对表添加了写锁，那么在当前事务中是无法读到数据的，必须等到另一个事务提交，另一个事务释放了对表的写锁，当前事务才能进行申请读锁，使用串行化的隔离级别不会出现幻读的情况，但是，聪明如你一定发现了，当事务的隔离级别设置为串行化时，数据库失去了并发的能力，所以，我们很少将隔离级别设置为串行化，因为这种隔离性过于严格了。</p>
+<h2 id="隔离级别：读已提交"><a href="#隔离级别：读已提交" class="headerlink" title="隔离级别：读已提交"></a>隔离级别：读已提交</h2><p>现在，我们已经了解了两种隔离级别，可重读与串行化，而且，我们已经了解到，串行化隔离级别的隔离性是最强的，没有并发能力，可重读隔离级别的隔离性稍微次之，但是比较串行化而言，并发能力较好，不过存在”幻读”的问题。</p>
+<p>修改会话隔离级别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</span><br></pre></td></tr></table></figure>
+
+<p>那么，有了之前的基础，再去理解另外两个隔离级别就容易了，我们先来聊聊”读提交”。</p>
+<p>同样，在两个会话中同时开启两个事务，在事务1中修改tl表中的第二条数据，如下图中的1、2步所示，此时，事务1并未提交，所以如第3步所示，在事务2中并无法看到事务1中的修改，而当事务1提交以后，事务2中即可看到事务1中的修改，换句话说，就是事务2能够读到事务1提交后的更改，这种隔离级别被称为”读提交”。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204173249.png"></p>
+<p>在”读提交”的隔离级别下，也会出现”幻读”的问题，示例如下。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204173507.png"></p>
+<p>在上述示例中，事务1向tl表中插入了一行数据，在事务1提交以后，事务2中即可看到，但是事务2还没有提交，在事务2中执行两次相同的查询语句，莫名其妙的多出了一行，出现了”幻读”的情况。</p>
+<p>在读已提交的隔离级别下，除了会出现幻读的情况，还会出现不可重读的情况。”不可重读”表示”不一定可重读”，不要理解为”一定不可重读”。什么叫”不一定可重读”呢？</p>
+<p>仍然以刚才的第一个示例为例，下图中的第3步中，获取到的第2条记录对应的tlstr字段值为”test”:，而在同一个事务中，第5步所查出第二条记录对应的tlstr字段却变成了”ttt”，所以，当我们想要再次重复读到刚才的”test”，就变成了”不可重读”。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204173941.png"></p>
+<p>其实，”不可重读”与”幻读”的表象都非常相似，都是在同一个事务中，并没有操作某些数据，可是这些数据却莫名的被改变了，或者突然多出了某些数据，又或者突然少了某些数据，这些状况好像都能用”幻象”这个词去理解，所以我一开始总是分不清到底什么是幻读，而且，mysql 官方文档中也把不可重读归为幻读，只是大家为了更加的细化它们的区别，把他们分成了”不可重读”与”幻读”，如果我们实在无法分清他们，我们可以这样理解，”幻读”的重点在于莫名其妙的增加了或减少了某些数据，”不可重读”的重点在于莫名的情况下，数据被修改更新了。</p>
+<p>那么我们再来总结一下”读提交”这个隔离级别，在”读提交”隔离级别下，回出现”不可重读”，”幻读”的问题，比”可重读”隔离级别的问题更多，但是它的并发能力比”可重读”更强，我们似乎发现了一个规律，隔离级别的隔离性越低，并发能力就越强，存在的问题就越多，那么现在，我们只剩下最后一个隔离级别没有了解了，那就是”读未提交”。它的并发能力更强吗，它会有更多的问题吗？我们来看看。</p>
+<h2 id="隔离级别：读未提交"><a href="#隔离级别：读未提交" class="headerlink" title="隔离级别：读未提交"></a>隔离级别：读未提交</h2><p>修改会话隔离级别：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SET SESSION TRANSACTION ISOLATION LEVEL READ UNCOMMITTED;</span><br></pre></td></tr></table></figure>
+
+<p>老规矩，我们在两个会话中同时开启两个事务，然后进行实验。</p>
+<p>此时，我们将两个会话的事务隔离级别同时设置为读未提交，然后在两个会话中各自开启一个事务，然后在事务1中插入一条数据，并且删除一条数据，如下图中的第1步与第2步所示。</p>
+<p><img src="/images/MySQL/isolation-levels-in-mysql/20201204174532.png"></p>
+<p>第1、2步执行完毕以后，事务1并未提交，此时执行步骤3，在事务2中查看tl表中的数据，是可以看到事务1中所做出的修改的。</p>
+<p>所以，我们可以发现，在读未提交这个隔离级别下，即使别的事务所做的修改并未提交，我们也能看到其修改的数据。</p>
+<p>当前事务能够看到别的事务中未提交的数据，我们称这种现象为”脏读”，上例中，事务1并未提交，但是其所作出的修改已经能在事务2中查看到，由于事务1中的修改有可能被回滚，或者数据有可能继续被修改，所以事务2中看到数据是飘忽不定的，并不是最终的数据，并不是提交后的数据，是”脏”的，但是事务2中仍然能看到这些数据，所以，这种显现被称之为脏读，当事务的隔离级别处于”读未提交”时，其并发性能是最强的，但是其隔离性与安全性是最差的。</p>
+<p>聪明如你一定想到了，当事务处于”读未提交”这种隔离级别时，会出现”脏读”的情况，同时，也会出现”不可重读”，”幻读”的问题。</p>
+<h2 id="脏读、幻读、不可重读的区别"><a href="#脏读、幻读、不可重读的区别" class="headerlink" title="脏读、幻读、不可重读的区别"></a>脏读、幻读、不可重读的区别</h2><p>现在，我们是不是更容易把脏读、幻读、不可重读混淆了呢？</p>
+<p>我们一起来总结一下它们之前的区别：</p>
+<p><strong>脏读</strong>：当前事务可以查看到别的事务未提交的数据（侧重点在于别的事务未提交）。</p>
+<p><strong>幻读</strong>：幻读的表象与不可重读的表象都让人”懵逼”，很容易搞混，但是如果非要细分的话，幻读的侧重点在于新增和删除。表示在同一事务中，使用相同的查询语句，第二次查询时，莫名的多出了一些之前不存在数据，或者莫名的不见了一些数据。</p>
+<p><strong>不可重读</strong>：不可重读的侧重点在于更新修改数据。表示在同一事务中，查询相同的数据范围时，同一个数据资源莫名的改变了。</p>
+<h2 id="不同的隔离级别所拥有的问题"><a href="#不同的隔离级别所拥有的问题" class="headerlink" title="不同的隔离级别所拥有的问题"></a>不同的隔离级别所拥有的问题</h2><p><img src="/images/MySQL/isolation-levels-in-mysql/20201204174835.png"></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/MySQL/isolation-levels-in-mysql/" title="事务隔离级别">https://novnan.github.io/MySQL/isolation-levels-in-mysql/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/mysql/" rel="tag"># mysql</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/WSL/WSL2+Docker+Laradock/" rel="prev" title="WSL2 + Docker + Laradock 配置">
+                  <i class="fa fa-chevron-left"></i> WSL2 + Docker + Laradock 配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/PHP/foreach_problems_caused_by_circular_references/" rel="next" title="foreach ($data as &$item) 循环引用产生的问题">
+                  foreach ($data as &$item) 循环引用产生的问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/MySQL/isolation-levels-in-mysql/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

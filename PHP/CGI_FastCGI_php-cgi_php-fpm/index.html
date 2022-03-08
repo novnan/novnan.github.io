@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.0.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic%7CSatisfy:300,300italic,400,400italic,700,700italic%7CRoboto+Slab:300,300italic,400,400italic,700,700italic%7CPT+Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css" integrity="sha256-jTIdiMuX/e3DGJUGwl3pKSxuc6YOuqtJYkM0bGQESA4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" integrity="sha256-Vzbj7sDDS/woiFS3uNKo8eIuni59rjyNGtXfstRzStA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdn.jsdelivr.net/npm/pace-js@1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"novnan.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.10.1","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":true,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="一、最早的Web服务器最早的Web服务器简单地响应浏览器发来的HTTP静态文件请求，并将存储在服务器上的静态文件（例如： jpg、htm、html）返回给浏览器。如图是处理流程  比如我访问：http:&#x2F;&#x2F;www.example.com&#x2F;index.html，那么网络服务器就会去对应目录中找到 index.html这个文件，并返回给浏览器。 二、CGI的出现首先说明：CGI是一种协议 事物总是不断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CGI&#x2F;FastCGI&#x2F;php-cgi&#x2F;php-fpm的区别">
+<meta property="og:url" content="https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/index.html">
+<meta property="og:site_name" content="novnan&#39;s notes">
+<meta property="og:description" content="一、最早的Web服务器最早的Web服务器简单地响应浏览器发来的HTTP静态文件请求，并将存储在服务器上的静态文件（例如： jpg、htm、html）返回给浏览器。如图是处理流程  比如我访问：http:&#x2F;&#x2F;www.example.com&#x2F;index.html，那么网络服务器就会去对应目录中找到 index.html这个文件，并返回给浏览器。 二、CGI的出现首先说明：CGI是一种协议 事物总是不断">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/76df2b.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/42e54.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/081a0b3.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6153419.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6155930.jpg">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/9f36463c.jpg">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/60157.png">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/b5a89c.jpeg">
+<meta property="og:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/3f6876.jpg">
+<meta property="article:published_time" content="2021-06-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-08T06:50:02.282Z">
+<meta property="article:author" content="novnan">
+<meta property="article:tag" content="CGI">
+<meta property="article:tag" content="FastCGI">
+<meta property="article:tag" content="php-cgi">
+<meta property="article:tag" content="php-fpm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://novnan.github.io/images/PHP/CGI_FastCGI_php-cgi_php-fpm/76df2b.png">
+
+
+<link rel="canonical" href="https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/","path":"PHP/CGI_FastCGI_php-cgi_php-fpm/","title":"CGI/FastCGI/php-cgi/php-fpm的区别"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CGI/FastCGI/php-cgi/php-fpm的区别 | novnan's notes</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="novnan's notes" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">novnan's notes</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu">
+        <li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li>
+        <li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+        <li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E6%9C%80%E6%97%A9%E7%9A%84Web%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">一、最早的Web服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81CGI%E7%9A%84%E5%87%BA%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">二、CGI的出现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CGI%E7%A8%8B%E5%BA%8F%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">CGI程序的工作方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%86%85%E7%BD%AE%E6%A8%A1%E5%9D%97"><span class="nav-number">2.2.</span> <span class="nav-text">web服务器内置模块</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FastCGI"><span class="nav-number">2.3.</span> <span class="nav-text">FastCGI</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-fpm"><span class="nav-number">2.4.</span> <span class="nav-text">php-fpm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-cgi"><span class="nav-number">2.5.</span> <span class="nav-text">php-cgi</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-cgi%E4%B8%8Ephp%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.6.</span> <span class="nav-text">php-cgi与php的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-cgi%E6%94%AF%E6%8C%81fastCGI%E5%8D%8F%E8%AE%AE"><span class="nav-number">2.7.</span> <span class="nav-text">php-cgi支持fastCGI协议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-cgi%E4%B8%8Ephp-fpm%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">2.8.</span> <span class="nav-text">php-cgi与php-fpm的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-fpm%E7%AE%A1%E7%90%86%E8%BF%9B%E7%A8%8B%E7%9A%84%E4%B8%89%E7%A7%8D%E6%96%B9%E5%BC%8F"><span class="nav-number">2.9.</span> <span class="nav-text">php-fpm管理进程的三种方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php-fpm%E5%B9%B3%E6%BB%91%E9%87%8D%E5%90%AF%E5%8E%9F%E7%90%86"><span class="nav-number">2.10.</span> <span class="nav-text">php-fpm平滑重启原理</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="novnan"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">novnan</p>
+  <div class="site-description" itemprop="description">胡编一通，乱写一气</div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">45</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+  <div class="links-of-blogroll site-overview-item animated">
+    <div class="links-of-blogroll-title"><i class="fa fa-globe fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://zhengyongshun.com/" title="http:&#x2F;&#x2F;zhengyongshun.com&#x2F;" rel="noopener" target="_blank">挨踢Blog</a>
+        </li>
+        <li class="links-of-blogroll-item">
+          <a href="https://sevming.github.io/" title="https:&#x2F;&#x2F;sevming.github.io&#x2F;" rel="noopener" target="_blank">Mr.Blog</a>
+        </li>
+    </ul>
+  </div>
+<div style="">
+  <canvas id="canvas" style="width:60%;">当前浏览器不支持canvas，请更换浏览器后再试</canvas>
+</div>
+<script>
+(function(){
+
+   var digit=
+    [
+        [
+            [0,0,1,1,1,0,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,0,1,1,0],
+            [0,0,1,1,1,0,0]
+        ],//0
+        [
+            [0,0,0,1,1,0,0],
+            [0,1,1,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [1,1,1,1,1,1,1]
+        ],//1
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,1,1],
+            [1,1,1,1,1,1,1]
+        ],//2
+        [
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//3
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,0],
+            [0,0,1,1,1,1,0],
+            [0,1,1,0,1,1,0],
+            [1,1,0,0,1,1,0],
+            [1,1,1,1,1,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,1,1]
+        ],//4
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,0],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//5
+        [
+            [0,0,0,0,1,1,0],
+            [0,0,1,1,0,0,0],
+            [0,1,1,0,0,0,0],
+            [1,1,0,0,0,0,0],
+            [1,1,0,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//6
+        [
+            [1,1,1,1,1,1,1],
+            [1,1,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,0,0,1,1,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0],
+            [0,0,1,1,0,0,0]
+        ],//7
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,1,1,0]
+        ],//8
+        [
+            [0,1,1,1,1,1,0],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [1,1,0,0,0,1,1],
+            [0,1,1,1,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,0,1,1],
+            [0,0,0,0,1,1,0],
+            [0,0,0,1,1,0,0],
+            [0,1,1,0,0,0,0]
+        ],//9
+        [
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,0,0,0,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,1,1,1,0,0],
+            [0,0,0,0,0,0,0]
+        ]//:
+    ];
+
+var canvas = document.getElementById('canvas');
+
+if(canvas.getContext){
+    var cxt = canvas.getContext('2d');
+    //声明canvas的宽高
+    var H = 100,W = 700;
+    canvas.height = H;
+    canvas.width = W;
+    cxt.fillStyle = '#f00';
+    cxt.fillRect(10,10,50,50);
+
+    //存储时间数据
+    var data = [];
+    //存储运动的小球
+    var balls = [];
+    //设置粒子半径
+    var R = canvas.height/20-1;
+    (function(){
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        //存储时间数字，由十位小时、个位小时、冒号、十位分钟、个位分钟、冒号、十位秒钟、个位秒钟这7个数字组成
+        data.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+    })();
+
+    /*生成点阵数字*/
+    function renderDigit(index,num){
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    cxt.beginPath();
+                    cxt.arc(14*(R+2)*index + j*2*(R+1)+(R+1),i*2*(R+1)+(R+1),R,0,2*Math.PI);
+                    cxt.closePath();
+                    cxt.fill();
+                }
+            }
+        }
+    }
+
+    /*更新时钟*/
+    function updateDigitTime(){
+        var changeNumArray = [];
+        var temp = /(\d)(\d):(\d)(\d):(\d)(\d)/.exec(new Date());
+        var NewData = [];
+        NewData.push(temp[1],temp[2],10,temp[3],temp[4],10,temp[5],temp[6]);
+        for(var i = data.length-1; i >=0 ; i--){
+            //时间发生变化
+            if(NewData[i] !== data[i]){
+                //将变化的数字值和在data数组中的索引存储在changeNumArray数组中
+                changeNumArray.push(i+'_'+(Number(data[i])+1)%10);
+            }
+        }
+        //增加小球
+        for(var i = 0; i< changeNumArray.length; i++){
+            addBalls.apply(this,changeNumArray[i].split('_'));
+        }
+        data = NewData.concat();
+    }
+
+    /*更新小球状态*/
+    function updateBalls(){
+        for(var i = 0; i < balls.length; i++){
+            balls[i].stepY += balls[i].disY;
+            balls[i].x += balls[i].stepX;
+            balls[i].y += balls[i].stepY;
+            if(balls[i].x > W + R || balls[i].y > H + R){
+                balls.splice(i,1);
+                i--;
+            }
+        }
+    }
+
+    /*增加要运动的小球*/
+    function addBalls(index,num){
+        var numArray = [1,2,3];
+        var colorArray =  ["#3BE","#09C","#A6C","#93C","#9C0","#690","#FB3","#F80","#F44","#C00"];
+        for(var i = 0; i < digit[num].length; i++){
+            for(var j = 0; j < digit[num][i].length; j++){
+                if(digit[num][i][j] == 1){
+                    var ball = {
+                        x:14*(R+2)*index + j*2*(R+1)+(R+1),
+                        y:i*2*(R+1)+(R+1),
+                        stepX:Math.floor(Math.random() * 4 -2),
+                        stepY:-2*numArray[Math.floor(Math.random()*numArray.length)],
+                        color:colorArray[Math.floor(Math.random()*colorArray.length)],
+                        disY:1
+                    };
+                    balls.push(ball);
+                }
+            }
+        }
+    }
+
+    /*渲染*/
+    function render(){
+        //重置画布宽度，达到清空画布的效果
+        canvas.height = 100;
+        //渲染时钟
+        for(var i = 0; i < data.length; i++){
+            renderDigit(i,data[i]);
+        }
+        //渲染小球
+        for(var i = 0; i < balls.length; i++){
+            cxt.beginPath();
+            cxt.arc(balls[i].x,balls[i].y,R,0,2*Math.PI);
+            cxt.fillStyle = balls[i].color;
+            cxt.closePath();
+            cxt.fill();
+        }
+    }
+
+    clearInterval(oTimer);
+    var oTimer = setInterval(function(){
+        //更新时钟
+        updateDigitTime();
+        //更新小球状态
+        updateBalls();
+        //渲染
+        render();
+    },50);
+}
+
+})();
+</script>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.png">
+      <meta itemprop="name" content="novnan">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="novnan's notes">
+      <meta itemprop="description" content="胡编一通，乱写一气">
+    </span>
+    
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CGI/FastCGI/php-cgi/php-fpm的区别 | novnan's notes">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CGI/FastCGI/php-cgi/php-fpm的区别
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-06-16 00:00:00" itemprop="dateCreated datePublished" datetime="2021-06-16T00:00:00+08:00">2021-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+        </span>
+    </span>
+
+  
+    <span id="/PHP/CGI_FastCGI_php-cgi_php-fpm/" class="post-meta-item leancloud_visitors" data-flag-title="CGI/FastCGI/php-cgi/php-fpm的区别" title="阅读次数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span class="leancloud-visitors-count"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="一、最早的Web服务器"><a href="#一、最早的Web服务器" class="headerlink" title="一、最早的Web服务器"></a>一、最早的Web服务器</h2><p>最早的Web服务器简单地响应浏览器发来的HTTP静态文件请求，并将存储在服务器上的静态文件（例如： jpg、htm、html）返回给浏览器。如图是处理流程</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/76df2b.png"></p>
+<p>比如我访问：<code>http://www.example.com/index.html</code>，那么网络服务器就会去对应目录中找到 <code>index.html</code>这个文件，并返回给浏览器。</p>
+<h2 id="二、CGI的出现"><a href="#二、CGI的出现" class="headerlink" title="二、CGI的出现"></a>二、CGI的出现</h2><p><strong>首先说明：CGI是一种协议</strong></p>
+<p>事物总是不断发展，网站也越来越复杂，所以出现动态技术。但是Web服务器并不能直接运行 php&#x2F;asp 这样的文件，自己不能做，外包给别人吧，但是要与第三做个约定，我给你什么，然后你给我什么，就是我把请求参数发送给你，然后我接收你的处理结果再给客户端。这个约定就是 CGI协议(Common Gateway Interface)，协议只是一个“规定、规则”，理论上用什么语言都能实现，比如用 vb&#x2F;c&#x2F;perl&#x2F;php&#x2F;python 来实现。</p>
+<p>在2000年或更早的时候，CGI 比较盛行。那时，Perl 是编写 CGI 的主流语言，以至于一般的 CGI 程序(遵循 CGI 协议的程序)就是 Perl 程序（例如世界上80%的网站所采用的编程语言 php 语言刚开始的版本就是用Perl语言写的）。</p>
+<p>CGI 是 “Common Gateway Interface” 的缩写，翻成中文叫“公共网关接口”，它是 web 服务器与外部应用程序（CGI 程序）之间传递信息的接口标准。通过 CGI 接口，web 服务器就能够获取客户端提交的信息，并转交给服务器端的 CGI 程序处理，最后返回结果给客户端。也就是说，CGI 实际上是一个接口标准。我们通常所说的 CGI 是指 CGI 程序，即实现了 CGI 接口标准的程序。只要某种语言具有标准输入、输出和环境变量，如 perl&#x2F;PHP&#x2F;C 等，就可以用来编写 CGI 程序。CGI 只是接口协议，根本不是什么语言。</p>
+<span id="more"></span>
+
+<h3 id="CGI程序的工作方式"><a href="#CGI程序的工作方式" class="headerlink" title="CGI程序的工作方式"></a>CGI程序的工作方式</h3><p>web 服务器一般只处理静态文件请求（如 jpg、htm、html），如果碰到一个动态脚本请求（如 php），web 服务器主进程，就 fork 出一个新的进程来启动 CGI 程序，也就是说将动态脚本请求交给 CGI 程序来处理。启动 CGI 程序需要一个过程，比如，读取配置文件，加载扩展等。CGI 程序启动后，就会解析动态脚本，然后将结果返回给 web 服务器，最后 web 服务器再将结果返回给客户端，刚才 fork 的进程也会随之关闭。这样，每次用户请求动态脚本，web 服务器都要重新 fork 一个新进程，去启动 CGI 程序，由 CGI 程序来处理动态脚本，处理完后进程随之关闭。毫无疑问，这种工作方式的效率是非常低下的。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/42e54.png"></p>
+<p>CGI程序与web服务器传递数据：</p>
+<p>CGI 程序通过标准输入（STDIN）和标准输出（STDOUT）来进行输入输出。此外 CGI 程序还通过环境变量来得到输入，操作系统提供了许多环境变量，它们定义了程序的执行环境，应用程序可以存取这些环境变量。web 服务器和 CGI 接口又另外设置了一些环境变量，用来向CGI程序传递一些重要的参 数。CGI 的 GET 方法还通过环境变量 QUERY-STRING 向 CGI 程序传递 Form 中的数据。 下面是一些常用的 CGI 环境变量：</p>
+<table>
+<thead>
+<tr>
+<th align="left">变量名</th>
+<th align="left">描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CONTENT_TYPE</td>
+<td align="left">这个环境变量的值指示所传递来的信息的MIME类型。目前，环境变量CONTENT_TYPE一般都是：application&#x2F;x-www-form-urlencoded，他表示数据来自于HTML表单。</td>
+</tr>
+<tr>
+<td align="left">CONTENT_LENGTH</td>
+<td align="left">如果服务器与CGI程序信息的传递方式是POST，这个环境变量即使从标准输入STDIN中可以读到的有效数据的字节数。这个环境变量在读取所输入的数据时必须使用。</td>
+</tr>
+<tr>
+<td align="left">HTTP_COOKIE</td>
+<td align="left">客户机内的 COOKIE 内容。</td>
+</tr>
+<tr>
+<td align="left">HTTP_USER_AGENT</td>
+<td align="left">提供包含了版本数或其他专有数据的客户浏览器信息。</td>
+</tr>
+<tr>
+<td align="left">PATH_INFO</td>
+<td align="left">这个环境变量的值表示紧接在CGI程序名之后的其他路径信息。它常常作为CGI程序的参数出现。</td>
+</tr>
+<tr>
+<td align="left">QUERY_STRING</td>
+<td align="left">如果服务器与CGI程序信息的传递方式是GET，这个环境变量的值即是所传递的信息。这个信息经跟在CGI程序名的后面，两者中间用一个问号?分隔，多个参数用&amp;号连接。</td>
+</tr>
+<tr>
+<td align="left">REMOTE_ADDR</td>
+<td align="left">这个环境变量的值是发送请求的客户机的IP地址，例如上面的192.168.1.67。这个值总是存在的。而且它是Web客户机需要提供给Web服务器的唯一标识，可以在CGI程序中用它来区分不同的Web客户机。</td>
+</tr>
+<tr>
+<td align="left">REMOTE_HOST</td>
+<td align="left">这个环境变量的值包含发送CGI请求的客户机的主机名。如果不支持你想查询，则无需定义此环境变量。</td>
+</tr>
+<tr>
+<td align="left">REQUEST_METHOD</td>
+<td align="left">提供脚本被调用的方法。对于使用 HTTP&#x2F;1.0 协议的脚本，仅 GET 和 POST 有意义。</td>
+</tr>
+<tr>
+<td align="left">SCRIPT_FILENAME</td>
+<td align="left">CGI脚本的完整路径。</td>
+</tr>
+<tr>
+<td align="left">SCRIPT_NAME</td>
+<td align="left">CGI脚本的的名称。</td>
+</tr>
+<tr>
+<td align="left">SERVER_NAME</td>
+<td align="left">这是你的 WEB 服务器的主机名、别名或IP地址。</td>
+</tr>
+<tr>
+<td align="left">SERVER_SOFTWARE</td>
+<td align="left">这个环境变量的值包含了调用CGI程序的HTTP服务器的名称和版本号。例如，上面的值为Apache&#x2F;2.2.14(Unix)。</td>
+</tr>
+</tbody></table>
+<h3 id="web服务器内置模块"><a href="#web服务器内置模块" class="headerlink" title="web服务器内置模块"></a>web服务器内置模块</h3><p>后来，出现了一种比较高效的方式：web 服务器内置模块。例如，apache 的 mod_php 模块。将 php 解释器做成模块，然后加载到 apache 服务器中。</p>
+<p>这样，apache 服务器在启动的时候，就会同时启动 php 模块。当客户端请求 php 文件时，apache 服务器就不用再 fork 出一个新进程来启动 php 解释器，而是直接将 php 文件交给运行中的 php 模块处理。显然，这种方式下，效率会比较高。</p>
+<p>由于在 apache 服务器启动时，才会读取 php 的配置文件，加载 php 模块，在 apache 的运行过程中 ，不会再重新读取 php 的配置文件。所以，每次我们修改了 php 的配置文件后，必须重启 apache，新的php配置文件才会生效。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/081a0b3.png"></p>
+<h3 id="FastCGI"><a href="#FastCGI" class="headerlink" title="FastCGI"></a>FastCGI</h3><p><strong>FastCGI是一种协议</strong>，它是在<strong>CGI标准协议</strong>基础上发展出来的一个变种协议，它的主要目标是减轻 web 服务器与 CGI 程序之间交互时的负载，这样一台服务器就可以在同一时间处理更多的 web 请求。</p>
+<p>FASTCGI 的定义相关文章：<a target="_blank" rel="noopener" href="http://www.mit.edu/~yandros/doc/specs/fcgi-spec.html#S1">FastCGI Specification</a>、<a target="_blank" rel="noopener" href="http://www.mit.edu/afs.new/sipb/project/merakidev/src/openwrt-meraki/openwrt/build_mips/lighttpd-1.4.11/doc/fastcgi.txt">the FastCGI Interface</a></p>
+<p><strong>FastCGI进程管理器</strong>是遵循<strong>FastCGI协议</strong>的程序，只要你有能力就可以写出遵循 “FastCGI协议” 的 “FastCGI进程管理器”，毫无疑问，“FastCGI进程管理器” 并不是一个程序的名称，而是指遵循<strong>FastCGI协议</strong>的一类程序。</p>
+<p>当客户端请求 Web 服务器上的动态脚本时，Web 服务器会将动态脚本通过 Unix 域套接字(Unix domain socket)，或命名管道(named pipe)，或 TCP 连接(TCP connection)交给 FastCGI 主进程，FastCGI 主进程根据情况，安排一个空闲的子进程来解析动态脚本，处理完成后将结果返回给 Web 服务器，Web 服务器再将结果返回给客户端。该客户端请求处理完毕后，FastCGI 子进程并不会随之关闭，而是继续等待主进程安排工作任务。由此可知，FastCGI 的工作效率是非常高的。运行示意图如下：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6153419.png"></p>
+<h3 id="php-fpm"><a href="#php-fpm" class="headerlink" title="php-fpm"></a>php-fpm</h3><p><strong>fpm</strong>是<strong>FastCGI Process Manager</strong>的缩写，中文叫 “FastCGI进程管理器”，而 php-fpm 就是用于 php 语言的 FastCGI 进程管理器（前面说过，“FastCGI进程管理器”是一类程序，而 php-fpm 就属于这一类程序中的其中一个）。对于 php5.3 之前的版本来说，php-fpm 是一个第三方的补丁包，旨在将 FastCGI 进程管理整合进PHP包中。在 php5.3 之后的版本中，php-fpm 不再是第三方的包，它已经被集成到 php 的源码中了，因为 php-fpm 提供了更好的PHP进程管理方式，可以有效控制内存和进程、可以平滑重载 PHP 配置，比 spawn-fcgi 具有更多优点，所以 php-fpm 被 PHP 官方集成了。</p>
+<h3 id="php-cgi"><a href="#php-cgi" class="headerlink" title="php-cgi"></a>php-cgi</h3><p>PHP为什么叫PHP</p>
+<div class="note info"><p>PHP于1994年由Rasmus Lerdorf创建，刚刚开始是Rasmus Lerdorf为了要维护个人网页而制作的一个简单的用Perl语言编写的程序。这些工具程序用来显示 Rasmus Lerdorf 的个人履历，以及统计网页流量。后来又用C语言重新编写，包括可以访问数据库。他将这些程序和一些表单直译器整合起来，称为 PHP&#x2F;FI。</p>
+<p>而PHP&#x2F;FI，是“Personal Home Page&#x2F;Form Interpreter”的缩写，意思是“个人主页&#x2F;表单解释器”，也就是说，PHP最初还不是一门“语言”，而是“Rasmus Lerdorf”为了维护他自己的个人主页而写的一个简单的“表单解释器”。</p>
+<p>不过后来，PHP被重新定义为<strong>“PHP: HyperText Preprocessor”</strong>的缩写，注意不是“HyperText Preprocessor”而是“PHP: HyperText Preprocessor”，这种将名称放到定义中的写法被称作<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%80%92%E5%BD%92%E7%BC%A9%E5%86%99">递归缩写</a></p>
+<p>所以，PHP现在的定义就是一个“超文本预处理器”，用于“把php语言写的程序解释成超文本”(说白了就是把你写的php代码转换成html，当然现在的能力不止是解释成html)，安装好php后，对于Linux&#x2F;Mac会在安装目录下有一个 <code>php</code> 和一个<code>php-cgi</code>，对于Win则是<code>php.exe</code>和<code>php-cgi.exe</code>。</p>
+</div>
+
+<h3 id="php-cgi与php的区别"><a href="#php-cgi与php的区别" class="headerlink" title="php-cgi与php的区别"></a>php-cgi与php的区别</h3><p>php-cgi与php的区别(在win下就是php-cgi.exe与php.exe)在于，php&#x2F;php.exe是命令模式的php解释器，而php-cgi&#x2F;php-cgi.exe是支持“通用网关接口”的php解释器，而通用网关接口就是我们前面说的“CGI”(从它的名称就能看出来啦，它都标明了“-cgi”了)，不过现在的php-cgi是即支持“CGI”协议，也支持“CGI协议”的改进版——“fastCGI协议”的。</p>
+<p><strong>举例说明php与php-cgi都是php解释器：</strong> 运行<code>php -i</code>是“查看php的配置信息(i是info的缩写)”，而运行<code>php-cgi -i</code>同样是“查看php的配置信息”，只不过<code>php -i</code>是以命令版的格式返回(说白了就是纯字符串，最多加上换行)，而<code>php-cgi -i</code>返回的格式，却是html格式的，你可以用 <code>php-cgi -i &gt; /path/to/php-cgi.html</code>保存成html文件再来打开，可以发现跟你在php文件中用<code>phpinfo();</code>函数是一样的。</p>
+<h3 id="php-cgi支持fastCGI协议"><a href="#php-cgi支持fastCGI协议" class="headerlink" title="php-cgi支持fastCGI协议"></a>php-cgi支持fastCGI协议</h3><p>为什么说<code>php-cgi</code>既支持普通的CGI协议，也支持“fastCGI”协议呢？运行<code>php-cgi -h</code>输出结果如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">Usage: php [-q] [-h] [-s] [-v] [-i] [-f &lt;file&gt;]</span><br><span class="line">       php &lt;file&gt; [args...]</span><br><span class="line">  -a               Run interactively</span><br><span class="line">  -b &lt;address:port&gt;|&lt;port&gt; Bind Path for external FASTCGI Server mode</span><br><span class="line">  -C               Do not chdir to the script&#x27;s directory</span><br><span class="line">  -c &lt;path&gt;|&lt;file&gt; Look for php.ini file in this directory</span><br><span class="line">  -n               No php.ini file will be used</span><br><span class="line">  -d foo[=bar]     Define INI entry foo with value &#x27;bar&#x27;</span><br><span class="line">  -e               Generate extended information for debugger/profiler</span><br><span class="line">  -f &lt;file&gt;        Parse &lt;file&gt;.  Implies `-q&#x27;</span><br><span class="line">  -h               This help</span><br><span class="line">  -i               PHP information</span><br><span class="line">  -l               Syntax check only (lint)</span><br><span class="line">  -m               Show compiled in modules</span><br><span class="line">  -q               Quiet-mode.  Suppress HTTP Header output.</span><br><span class="line">  -s               Display colour syntax highlighted source.</span><br><span class="line">  -v               Version number</span><br><span class="line">  -w               Display source with stripped comments and whitespace.</span><br><span class="line">  -z &lt;file&gt;        Load Zend extension &lt;file&gt;.</span><br><span class="line">  -T &lt;count&gt;       Measure execution time of script repeated &lt;count&gt; times.</span><br></pre></td></tr></table></figure>
+
+<p>其中有这句“Bind Path for external FASTCGI Server mode”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-b &lt;address:port&gt;|&lt;port&gt; Bind Path for external FASTCGI Server mode</span><br></pre></td></tr></table></figure>
+
+<p>意思是“绑定路径以作为外部FASTCGI服务器模式来使用”，那么不绑定呢？不绑定就是作为“非FASTCGI”模式使用呗。</p>
+<p>当然，php-cgi支持“标准CGI”接口只是我的猜测，我无法用实际的例子来解释（而且就算可以，也没人会用这种方式了），但是php-cgi支持“FASTCGI”这是绝对绝对可以确定的，因为我有实例可以证明！！</p>
+<p>相信现在绝大部分人都是用nginx+php-fpm模式来运行网站的，我这个例子就以这个来解释！下列配置，只要配置过nginx+php-fpm的童鞋应该都很熟悉，意思就是当nginx遇到<code>.php</code>结尾的文件，就“调用php-fpm”来解释这个php文件，此时php-fpm相当于“服务器”，“127.0.0.1:9000”就是php-fpm服务器监听的ip和端口，而nginx相当于“客户端”：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">location ~ \.php$ &#123;</span><br><span class="line">    include fastcgi.conf;</span><br><span class="line">    fastcgi_pass   127.0.0.1:9000;</span><br><span class="line">    fastcgi_index  index.php;</span><br><span class="line">    fastcgi_buffer_size 128k;</span><br><span class="line">    fastcgi_buffers 4 256k;</span><br><span class="line">    fastcgi_busy_buffers_size 256k;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>现在我们把上述配置修改一个地方，把<code>9000</code>改成<code>9001</code>(如果你9001被占用了那就用其他未占用的端口，只要下边对应即可)，然后<code>sudo nginx -s reload</code>重载配置，毫无疑问，现在用浏览器访问你的php文件，比如<code>http://localhost/index.php</code>将会出现<code>502 Bad Gateway</code>，因为php-fpm监听的是9000端口，现在你修改成9001它当然找不到啊。</p>
+<p>还记得刚才前面说到的“绑定路径以作为外部FASTCGI服务器模式来使用”吗？现在我们就来使用它，进入php-cgi所在目录，运行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./php-cgi -b 127.0.0.1:9001</span><br></pre></td></tr></table></figure>
+
+<p>再次刷新你的<code>http://localhost/index.php</code>，怎样？是不是没有502了？是不是正常了？但你要知道，现在解释你的<code>index.php</code>文件的是<code>php-cgi</code>而不再是<code>php-fpm</code>了，这就证明了<code>php-cgi</code>确实是支持“FASTCGI”协议的，为什么？因为nginx里用的参数，都是<code>fastcgi_</code>开头的啊，这就是“FASTCGI”协议啊。</p>
+<p>实验结束，<code>ctrl+C</code>就可以关闭你刚才运行的<code>php-cgi</code>了，因为刚才是直接在前台运行的，然后把9001改加9000，再执行<code>sudo nginx -s reload</code>就恢复到用<code>php-fpm</code>了。</p>
+<p><strong>另一个用于证明php-cgi即支持“CGI”又支持“fastCGI”的例子：</strong></p>
+<p>由于Windows不支持默认php-fpm(因为php-fpm是基于Linux的fork()创建子进程的，而Windows不支持这个，不过可以用Cygwin模拟)，而像一些集成工具一般都是直接使用php-cgi.exe代替php-fpm，比如phpStudy，我们选择用php+nginx：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/6155930.jpg"></p>
+<p>然后查看phpStudy的子进程，里面就有一个<code>CGI / FastCGI(32 bit)</code>，这个就是“php-cgi.exe”，你可以右击它→点击“属性”→点击“安全”，就能看到它的路径：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/9f36463c.jpg"></p>
+<p><strong>证明例子3：</strong><a target="_blank" rel="noopener" href="https://php.net/manual/en/install.fpm.php#121725">https://php.net/manual/en/install.fpm.php#121725</a>，这个老外说了，php-cgi是fastCGI接口但不是fpm，所以这又证明了“php-cgi”是支持fastCGI协议的。</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/60157.png"></p>
+<p>前面说了php-cgi与php的相同点——它们都是php解释器，只是一个只支持使用“命令行方式调用”，一个支持“通用网关接口”方式调用。</p>
+<h3 id="php-cgi与php-fpm的区别"><a href="#php-cgi与php-fpm的区别" class="headerlink" title="php-cgi与php-fpm的区别"></a>php-cgi与php-fpm的区别</h3><p>那么php-cgi与php-fpm又有什么不同？其实你可以认为“php-fpm”就是“php-cgi”的改进版，前面我说了php-cgi就是一个“遵循通用网关接口的php解释器”，而php-fpm是php-cgi的改进版，说明php-fpm同样也是一个“遵循通用网关接口的php解释器”，并且这里的“通用网关接口”指的是“FASTCGI”而不是“CGI”，因为前面都已经用实例证明了“php-cgi”是支持“FASTCGI”协议的，既然php-cgi都支持，那么它的改进版——php-fpm肯定就更支持了，从它的名字“fpm”里就能看出来，“fpm”是“Fastcgi Process Manager”，意思是“支持fastCGI协议的进程管理器”，那么“php-fpm”就是用于php的“支持fastCGI协议的进程管理器”，因为“支持fastCGI协议的进程管理器”不一定只有用于php，也许还有其他的呢？</p>
+<p>好了，既然php-fpm也是“遵循通用网关接口的php解释器”，那么有一点可以确定的是，php-fpm不会调用php-cgi也不会依赖php-cgi，因为它本身就是“php-cgi”的改进版，没有理由去调用(去依赖php-cgi)，确定方法很简单，先停掉你的php-fpm，然后把php-cgi改个名或者移动到另一个目录，再启动php-fpm，看一切是否正常？答案是肯定正常的，php-fpm根本不依赖php-cgi。</p>
+<p>前面说，“php-fpm”是“php-cgi”的改进版（当然这个“改进版”是我自己的说法，实际上php-fpm是不是在php-cgi的基础上改进的，我也不知道，但说它是改进版是没有问题的），既然是改进版，那改进了什么呢？请看官方文档：<a target="_blank" rel="noopener" href="https://www.php.net/manual/zh/install.fpm.php">FastCGI 进程管理器(fpm)</a></p>
+<ul>
+<li>支持平滑停止&#x2F;启动的高级进程管理功能；</li>
+<li>可以工作于不同的 uid&#x2F;gid&#x2F;chroot 环境下，并监听不同的端口和使用不同的 php.ini 配置文件（可取代 safe_mode 的设置）；</li>
+<li>stdout 和 stderr 日志记录;</li>
+<li>在发生意外情况的时候能够重新启动并缓存被破坏的 opcode;</li>
+<li>文件上传优化支持;</li>
+<li>“慢日志” – 记录脚本（不仅记录文件名，还记录 PHP backtrace 信息，可以使用 ptrace或者类似工具读取和分析远程进程的运行数据）运行所导致的异常缓慢;</li>
+<li>fastcgi_finish_request() – 特殊功能：用于在请求完成和刷新数据后，继续在后台执行耗时的工作（录入视频转换、统计处理等）；</li>
+<li>动态／静态子进程产生；</li>
+<li>基本 SAPI 运行状态信息（类似Apache的 mod_status）；</li>
+<li>基于 php.ini 的配置文件。</li>
+</ul>
+<p>由前面的phpStudy我们可以看到，运行php-cgi.exe(在Mac&#x2F;Linux上是php-cgi)时，只有一个进程，当网站并发数大时，这个进程很容易就“挂掉”，挂掉就再也无法处理nginx的请求了。而php-fpm是一个进程管理器，启动它时，它除了有一个“主进程(master)”外，还会创建很多“子进程”，如下图：</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/b5a89c.jpeg"></p>
+<p>这些子进程，才是真正的“遵循通用网关接口的php解释器”，而主进程只不过是把请求分配给这些子进程而已，所以php-fpm才叫“php fastCGI进程管理器”，当网站并发数大时，主进程会不断把请求分配给这些子进程，从而可以同时处理高并发而不“挂掉”。</p>
+<p>另外，子进程的多少，主进程还会“自动分配”，比如并发数大时，主进程会多创建一些子进程，用于同时处理更多的请求，而当并发数小时，则会自动关闭一些进程，从而“减少这些子进程对服务器内存的占用”，当然这个取决于php-fpm配置的进程管理方式(static方式不会自动)。</p>
+<p><strong>注意：</strong>网上很多人说，php-fpm是用于管理php-cgi的，这个说法对也不对，说他对，是因为在php5.4以前确实是这样的，但php5.4以后，php-fpm已被php官方收编，本身已经自带了解析php的功能，不只是做进程管理，也不再依赖php-cgi来解析php了。</p>
+<h3 id="php-fpm管理进程的三种方式"><a href="#php-fpm管理进程的三种方式" class="headerlink" title="php-fpm管理进程的三种方式"></a>php-fpm管理进程的三种方式</h3><p>php-fpm的进程管理方式有：</p>
+<ul>
+<li>static：静态方式，即子进程数是固定的，不会随着并发数的多少而自动调整子进程数，有两个缺点，1、当并发数少时，如果子进程太多会浪费内存，2、当并发数大时也不会自动增加子进程，比如“死板”，我们一般不会用这种方式。</li>
+<li>dynamic：动态分配，当空闲时，会自动缩小到最少子进程数(通过pm.min_spare_servers指定)，当并发数大时，会按需求增加子进程数，当然这个增加并不是无止境的，而是有最大子进程数的(通过pm.max_children指定，另外也有空闲时的最大子进程数，通过pm.max_spare_servers指定)，一般我们都采用这种进程管理方式。</li>
+<li>ondemand：启动php-fpm时，只有主进程，没有子进程，当有请求过来时，才会创建子进程，并发数越多创建的子进程数就越多，但有个极限值(由pm.max_children指定)，空闲的进程会在pm.process_idle_timeout秒内被关闭，这种方式无法及时的“响应并处理”nginx的请求，虽然这会让php-fpm在空闲时占用内存最小，但没有必要，因为服务器不缺这点内存，这种方式一般也不会使用。</li>
+</ul>
+<h3 id="php-fpm平滑重启原理"><a href="#php-fpm平滑重启原理" class="headerlink" title="php-fpm平滑重启原理"></a>php-fpm平滑重启原理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kill -SIGUSR2 主进程id</span><br></pre></td></tr></table></figure>
+
+<p>因为php-fpm本身并没有类似nginx的<code>reload</code>之类的命令，你用<code>man php-fpm</code>也能看出来，确实没有，如果你有在网上看到过<code>php-fpm reload</code>或<code>service php-fpm reload</code>之类的命令或者你使用过，它本身并不是<code>php-fpm</code>，而是一个shell脚本而已，它所在的位置有在<code>/etc/init.d/php-fpm</code>，而这个<code>reload</code>的本质，其实就是给php-fpm主进程发送<code>-SIGUSR2</code>信号，而php-fpm规定了<code>-SIGUSR2</code>信号为平滑重启信号(参见<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2ea78b789263">php-fpm信号，你造么？</a>)。</p>
+<p><img src="/images/PHP/CGI_FastCGI_php-cgi_php-fpm/3f6876.jpg"></p>
+<p><strong>平滑重启步骤：</strong></p>
+<ul>
+<li>master通过给子进程发送SIGQUIT信号的方式，平滑关闭所有的子进程</li>
+<li>如果过一段时间，有些子进程还没退出，给子进程发送SIGTERM信号，强制关闭子进程</li>
+<li>如果还没关闭，给子进程发送SIGKILL信号，强制关闭</li>
+<li>等所有的子进程退出后，master重新启动</li>
+</ul>
+<div class="note default"><p>原文链接：<a target="_blank" rel="noopener" href="https://www.xiebruce.top/606.html">CGI&#x2F;FastCGI&#x2F;php-cgi&#x2F;php-fpm的区别</a></p>
+</div>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer"><div>
+    
+</div>
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>novnan
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/" title="CGI&#x2F;FastCGI&#x2F;php-cgi&#x2F;php-fpm的区别">https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/CGI/" rel="tag"># CGI</a>
+              <a href="/tags/FastCGI/" rel="tag"># FastCGI</a>
+              <a href="/tags/php-cgi/" rel="tag"># php-cgi</a>
+              <a href="/tags/php-fpm/" rel="tag"># php-fpm</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/MySQL/redolog-undolog-binlog-of-MySQL/" rel="prev" title="必须了解的mysql三大日志-binlog、redo log和undo log">
+                  <i class="fa fa-chevron-left"></i> 必须了解的mysql三大日志-binlog、redo log和undo log
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 2017 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">novnan</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div><div class="translate-style">
+繁/简：<a id="translateLink" href="javascript:translatePage();">繁体
+</a>
+</div>
+<script type="text/javascript" src="/js/tw_cn.js"></script>
+<script type="text/javascript">
+var defaultEncoding = 2; //网站编写字体是否繁体，1-繁体，2-简体
+var translateDelay = 0; //延迟时间,若不在前, 要设定延迟翻译时间, 如100表示100ms,默认为0
+var cookieDomain = "https://novnan.github.io/"; //Cookie地址, 一定要设定, 通常为你的网址
+var msgToTraditionalChinese = "繁体"; //此处可以更改为你想要显示的文字
+var msgToSimplifiedChinese = "简体"; //同上，但两处均不建议更改
+var translateButtonId = "translateLink"; //默认互换id
+translateInitilization();
+</script>
+
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" integrity="sha256-yt2kYMy0w8AbtF89WXb2P1rfjcP/HTHLT7097U8Y5b8=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+<script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.0/dist/search.js" integrity="sha256-vXZMYLEqsROAXkEw93GGIvaB2ab+QW6w3+1ahD9nXXA=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+  <script src="/js/third-party/fancybox.js"></script>
+
+  <script src="/js/third-party/pace.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="leancloud_visitors" type="application/json">{"enable":true,"app_id":"2f69doQUwzEDOW2hnwDLSkfX-gzGzoHsz","app_key":"zGdIGQHH9AH8Anwkmc0ECpCG","server_url":null,"security":false}</script>
+  <script src="/js/third-party/statistics/lean-analytics.js"></script>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/quicklink@2.2.0/dist/quicklink.umd.js" integrity="sha256-4kQf9z5ntdQrzsBC3YSHnEz02Z9C1UeW/E9OgnvlzSY=" crossorigin="anonymous"></script>
+  <script class="next-config" data-name="quicklink" type="application/json">{"enable":true,"home":true,"archive":true,"delay":true,"timeout":3000,"priority":true,"url":"https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/"}</script>
+  <script src="/js/third-party/quicklink.js"></script>
+
+
+
+
+  <script type="text/javascript" src="/js/fold_action.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>novnan&#39;s notes</title>
+  <icon>https://novnan.github.io/icon.png</icon>
+  
+  <link href="https://novnan.github.io/atom.xml" rel="self"/>
+  
+  <link href="https://novnan.github.io/"/>
+  <updated>2022-03-08T06:50:02.282Z</updated>
+  <id>https://novnan.github.io/</id>
+  
+  <author>
+    <name>novnan</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>CGI/FastCGI/php-cgi/php-fpm的区别</title>
+    <link href="https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/"/>
+    <id>https://novnan.github.io/PHP/CGI_FastCGI_php-cgi_php-fpm/</id>
+    <published>2021-06-15T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.282Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;一、最早的Web服务器&quot;&gt;&lt;a href=&quot;#一、最早的Web服务器&quot; class=&quot;headerlink&quot; title=&quot;一、最早的Web服务器&quot;&gt;&lt;/a&gt;一、最早的Web服务器&lt;/h2&gt;&lt;p&gt;最早的Web服务器简单地响应浏览器发来的HTTP静态文件请求，并将存储在服务器上的静态文件（例如： jpg、htm、html）返回给浏览器。如图是处理流程&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/PHP/CGI_FastCGI_php-cgi_php-fpm/76df2b.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;比如我访问：&lt;code&gt;http://www.example.com/index.html&lt;/code&gt;，那么网络服务器就会去对应目录中找到 &lt;code&gt;index.html&lt;/code&gt;这个文件，并返回给浏览器。&lt;/p&gt;
+&lt;h2 id=&quot;二、CGI的出现&quot;&gt;&lt;a href=&quot;#二、CGI的出现&quot; class=&quot;headerlink&quot; title=&quot;二、CGI的出现&quot;&gt;&lt;/a&gt;二、CGI的出现&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;首先说明：CGI是一种协议&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;事物总是不断发展，网站也越来越复杂，所以出现动态技术。但是Web服务器并不能直接运行 php&amp;#x2F;asp 这样的文件，自己不能做，外包给别人吧，但是要与第三做个约定，我给你什么，然后你给我什么，就是我把请求参数发送给你，然后我接收你的处理结果再给客户端。这个约定就是 CGI协议(Common Gateway Interface)，协议只是一个“规定、规则”，理论上用什么语言都能实现，比如用 vb&amp;#x2F;c&amp;#x2F;perl&amp;#x2F;php&amp;#x2F;python 来实现。&lt;/p&gt;
+&lt;p&gt;在2000年或更早的时候，CGI 比较盛行。那时，Perl 是编写 CGI 的主流语言，以至于一般的 CGI 程序(遵循 CGI 协议的程序)就是 Perl 程序（例如世界上80%的网站所采用的编程语言 php 语言刚开始的版本就是用Perl语言写的）。&lt;/p&gt;
+&lt;p&gt;CGI 是 “Common Gateway Interface” 的缩写，翻成中文叫“公共网关接口”，它是 web 服务器与外部应用程序（CGI 程序）之间传递信息的接口标准。通过 CGI 接口，web 服务器就能够获取客户端提交的信息，并转交给服务器端的 CGI 程序处理，最后返回结果给客户端。也就是说，CGI 实际上是一个接口标准。我们通常所说的 CGI 是指 CGI 程序，即实现了 CGI 接口标准的程序。只要某种语言具有标准输入、输出和环境变量，如 perl&amp;#x2F;PHP&amp;#x2F;C 等，就可以用来编写 CGI 程序。CGI 只是接口协议，根本不是什么语言。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="CGI" scheme="https://novnan.github.io/tags/CGI/"/>
+    
+    <category term="FastCGI" scheme="https://novnan.github.io/tags/FastCGI/"/>
+    
+    <category term="php-cgi" scheme="https://novnan.github.io/tags/php-cgi/"/>
+    
+    <category term="php-fpm" scheme="https://novnan.github.io/tags/php-fpm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>必须了解的mysql三大日志-binlog、redo log和undo log</title>
+    <link href="https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/"/>
+    <id>https://novnan.github.io/MySQL/redolog-undolog-binlog-of-MySQL/</id>
+    <published>2020-12-17T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.279Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;日志是&lt;code&gt;mysql&lt;/code&gt;数据库的重要组成部分，记录着数据库运行期间各种状态信息。&lt;code&gt;mysql&lt;/code&gt;日志主要包括错误日志、查询日志、慢查询日志、事务日志、二进制日志几大类。作为开发，我们重点需要关注的是二进制日志(&lt;code&gt;binlog&lt;/code&gt;)和事务日志(包括&lt;code&gt;redo log&lt;/code&gt;和&lt;code&gt;undo log&lt;/code&gt;)，本文接下来会详细介绍这三种日志。&lt;/p&gt;
+&lt;h2 id=&quot;binlog&quot;&gt;&lt;a href=&quot;#binlog&quot; class=&quot;headerlink&quot; title=&quot;binlog&quot;&gt;&lt;/a&gt;binlog&lt;/h2&gt;&lt;p&gt;&lt;code&gt;binlog&lt;/code&gt;用于记录数据库执行的写入性操作(不包括查询)信息，以二进制的形式保存在磁盘中。&lt;code&gt;binlog&lt;/code&gt;是&lt;code&gt;mysql&lt;/code&gt;的逻辑日志，并且由&lt;code&gt;Server&lt;/code&gt;层进行记录，使用任何存储引擎的&lt;code&gt;mysql&lt;/code&gt;数据库都会记录&lt;code&gt;binlog&lt;/code&gt;日志。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;逻辑日志：&lt;strong&gt;可以简单理解为记录的就是sql语句&lt;/strong&gt;。&lt;br&gt;物理日志：&lt;strong&gt;因为&lt;code&gt;mysql&lt;/code&gt;数据最终是保存在数据页中的，物理日志记录的就是数据页变更&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;&lt;code&gt;binlog&lt;/code&gt;是通过追加的方式进行写入的，可以通过&lt;code&gt;max_binlog_size&lt;/code&gt;参数设置每个&lt;code&gt;binlog&lt;/code&gt;文件的大小，当文件大小达到给定值之后，会生成新的文件来保存日志。&lt;/p&gt;
+&lt;h3 id=&quot;binlog使用场景&quot;&gt;&lt;a href=&quot;#binlog使用场景&quot; class=&quot;headerlink&quot; title=&quot;binlog使用场景&quot;&gt;&lt;/a&gt;binlog使用场景&lt;/h3&gt;&lt;p&gt;在实际应用中，&lt;code&gt;binlog&lt;/code&gt;的主要使用场景有两个，分别是&lt;strong&gt;主从复制&lt;/strong&gt;和&lt;strong&gt;数据恢复&lt;/strong&gt;。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;主从复制&lt;/strong&gt;：在&lt;code&gt;Master&lt;/code&gt;端开启&lt;code&gt;binlog&lt;/code&gt;，然后将&lt;code&gt;binlog&lt;/code&gt;发送到各个&lt;code&gt;Slave&lt;/code&gt;端，&lt;code&gt;Slave&lt;/code&gt;端重放&lt;code&gt;binlog&lt;/code&gt;从而达到主从数据一致。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据恢复&lt;/strong&gt;：通过使用&lt;code&gt;mysqlbinlog&lt;/code&gt;工具来恢复数据。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&quot;binlog刷盘时机&quot;&gt;&lt;a href=&quot;#binlog刷盘时机&quot; class=&quot;headerlink&quot; title=&quot;binlog刷盘时机&quot;&gt;&lt;/a&gt;binlog刷盘时机&lt;/h3&gt;&lt;p&gt;对于&lt;code&gt;InnoDB&lt;/code&gt;存储引擎而言，只有在事务提交时才会记录&lt;code&gt;biglog&lt;/code&gt;，此时记录还在内存中，那么&lt;code&gt;biglog&lt;/code&gt;是什么时候刷到磁盘中的呢？&lt;code&gt;mysql&lt;/code&gt;通过&lt;code&gt;sync_binlog&lt;/code&gt;参数控制&lt;code&gt;biglog&lt;/code&gt;的刷盘时机，取值范围是&lt;code&gt;0-N&lt;/code&gt;：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;0：不去强制要求，由系统自行判断何时写入磁盘；&lt;/li&gt;
+&lt;li&gt;1：每次&lt;code&gt;commit&lt;/code&gt;的时候都要将&lt;code&gt;binlog&lt;/code&gt;写入磁盘；&lt;/li&gt;
+&lt;li&gt;N：每N个事务，才会将&lt;code&gt;binlog&lt;/code&gt;写入磁盘。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;从上面可以看出，&lt;code&gt;sync_binlog&lt;/code&gt;最安全的是设置是&lt;code&gt;1&lt;/code&gt;，这也是&lt;code&gt;MySQL 5.7.7&lt;/code&gt;之后版本的默认值。但是设置一个大一些的值可以提升数据库性能，因此实际情况下也可以将值适当调大，牺牲一定的一致性来获取更好的性能。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://novnan.github.io/categories/MySQL/"/>
+    
+    
+    <category term="mysql" scheme="https://novnan.github.io/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>foreach ($data as &amp;$item) 循环引用产生的问题</title>
+    <link href="https://novnan.github.io/PHP/foreach_problems_caused_by_circular_references/"/>
+    <id>https://novnan.github.io/PHP/foreach_problems_caused_by_circular_references/</id>
+    <published>2020-12-03T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.288Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PHP version</summary>
+        
+      
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>事务隔离级别</title>
+    <link href="https://novnan.github.io/MySQL/isolation-levels-in-mysql/"/>
+    <id>https://novnan.github.io/MySQL/isolation-levels-in-mysql/</id>
+    <published>2020-12-02T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.277Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;mysql version 8.0.13&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;事务隔离级别概述&quot;&gt;&lt;a href=&quot;#事务隔离级别概述&quot; class=&quot;headerlink&quot; title=&quot;事务隔离级别概述&quot;&gt;&lt;/a&gt;事务隔离级别概述&lt;/h2&gt;&lt;p&gt;mysql 中，InnoDB 所提供的事务符合 ACID 的要求，而事务通过事务日志中的 redo log 和 undo log 满足了原子性、一致性、持久性，事务还会通过锁机制满足隔离性，在 InnoDB 存储引擎中，有不同的隔离级别，它们有着不同的隔离性。&lt;/p&gt;
+&lt;p&gt;什么是事务的隔离级别？如果只是从概念上理解的话可能比较模糊，咱们直接看看不同隔离级别下的实际表现是什么样子的，再结合理论去理解，就会明了很多。首先，打开两个终端，同时连接到当前数据库，如下图所示，我们对两个回话进行编号，并且以颜色区分，1号会话使用黄色进行标识，2号会话使用红色进行标识。&lt;/p&gt;
+&lt;p&gt;两个会话使用相同的数据库。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/MySQL/isolation-levels-in-mysql/20201204162840.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;两个会话中同时各自开启一个事务。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/MySQL/isolation-levels-in-mysql/20201204163421.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;由于下面的所有操作会在两个会话中来回切换，所以，为了方便描述，我们为每个操作的顺序进行编号，例如下图中，我们先在会话1的事务1中执行了更新操作，然后在事务1中执行了查询操作，最后又在会话2中的事务2中执行了查询操作，按照操作顺序，为各个操作进行了顺序编号。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="MySQL" scheme="https://novnan.github.io/categories/MySQL/"/>
+    
+    
+    <category term="mysql" scheme="https://novnan.github.io/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>WSL2 + Docker + Laradock 配置</title>
+    <link href="https://novnan.github.io/WSL/WSL2+Docker+Laradock/"/>
+    <id>https://novnan.github.io/WSL/WSL2+Docker+Laradock/</id>
+    <published>2020-11-03T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.301Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;系统环境介绍&quot;&gt;&lt;a href=&quot;#系统环境介绍&quot; class=&quot;headerlink&quot; title=&quot;系统环境介绍&quot;&gt;&lt;/a&gt;系统环境介绍&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Win 10 2004&lt;br&gt;WSL2(Ubuntu 20.04)&lt;br&gt;Docker 19.03.13&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;启用-Linux-子系统&quot;&gt;&lt;a href=&quot;#启用-Linux-子系统&quot; class=&quot;headerlink&quot; title=&quot;启用 Linux 子系统&quot;&gt;&lt;/a&gt;启用 Linux 子系统&lt;/h2&gt;&lt;p&gt;打开 &lt;code&gt;控制面板 -&amp;gt; 程序 -&amp;gt; 启用或关闭Windows功能&lt;/code&gt;。找到&lt;code&gt;适用于Linux的Windows子系统&lt;/code&gt;和&lt;code&gt;虚拟机平台&lt;/code&gt;，勾选这两项之后确定，并重新启动计算机。&lt;/p&gt;
+&lt;h2 id=&quot;切换系统-WSL-默认版本到-2&quot;&gt;&lt;a href=&quot;#切换系统-WSL-默认版本到-2&quot; class=&quot;headerlink&quot; title=&quot;切换系统 WSL 默认版本到 2&quot;&gt;&lt;/a&gt;切换系统 WSL 默认版本到 2&lt;/h2&gt;&lt;p&gt;使用管理员用户打开 &lt;code&gt;Windows PowerShell&lt;/code&gt;，运行：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;wsl --set-default-version 2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;注意，有可能会出现如下提示：&lt;/p&gt;
+&lt;div class=&quot;note warning&quot;&gt;&lt;p&gt;WSL 2 需要更新其内核组件。有关信息，请访问 &lt;a href=&quot;https://aka.ms/wsl2kernel&quot;&gt;https://aka.ms/wsl2kernel&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;出现这个提示，说明需要更新 WSL2 的内核。按照提示打开链接。点击下图中的下载链接，下载并安装 WSL2 内核。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/WSL/WSL2+Docker+Laradock/72ab658461070fe25ee5e27.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="WSL" scheme="https://novnan.github.io/categories/WSL/"/>
+    
+    
+    <category term="WSL2" scheme="https://novnan.github.io/tags/WSL2/"/>
+    
+    <category term="Docker" scheme="https://novnan.github.io/tags/Docker/"/>
+    
+    <category term="Laradock" scheme="https://novnan.github.io/tags/Laradock/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>接口限流常用算法实践</title>
+    <link href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/"/>
+    <id>https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.284Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;背景&quot;&gt;&lt;a href=&quot;#背景&quot; class=&quot;headerlink&quot; title=&quot;背景&quot;&gt;&lt;/a&gt;背景&lt;/h2&gt;&lt;p&gt;为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如何限制每分钟访问 &lt;code&gt;/api/books&lt;/code&gt; 接口不能超过 120 次 ？&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们先定义一个接口：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;class&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;interface&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;RateLimiter&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;class&quot;&gt;&lt;/span&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;function&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;title&quot;&gt;access&lt;/span&gt;(&lt;span class=&quot;params&quot;&gt;&lt;/span&gt;)&lt;/span&gt;;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;固定时间窗口算法&quot;&gt;&lt;a href=&quot;#固定时间窗口算法&quot; class=&quot;headerlink&quot; title=&quot;固定时间窗口算法&quot;&gt;&lt;/a&gt;固定时间窗口算法&lt;/h2&gt;&lt;p&gt;固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。&lt;/p&gt;
+&lt;p&gt;固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;举个例子，如果 A 用户访问接口的时间分布如下：&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;时间段&lt;/th&gt;
+&lt;th&gt;访问次数&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;00:00 ~ 00:30&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;00:30 ~ 01:00&lt;/td&gt;
+&lt;td&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;01:00 ~ 01:30&lt;/td&gt;
+&lt;td&gt;100&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;01:30 ~ 02:00&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 &lt;code&gt;00:30 ~ 01:30&lt;/code&gt; 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="Api" scheme="https://novnan.github.io/tags/Api/"/>
+    
+    <category term="rate-limiter" scheme="https://novnan.github.io/tags/rate-limiter/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis Pipeline</title>
+    <link href="https://novnan.github.io/Redis/redis-pipeline/"/>
+    <id>https://novnan.github.io/Redis/redis-pipeline/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.296Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;h2 id=&quot;简介&quot;&gt;&lt;a href=&quot;#简介&quot; class=&quot;headerlink&quot; title=&quot;简介&quot;&gt;&lt;/a&gt;简介&lt;/h2&gt;&lt;p&gt;在命令行中是没有 redis pipeline 功能的，但 redis 是支持 pipeline 的，而且在各个语言版的 client</summary>
+        
+      
+    
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/categories/Redis/"/>
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/tags/Redis/"/>
+    
+    <category term="Pipeline" scheme="https://novnan.github.io/tags/Pipeline/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Redis 事务</title>
+    <link href="https://novnan.github.io/Redis/redis-transactions/"/>
+    <id>https://novnan.github.io/Redis/redis-transactions/</id>
+    <published>2020-10-19T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.298Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;概述&quot;&gt;&lt;a href=&quot;#概述&quot; class=&quot;headerlink&quot; title=&quot;概述&quot;&gt;&lt;/a&gt;概述&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;概念：&lt;/strong&gt; 可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Redis 部分支持事务，不支持的是：强一致性&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;能干嘛：&lt;/strong&gt; 一个队列中，一次性、顺序性、排他性的执行一系列命令&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;常用命令：&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MULTI&lt;/code&gt;：开启一个事务，&lt;code&gt;MULTI&lt;/code&gt; 执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;EXEC&lt;/code&gt;：执行队列中所有的命令&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DISCARD&lt;/code&gt;：清空事务队列,并放弃执行事务&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UNWATCH&lt;/code&gt;：取消 &lt;code&gt;WATCH&lt;/code&gt; 命令对所有 key 的监视&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WATCH key1 key2 ...&lt;/code&gt;    ：监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&quot;使用&quot;&gt;&lt;a href=&quot;#使用&quot; class=&quot;headerlink&quot; title=&quot;使用&quot;&gt;&lt;/a&gt;使用&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;正常执行：&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/Redis/redis-transactions/16a167bf936bde78.png&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/categories/Redis/"/>
+    
+    
+    <category term="Redis" scheme="https://novnan.github.io/tags/Redis/"/>
+    
+    <category term="事务" scheme="https://novnan.github.io/tags/%E4%BA%8B%E5%8A%A1/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>本博客当前使用的插件总结</title>
+    <link href="https://novnan.github.io/Hexo/plugins-used-in-this-blog/"/>
+    <id>https://novnan.github.io/Hexo/plugins-used-in-this-blog/</id>
+    <published>2020-10-14T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.269Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Hexo 5.2.0&lt;br&gt;NexT 8.0.1&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;这几天将博客主题从 NexT-7.7.0 升级到了 8.0.1，在重新安装插件的时候顺便记录了本博客当前使用的插件&lt;/p&gt;
+&lt;h2 id=&quot;鼠标点击特效&quot;&gt;&lt;a href=&quot;#鼠标点击特效&quot; class=&quot;headerlink&quot; title=&quot;鼠标点击特效&quot;&gt;&lt;/a&gt;鼠标点击特效&lt;/h2&gt;&lt;p&gt;下面是四个比较常用的鼠标点击特效脚本，我们可以把它们放置在 &lt;code&gt;source/js/cursor/&lt;/code&gt; 目录下：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;礼花特效代码：&lt;/li&gt;
+&lt;/ul&gt;</summary>
+    
+    
+    
+    <category term="Hexo" scheme="https://novnan.github.io/categories/Hexo/"/>
+    
+    
+    <category term="Hexo" scheme="https://novnan.github.io/tags/Hexo/"/>
+    
+    <category term="NexT" scheme="https://novnan.github.io/tags/NexT/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Hexo版本升级指南</title>
+    <link href="https://novnan.github.io/Hexo/update_hexo/"/>
+    <id>https://novnan.github.io/Hexo/update_hexo/</id>
+    <published>2020-08-06T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.270Z</updated>
+    
+    
+      
+      
+        
+        
+    <summary type="html">&lt;p&gt;Hexo 升级比较简单，老方法 &lt;code&gt;npm-check&lt;/code&gt;、&lt;code&gt;npm-upgrade&lt;/code&gt;、&lt;code&gt;npm-update&lt;/code&gt; 一键三连。按以下顺序逐步执行完成后，Hexo</summary>
+        
+      
+    
+    
+    
+    <category term="Hexo" scheme="https://novnan.github.io/categories/Hexo/"/>
+    
+    
+    <category term="Hexo" scheme="https://novnan.github.io/tags/Hexo/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>宝塔Linux面板小内存服务器编译安装 MySQL 8.0</title>
+    <link href="https://novnan.github.io/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/"/>
+    <id>https://novnan.github.io/Linux/bt-panel-install-mysql%208.0-on-low-memory-server/</id>
+    <published>2019-07-14T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.274Z</updated>
+    
+    
+    <summary type="html">&lt;div class=&quot;note primary&quot;&gt;&lt;p&gt;如果 1G 内存要装 MySQL 5.7，这篇文章也是适用的。&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;宝塔 6.9.8&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;宝塔面板在编译安装 MySQL 8.0 时，要求 4个核心的 CPU，8G 内存，实在是太高了，小站长的服务器一般都不会有如此高的配置。这时候，我们要使用 MySQL 8.0，可以选择极速安装，或者，如果一定要自己编译的话，可以使用命令行来跳过配置检测。不过，MySQL 编译过程中，需要 5G 以上的内存，以及 9G 以上的数据盘空间。如果我们的内存实在不够，可以创建 swap 虚拟内存。&lt;/p&gt;
+&lt;p&gt;在宝塔面板里的 &lt;strong&gt;Linux 工具箱&lt;/strong&gt;(如果没有可以去软件商店里面安装) 修改 Swap&amp;#x2F;虚拟内存，输入 0，然后手动设置 swap 到系统盘：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;fallocate -l 4G /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;chown&lt;/span&gt; root:root /swap &lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;chmod&lt;/span&gt; 0600 /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;mkswap /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;swapon /swap&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;built_in&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;/swap    swap    swap    defaults    0 0&amp;#x27;&lt;/span&gt; &amp;gt;&amp;gt; /etc/fstab&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;查看一下 swap 是否开启成功：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;swapon -s&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;Filename                                Type            Size    Used    Priority&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;/swap                                   file    4194300 9480    -2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;现在内存有 5933M，应该够了，我们还要检查一下，&amp;#x2F;www 所在的磁盘够不够，建议剩余空间不小于 10G。如果不够，把不需要的文件删一下，或者扩容磁盘，这里不赘述。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://novnan.github.io/categories/Linux/"/>
+    
+    
+    <category term="BT Panel" scheme="https://novnan.github.io/tags/BT-Panel/"/>
+    
+    <category term="mysql 8.0" scheme="https://novnan.github.io/tags/mysql-8-0/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Composer 修改项目依赖为新的镜像地址</title>
+    <link href="https://novnan.github.io/Composer/modify-the-project-dependency-to-the-new-mirror-address/"/>
+    <id>https://novnan.github.io/Composer/modify-the-project-dependency-to-the-new-mirror-address/</id>
+    <published>2019-07-10T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.259Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;前置说明&quot;&gt;&lt;a href=&quot;#前置说明&quot; class=&quot;headerlink&quot; title=&quot;前置说明&quot;&gt;&lt;/a&gt;前置说明&lt;/h2&gt;&lt;p&gt;本文以从 &lt;code&gt;https://pkg.phpcomposer.com&lt;/code&gt; 镜像切换到 &lt;code&gt;https://packagist.laravel-china.org&lt;/code&gt; 为例子来讲解。请自行修改命令行中对应的链接。&lt;/p&gt;
+&lt;h2 id=&quot;问题说明&quot;&gt;&lt;a href=&quot;#问题说明&quot; class=&quot;headerlink&quot; title=&quot;问题说明&quot;&gt;&lt;/a&gt;问题说明&lt;/h2&gt;&lt;p&gt;Composer 在安装时会在 &lt;code&gt;composer.lock&lt;/code&gt; 文件中写入扩展包下载地址，如：&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/images/Composer/modify-the-project-dependency-to-the-new-mirror-address/l5HYA3LOTP.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;一些年代久远的项目中使用了 &lt;code&gt;https://pkg.phpcomposer.com/&lt;/code&gt; 的中文加速镜像，然后最近因为其镜像访问出了故障：&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>你生产环境的 Composer 是这样吗？</title>
+    <link href="https://novnan.github.io/Composer/introduction-to-composer/"/>
+    <id>https://novnan.github.io/Composer/introduction-to-composer/</id>
+    <published>2019-06-11T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.258Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;composer-配置项&quot;&gt;&lt;a href=&quot;#composer-配置项&quot; class=&quot;headerlink&quot; title=&quot;composer 配置项&quot;&gt;&lt;/a&gt;composer 配置项&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;具体的每个配置项细节请参考  &lt;a href=&quot;https://docs.phpcomposer.com/04-schema.html&quot;&gt;Composer 官网&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&quot;配置列表&quot;&gt;&lt;a href=&quot;#配置列表&quot; class=&quot;headerlink&quot; title=&quot;配置列表&quot;&gt;&lt;/a&gt;配置列表&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;ID&lt;/th&gt;
+&lt;th&gt;配置项&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;name&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;包的名称，它包括供应商名称和项目名称，使用 &amp;#x2F; 分隔。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;description&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;包描述&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;version&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;版本&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;type&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装类型&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;keywords&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;关键字&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;homepage&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;项目主页&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;time&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;版本发布时间&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;license&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;许可协议&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;authors&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;作者&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;support&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;支持,获取项目支持的向相关信息对象。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;require&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自动加载的包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;require-dev&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;在DEV下自动加载的包&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;conflict&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;此列表中的包与当前包的这个版本冲突。它们将不允许同时被安装&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;14&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;suggest&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;建议安装的包，它们增强或能够与当前包良好的工作。这些只是信息，并显示在依赖包安装完成之后，给你的用户一个建议，他们可以添加更多的包。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;autoload&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;自动加载,分别有四种加载机制 &lt;code&gt;psr-4&lt;/code&gt; &lt;code&gt;psr-0&lt;/code&gt; &lt;code&gt;classmap&lt;/code&gt; &lt;code&gt;file&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;include-path&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;保留传统,不建议使用&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;target-dir&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;定义当前包安装的目标文件夹&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;18&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;minimum-stability&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装包的时候通过稳定性过滤包的默认行为, &lt;code&gt;dev&lt;/code&gt; &lt;code&gt;alpha&lt;/code&gt; &lt;code&gt;beta&lt;/code&gt; &lt;code&gt;RC&lt;/code&gt; &lt;code&gt;stable&lt;/code&gt; 可选&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;prefer-stable&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;安装包的时候优先使用更稳定的包版本, &lt;code&gt;&amp;quot;prefer-stable&amp;quot;: true&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;repositories&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;使用自定义的包资源库。默认情况下 composer 只使用 packagist 作为包的资源库。通过指定资源库，你可以从其他地方获取资源包。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;21&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;config&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;配置参数，eg：&lt;code&gt;process-timeout&lt;/code&gt; &lt;code&gt;vendor-dir&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;22&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;scripts &lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Composer 允许你在安装过程中的各个阶段挂接脚本。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;23&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;extra&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;任意的，供 &lt;code&gt;scripts&lt;/code&gt; 使用的额外数据。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;24&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;bin&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;该属性用于标注一组应被视为二进制脚本的文件，他们会被软链接到（config 对象中的）bin-dir 属性所标注的目录，以供其他依赖包调用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;25&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;archive&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;这些选项在创建包存档时使用。&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;</summary>
+    
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>六个鲜为人知的 Composer 命令</title>
+    <link href="https://novnan.github.io/Composer/six-lesser-known-composer-commands-you-should-know/"/>
+    <id>https://novnan.github.io/Composer/six-lesser-known-composer-commands-you-should-know/</id>
+    <published>2019-05-19T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.260Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;Composer 是 PHP 的一个依赖管理工具。 如果你是一名 PHP 开发人员，那么你很可能每天都在使用它并且频繁的运行命令 &lt;code&gt;require&lt;/code&gt;， &lt;code&gt;install&lt;/code&gt; 和 &lt;code&gt;update&lt;/code&gt;。也许你并没有意识到， 我们可以使用一些其他的 Composer 命令，来更加轻松的使用它。&lt;/p&gt;
+&lt;p&gt;它有许多的命令可以使用，但今天我将分享我使用的并且每天都有帮助的 6 个命令。&lt;/p&gt;
+&lt;h2 id=&quot;show&quot;&gt;&lt;a href=&quot;#show&quot; class=&quot;headerlink&quot; title=&quot;show&quot;&gt;&lt;/a&gt;show&lt;/h2&gt;&lt;p&gt;先说下 &lt;code&gt;show&lt;/code&gt; 命令。它允许您查看项目的所有已安装包(包括依赖项)，以及查看相关包的说明。所有这些信息都可以在Composer锁文件(composer.lock)中找到, 但是使用 &lt;code&gt;show&lt;/code&gt; 命令相对来说是一种更简单、更方便的一种查看包信息的方法。&lt;/p&gt;
+&lt;p&gt;要列出所有已安装的包及其版本号和说明，只需使用 &lt;code&gt;show&lt;/code&gt;:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;composer show&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;有时候把这些信息用依赖关系树的形式查看会更容易理解， 可以通过 &lt;code&gt;--tree&lt;/code&gt; or &lt;code&gt;-t&lt;/code&gt; 参数:&lt;/p&gt;
+&lt;figure class=&quot;highlight plaintext&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;composer show -t&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
+    
+    
+    <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
+    
+    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Git Submodule 用法笔记</title>
+    <link href="https://novnan.github.io/Git/git-submodule/"/>
+    <id>https://novnan.github.io/Git/git-submodule/</id>
+    <published>2019-04-02T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.265Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;git version 2.21.0&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;新增-submodule&quot;&gt;&lt;a href=&quot;#新增-submodule&quot; class=&quot;headerlink&quot; title=&quot;新增 submodule&quot;&gt;&lt;/a&gt;新增 submodule&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;# git submodule add https://github.com/theme-next/hexo-theme-next.git themes/next/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;git submodule add &amp;lt;url&amp;gt; &amp;lt;folder&amp;gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;div class=&quot;note danger&quot;&gt;&lt;p&gt;如果出现 &lt;code&gt;xxx already exists in the index&lt;/code&gt; 的提示，则给根据&lt;a href=&quot;https://stackoverflow.com/questions/12898278/issue-with-adding-common-code-as-git-submodule-already-exists-in-the-index&quot;&gt;Issue with adding common code as git submodule: “already exists in the index”
+&lt;/a&gt;里面的回答，执行 &lt;code&gt;git rm -f --cached &amp;lt;folder&amp;gt;&lt;/code&gt; 后，在执行 &lt;code&gt;git submodule add&lt;/code&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;如果这个仓库先前没有用过 submodule，那么 Git 会在目录下建立一个叫做 &lt;code&gt;.gitmodules&lt;/code&gt; 的文件，这里记录了 remote repo 的 URL 和这个 submodule 在此目录的路径。执行此命令后 submodule 和 &lt;code&gt;.gitmodules&lt;/code&gt; 会自动 staged，这个时候可以 commit 和 push。&lt;/p&gt;
+&lt;h2 id=&quot;更新-submodule&quot;&gt;&lt;a href=&quot;#更新-submodule&quot; class=&quot;headerlink&quot; title=&quot;更新 submodule&quot;&gt;&lt;/a&gt;更新 submodule&lt;/h2&gt;&lt;p&gt;必须到个人的目录底下执行 &lt;code&gt;git pull&lt;/code&gt; 去拉取 upstream 的代码，可是这样会比较安全；若要一次全部更新所有的 submodule，可以用 &lt;code&gt;foreach&lt;/code&gt; 命令：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;git submodule foreach --recursive git pull origin master&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;删除-submodule&quot;&gt;&lt;a href=&quot;#删除-submodule&quot; class=&quot;headerlink&quot; title=&quot;删除 submodule&quot;&gt;&lt;/a&gt;删除 submodule&lt;/h2&gt;&lt;p&gt;本以为会有像是 &lt;code&gt;git submodule rm&lt;/code&gt; 这样的命令，结果竟然没有，必须辛苦的一个一个手动移除，不知道不实现这个命令的考量是什么，希望未来的版本能把它加上去。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Git" scheme="https://novnan.github.io/categories/Git/"/>
+    
+    
+    <category term="Git" scheme="https://novnan.github.io/tags/Git/"/>
+    
+    <category term="Git Submodule" scheme="https://novnan.github.io/tags/Git-Submodule/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Ubuntu 18.04 LTS中安装和美化ZSH Shell</title>
+    <link href="https://novnan.github.io/Linux/install-zsh-shell-ubuntu-18-04/"/>
+    <id>https://novnan.github.io/Linux/install-zsh-shell-ubuntu-18-04/</id>
+    <published>2019-03-28T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.275Z</updated>
+    
+    
+    <summary type="html">&lt;blockquote&gt;
+&lt;p&gt;ZSH 或称 Z Shell 是一个类似于 Bash 和 SH 的 Linux Shell，它具有一些 Bash 和其它 Shell 不具备的高级功能。流行的 Git 版本控制系统也可以使用插件与 ZSH 很好的集成，这一点对软件开发人员来说非常有用。而且 ZSH 有非常多的主题和插件支持，比 Bash 更具可定制性。简单来说，ZSH 就是一款替代 Bash 且非常好用的 Linux Shell。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Ubuntu 18.04.2 LTS&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;安装ZSH-Shell&quot;&gt;&lt;a href=&quot;#安装ZSH-Shell&quot; class=&quot;headerlink&quot; title=&quot;安装ZSH Shell&quot;&gt;&lt;/a&gt;安装ZSH Shell&lt;/h2&gt;&lt;p&gt;ZSH 已经被收录到了 Ubuntu 18.04 LTS 的官方软件包存储库中，安装起来也非常容易。使用如下命令就可以直接安装&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;sudo apt install zsh&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;img src=&quot;/images/Linux/install-zsh-shell-ubuntu-18-04/bd9f206bly1g1jqcbjc1yj210y0xg79k.jpg&quot;&gt;&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="Linux" scheme="https://novnan.github.io/categories/Linux/"/>
+    
+    
+    <category term="Ubuntu" scheme="https://novnan.github.io/tags/Ubuntu/"/>
+    
+    <category term="zsh" scheme="https://novnan.github.io/tags/zsh/"/>
+    
+    <category term="oh my zsh" scheme="https://novnan.github.io/tags/oh-my-zsh/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>array_merge 和 array+ 的区别</title>
+    <link href="https://novnan.github.io/PHP/combining-arrays-using-plus-versus-array-merge/"/>
+    <id>https://novnan.github.io/PHP/combining-arrays-using-plus-versus-array-merge/</id>
+    <published>2019-03-28T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.284Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PHP version 7.1.26&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;键名是string，两者区别&quot;&gt;&lt;a href=&quot;#键名是string，两者区别&quot; class=&quot;headerlink&quot; title=&quot;键名是string，两者区别&quot;&gt;&lt;/a&gt;键名是string，两者区别&lt;/h2&gt;&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;15&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;meta&quot;&gt;&amp;lt;?php&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt; = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PHP&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt; = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;PYTHON&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;print_r&lt;/span&gt;(&lt;span class=&quot;title function_ invoke__&quot;&gt;array_merge&lt;/span&gt;(&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt;, &lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PYTHON ) 如果键名为字符，且键名相同，array_merge()后面数组元素值会覆盖前面数组元素值&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;print_r&lt;/span&gt;(&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt; + &lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; PHP )如果键名为字符，且键名相同，数组相加会将最先出现的值作为结果&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//再比如&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt; = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt; = [&lt;span class=&quot;string&quot;&gt;&amp;#x27;a&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;1&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;b&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;3&amp;#x27;&lt;/span&gt;, &lt;span class=&quot;string&quot;&gt;&amp;#x27;c&amp;#x27;&lt;/span&gt; =&amp;gt; &lt;span class=&quot;string&quot;&gt;&amp;#x27;2&amp;#x27;&lt;/span&gt;];&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;print_r&lt;/span&gt;(&lt;span class=&quot;title function_ invoke__&quot;&gt;array_merge&lt;/span&gt;(&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt;,&lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 3 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;print_r&lt;/span&gt;(&lt;span class=&quot;variable&quot;&gt;$arr1&lt;/span&gt; + &lt;span class=&quot;variable&quot;&gt;$arr2&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;// Array ( [a] =&amp;gt; 1 [b] =&amp;gt; 2 [c] =&amp;gt; 2 )&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>令人困惑的strtotime</title>
+    <link href="https://novnan.github.io/PHP/confusing-strtotime/"/>
+    <id>https://novnan.github.io/PHP/confusing-strtotime/</id>
+    <published>2018-07-30T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.285Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;今天是 &lt;code&gt;2018-07-31&lt;/code&gt; 执行代码&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;date&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;,&lt;span class=&quot;title function_ invoke__&quot;&gt;strtotime&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;-1 month&amp;quot;&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;按正常理解输出应该是 &lt;code&gt;2018-06-30&lt;/code&gt;，但实际输出是 &lt;code&gt;2018-07-01&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;虽然这个问题看起来很迷惑，但从内部逻辑上来说呢，其实是”对”的。&lt;br&gt;我们来模拟下date内部的对于这种事情的处理逻辑：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先做-1 month，那么当前是07-31，减去一以后就是06-31&lt;/li&gt;
+&lt;li&gt;再做日期规范化，因为6月没有31号，所以就好像2点60等于3点一样，6月31就等于了7月1&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;是不是逻辑很”清晰”呢? 我们也可以手动验证第二个步骤，比如:&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;var_dump&lt;/span&gt;(&lt;span class=&quot;title function_ invoke__&quot;&gt;date&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;, &lt;span class=&quot;title function_ invoke__&quot;&gt;strtotime&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;2017-06-31&amp;quot;&lt;/span&gt;)));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//输出2017-07-01&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+    <category term="strtotime" scheme="https://novnan.github.io/tags/strtotime/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>PHP empty 函数判断结果为空，但实际值却为非空</title>
+    <link href="https://novnan.github.io/PHP/When-empty-is-not-empty/"/>
+    <id>https://novnan.github.io/PHP/When-empty-is-not-empty/</id>
+    <published>2018-05-27T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.283Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;PHP 7.1.16&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;p&gt;最近我在一个项目中使用 &lt;code&gt;empty&lt;/code&gt; 时获取到了一些意料之外的结果。下面是我处理后的调试记录，在这里分享给你。&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;4&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;var_dump&lt;/span&gt;(&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;variable&quot;&gt;$person&lt;/span&gt;-&amp;gt;firstName,&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;    &lt;span class=&quot;keyword&quot;&gt;empty&lt;/span&gt;(&lt;span class=&quot;variable&quot;&gt;$person&lt;/span&gt;-&amp;gt;firstName)&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;);&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;它的结果是：&lt;/p&gt;
+&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;string&lt;/span&gt;(&lt;span class=&quot;number&quot;&gt;5&lt;/span&gt;) &lt;span class=&quot;string&quot;&gt;&amp;quot;Freek&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;keyword&quot;&gt;bool&lt;/span&gt;(&lt;span class=&quot;literal&quot;&gt;true&lt;/span&gt;)&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
+    
+    
+    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+    <category term="empty" scheme="https://novnan.github.io/tags/empty/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>ubuntu 16.04服务器上搭建Shadowsocks服务</title>
+    <link href="https://novnan.github.io/Shadowsocks/setup-Shadowsocks-on-ubuntu-1604/"/>
+    <id>https://novnan.github.io/Shadowsocks/setup-Shadowsocks-on-ubuntu-1604/</id>
+    <published>2018-05-09T16:00:00.000Z</published>
+    <updated>2022-03-08T06:50:02.299Z</updated>
+    
+    
+    <summary type="html">&lt;h2 id=&quot;Version&quot;&gt;&lt;a href=&quot;#Version&quot; class=&quot;headerlink&quot; title=&quot;Version&quot;&gt;&lt;/a&gt;Version&lt;/h2&gt;&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;Ubuntu 16.04&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;更新软件源&quot;&gt;&lt;a href=&quot;#更新软件源&quot; class=&quot;headerlink&quot; title=&quot;更新软件源&quot;&gt;&lt;/a&gt;更新软件源&lt;/h2&gt;&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt update&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;安装pip&quot;&gt;&lt;a href=&quot;#安装pip&quot; class=&quot;headerlink&quot; title=&quot;安装pip&quot;&gt;&lt;/a&gt;安装pip&lt;/h2&gt;&lt;p&gt;使用 &lt;code&gt;Python 3&lt;/code&gt; 为载体，因 &lt;code&gt;Python 3&lt;/code&gt; 对应的包管理器 &lt;code&gt;pip3&lt;/code&gt; 并未预装，首先安装 &lt;code&gt;pip3&lt;/code&gt;：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;sudo apt install python3-pip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;h2 id=&quot;安装Shadowsocks&quot;&gt;&lt;a href=&quot;#安装Shadowsocks&quot; class=&quot;headerlink&quot; title=&quot;安装Shadowsocks&quot;&gt;&lt;/a&gt;安装Shadowsocks&lt;/h2&gt;&lt;p&gt;因 Shadowsocks 作者不再维护 &lt;code&gt;pip&lt;/code&gt; 中的Shadowsocks（定格在了2.8.2），我们使用下面的命令来安装最新版的Shadowsocks：&lt;/p&gt;
+&lt;figure class=&quot;highlight bash&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;pip3 install https://github.com/shadowsocks/shadowsocks/archive/master.zip&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
+    
+    
+    
+    <category term="Shadowsocks" scheme="https://novnan.github.io/categories/Shadowsocks/"/>
+    
+    
+    <category term="shadowsocks" scheme="https://novnan.github.io/tags/shadowsocks/"/>
+    
+    <category term="ss" scheme="https://novnan.github.io/tags/ss/"/>
+    
+    <category term="ubuntu" scheme="https://novnan.github.io/tags/ubuntu/"/>
+    
+  </entry>
+  
+</feed>
