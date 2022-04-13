@@ -351,8 +351,7 @@
 </ul>
 <p>令牌桶算法中流量的流入速率是不限制的，流出速率也是没有强制限制的（令牌消耗瞬间峰值是桶的大小），但是令牌的产生和积攒需要时间，因此既支持一定程度突发流量，又能满足总体限流的目标。</p>
 <p>对比<code>漏桶算法</code>和<code>令牌桶算法</code>，我们发现，<code>漏桶算法</code>能够强行限制数据的传输速率，而<code>令牌桶算法</code>在能够限制数据的平均传输速率外，还允许某种程度的突发传输。</p>
-<div class="note default"><p>原文链接：<a href="https://rmingwang.com/api-rate-limiting-algorithm-practices.html">接口限流常用算法实践</a></p>
-</div>]]></content>
+]]></content>
       <categories>
         <category>PHP</category>
       </categories>
