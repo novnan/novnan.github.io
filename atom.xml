@@ -6,7 +6,7 @@
   <link href="https://novnan.github.io/atom.xml" rel="self"/>
   
   <link href="https://novnan.github.io/"/>
-  <updated>2022-04-26T02:52:04.351Z</updated>
+  <updated>2022-04-29T08:51:32.281Z</updated>
   <id>https://novnan.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Golang的协程调度器原理及GMP设计思想</title>
+    <link href="https://novnan.github.io/GO/Golang%E7%9A%84%E5%8D%8F%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%99%A8%E5%8E%9F%E7%90%86%E5%8F%8AGMP%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3/"/>
+    <id>https://novnan.github.io/GO/Golang%E7%9A%84%E5%8D%8F%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%99%A8%E5%8E%9F%E7%90%86%E5%8F%8AGMP%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3/</id>
+    <published>2022-04-28T16:00:00.000Z</published>
+    <updated>2022-04-29T08:51:32.281Z</updated>
+    
+    
+    <summary type="html">&lt;p&gt;&lt;img src=&quot;/images/GO/Golang%E7%9A%84%E5%8D%8F%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%99%A8%E5%8E%9F%E7%90%86%E5%8F%8AGMP%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3/GPM%E5%B0%81%E9%9D%A2.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;视频链接地址：&lt;a href=&quot;https://www.bilibili.com/video/BV19r4y1w7Nx&quot;&gt;https://www.bilibili.com/video/BV19r4y1w7Nx&lt;/a&gt;&lt;/p&gt;
+&lt;h4 id=&quot;一、Golang“调度器”的由来？&quot;&gt;&lt;a href=&quot;#一、Golang“调度器”的由来？&quot; class=&quot;headerlink&quot; title=&quot;一、Golang“调度器”的由来？&quot;&gt;&lt;/a&gt;一、Golang“调度器”的由来？&lt;/h4&gt;&lt;h5 id=&quot;1-单进程时代不需要调度器&quot;&gt;&lt;a href=&quot;#1-单进程时代不需要调度器&quot; class=&quot;headerlink&quot; title=&quot;(1) 单进程时代不需要调度器&quot;&gt;&lt;/a&gt;(1) 单进程时代不需要调度器&lt;/h5&gt;&lt;p&gt;我们知道，一切的软件都是跑在操作系统上，真正用来干活(计算)的是CPU。早期的操作系统每个程序就是一个进程，直到一个程序运行完，才能进行下一个进程，就是“单进程时代”&lt;/p&gt;
+&lt;p&gt;一切的程序只能串行发生。&lt;br&gt;&lt;img src=&quot;/images/GO/Golang%E7%9A%84%E5%8D%8F%E7%A8%8B%E8%B0%83%E5%BA%A6%E5%99%A8%E5%8E%9F%E7%90%86%E5%8F%8AGMP%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3/5-%E5%8D%95%E8%BF%9B%E7%A8%8B%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F.png&quot;&gt;&lt;/p&gt;
+&lt;p&gt;早期的单进程操作系统，面临2个问题：&lt;/p&gt;
+&lt;p&gt;1.单一的执行流程，计算机只能一个任务一个任务处理。&lt;/p&gt;
+&lt;p&gt;2.进程阻塞所带来的CPU时间浪费。&lt;/p&gt;
+&lt;p&gt;那么能不能有多个进程来宏观一起来执行多个任务呢？&lt;/p&gt;
+&lt;p&gt;后来操作系统就具有了&lt;strong&gt;最早的并发能力：多进程并发&lt;/strong&gt;，当一个进程阻塞的时候，切换到另外等待执行的进程，这样就能尽量把CPU利用起来，CPU就不浪费了。&lt;/p&gt;</summary>
+    
+    
+    
+    <category term="GO" scheme="https://novnan.github.io/categories/GO/"/>
+    
+    
+    <category term="GO" scheme="https://novnan.github.io/tags/GO/"/>
+    
+    <category term="GMP" scheme="https://novnan.github.io/tags/GMP/"/>
+    
+  </entry>
   
   <entry>
     <title>Go语言中什么时候使用指针</title>
@@ -722,37 +751,6 @@
     
     
     <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>令人困惑的strtotime</title>
-    <link href="https://novnan.github.io/PHP/confusing-strtotime/"/>
-    <id>https://novnan.github.io/PHP/confusing-strtotime/</id>
-    <published>2018-07-30T16:00:00.000Z</published>
-    <updated>2022-03-08T06:50:02.285Z</updated>
-    
-    
-    <summary type="html">&lt;p&gt;今天是 &lt;code&gt;2018-07-31&lt;/code&gt; 执行代码&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;date&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;,&lt;span class=&quot;title function_ invoke__&quot;&gt;strtotime&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;-1 month&amp;quot;&lt;/span&gt;));&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
-
-&lt;p&gt;按正常理解输出应该是 &lt;code&gt;2018-06-30&lt;/code&gt;，但实际输出是 &lt;code&gt;2018-07-01&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;虽然这个问题看起来很迷惑，但从内部逻辑上来说呢，其实是”对”的。&lt;br&gt;我们来模拟下date内部的对于这种事情的处理逻辑：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;先做-1 month，那么当前是07-31，减去一以后就是06-31&lt;/li&gt;
-&lt;li&gt;再做日期规范化，因为6月没有31号，所以就好像2点60等于3点一样，6月31就等于了7月1&lt;/li&gt;
-&lt;/ol&gt;
-&lt;p&gt;是不是逻辑很”清晰”呢? 我们也可以手动验证第二个步骤，比如:&lt;/p&gt;
-&lt;figure class=&quot;highlight php&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;2&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&quot;code&quot;&gt;&lt;pre&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;title function_ invoke__&quot;&gt;var_dump&lt;/span&gt;(&lt;span class=&quot;title function_ invoke__&quot;&gt;date&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;Y-m-d&amp;quot;&lt;/span&gt;, &lt;span class=&quot;title function_ invoke__&quot;&gt;strtotime&lt;/span&gt;(&lt;span class=&quot;string&quot;&gt;&amp;quot;2017-06-31&amp;quot;&lt;/span&gt;)));&lt;/span&gt;&lt;br&gt;&lt;span class=&quot;line&quot;&gt;&lt;span class=&quot;comment&quot;&gt;//输出2017-07-01&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;</summary>
-    
-    
-    
-    <category term="PHP" scheme="https://novnan.github.io/categories/PHP/"/>
-    
-    
-    <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
-    
-    <category term="strtotime" scheme="https://novnan.github.io/tags/strtotime/"/>
     
   </entry>
   
