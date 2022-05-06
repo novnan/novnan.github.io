@@ -484,7 +484,7 @@ if(canvas.getContext){
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/PHP/api-rate-limiting-algorithm-practices/">
+    <link itemprop="mainEntityOfPage" href="https://novnan.github.io/Redis/redis-transactions/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.png">
@@ -502,7 +502,7 @@ if(canvas.getContext){
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/PHP/api-rate-limiting-algorithm-practices/" class="post-title-link" itemprop="url">接口限流常用算法实践</a>
+          <a href="/Redis/redis-transactions/" class="post-title-link" itemprop="url">Redis 事务</a>
         </h2>
 
         <div class="post-meta-container">
@@ -521,12 +521,12 @@ if(canvas.getContext){
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/PHP/" itemprop="url" rel="index"><span itemprop="name">PHP</span></a>
+          <a href="/categories/Redis/" itemprop="url" rel="index"><span itemprop="name">Redis</span></a>
         </span>
     </span>
 
   
-    <span id="/PHP/api-rate-limiting-algorithm-practices/" class="post-meta-item leancloud_visitors" data-flag-title="接口限流常用算法实践" title="阅读次数">
+    <span id="/Redis/redis-transactions/" class="post-meta-item leancloud_visitors" data-flag-title="Redis 事务" title="阅读次数">
       <span class="post-meta-item-icon">
         <i class="far fa-eye"></i>
       </span>
@@ -542,45 +542,22 @@ if(canvas.getContext){
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>为了更好的说明几种算法，我们举个例子，下文就这个例子分别几种算法实现。</p>
+          <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><strong>概念：</strong> 可以一次执行多个命令，本质是一组命令的集合。一个事务中的所有命令都会序列化，按顺序地串行化执行而不会被其它命令插入，不许加塞。</p>
+<p><strong>Redis 部分支持事务，不支持的是：强一致性</strong></p>
+<p><strong>能干嘛：</strong> 一个队列中，一次性、顺序性、排他性的执行一系列命令</p>
+<p><strong>常用命令：</strong></p>
 <ul>
-<li>如何限制每分钟访问 <code>/api/books</code> 接口不能超过 120 次 ？</li>
+<li><code>MULTI</code>：开启一个事务，<code>MULTI</code> 执行之后，客户端可以继续向服务器发送任意多条命令，这些命令不会立即被执行，而是被放到一个队列中。</li>
+<li><code>EXEC</code>：执行队列中所有的命令</li>
+<li><code>DISCARD</code>：清空事务队列,并放弃执行事务</li>
+<li><code>UNWATCH</code>：取消 <code>WATCH</code> 命令对所有 key 的监视</li>
+<li><code>WATCH key1 key2 ...</code>    ：监视一个(或多个) key ，如果在事务执行之前这个(或这些) key 被其他命令所改动，那么事务将被打断。</li>
 </ul>
-<p>我们先定义一个接口：</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">RateLimiter</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">access</span>(<span class="params"></span>)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="固定时间窗口算法"><a href="#固定时间窗口算法" class="headerlink" title="固定时间窗口算法"></a>固定时间窗口算法</h2><p>固定时间窗口算法又叫计数器算法，逻辑就是对固定时间段内的访问次数进行计数，如果计数结果超过次数限制，则拒绝访问。</p>
-<p>固定时间窗口算法的劣势就在于其只关心时间段内的总访问次数，而忽略了瞬间集中请求的问题，换而言之，这种统计方法的粒度太粗了，然而我们无法保证请求在时间段内的分布是平均的。</p>
-<p><img src="/images/PHP/api-rate-limiting-algorithm-practices/fixed_window.png"></p>
-<p>举个例子，如果 A 用户访问接口的时间分布如下：</p>
-<table>
-<thead>
-<tr>
-<th>时间段</th>
-<th>访问次数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>00:00 ~ 00:30</td>
-<td>20</td>
-</tr>
-<tr>
-<td>00:30 ~ 01:00</td>
-<td>100</td>
-</tr>
-<tr>
-<td>01:00 ~ 01:30</td>
-<td>100</td>
-</tr>
-<tr>
-<td>01:30 ~ 02:00</td>
-<td>20</td>
-</tr>
-</tbody></table>
-<p>显然在第一分钟，我们有 120 次请求，第二分钟也是 120 次请求，但是 <code>00:30 ~ 01:30</code> 这一分钟时间内，显然是请求书超过 120 次的，所以，这种情况虽然实现了需求，但是很勉强，粒度不够细。</p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><p><strong>正常执行：</strong></p>
+<p><img src="/images/Redis/redis-transactions/16a167bf936bde78.png"></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/PHP/api-rate-limiting-algorithm-practices/#more" rel="contents">
+              <a class="btn" href="/Redis/redis-transactions/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
