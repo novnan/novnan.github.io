@@ -6,7 +6,7 @@
   <link href="https://novnan.github.io/atom.xml" rel="self"/>
   
   <link href="https://novnan.github.io/"/>
-  <updated>2023-06-12T05:29:58.000Z</updated>
+  <updated>2023-06-14T05:44:52.000Z</updated>
   <id>https://novnan.github.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://novnan.github.io/Linux/vagrant-lamp%E9%A1%B9%E7%9B%AE%E6%89%A9%E5%B1%95%E7%A3%81%E7%9B%98%E7%A9%BA%E9%97%B4/"/>
     <id>https://novnan.github.io/Linux/vagrant-lamp%E9%A1%B9%E7%9B%AE%E6%89%A9%E5%B1%95%E7%A3%81%E7%9B%98%E7%A9%BA%E9%97%B4/</id>
     <published>2023-06-07T16:00:00.000Z</published>
-    <updated>2023-06-12T05:29:58.000Z</updated>
+    <updated>2023-06-14T05:44:52.000Z</updated>
     
     
     <summary type="html">&lt;div class=&quot;note info&quot;&gt;&lt;p&gt;vagrant ssh 进入到虚拟机，df -h 查看默认的 &amp;#x2F;dev&amp;#x2F;sda1 是 40G，现在要扩容到 400G&lt;/p&gt;
@@ -726,9 +726,9 @@
     <category term="Composer" scheme="https://novnan.github.io/categories/Composer/"/>
     
     
-    <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
-    
     <category term="PHP" scheme="https://novnan.github.io/tags/PHP/"/>
+    
+    <category term="Composer" scheme="https://novnan.github.io/tags/Composer/"/>
     
   </entry>
   
